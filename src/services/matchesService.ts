@@ -5,32 +5,8 @@ import { Match } from "@/components/dashboard/matches/types";
  * Service for fetching and managing match data for the home page
  */
 export const getAvailableMatches = (): Match[] => {
-  // Fetch all matches from localStorage for all teams
-  const allMatches: Match[] = [];
-  
-  // Iterate through localStorage to find all matches
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.startsWith("tazkara_team_matches_")) {
-      try {
-        const matches = JSON.parse(localStorage.getItem(key) || "[]");
-        // Only add future matches that have available tickets
-        const futureMatches = matches.filter(
-          (match: Match) => match.isFuture && match.availableTickets > 0
-        );
-        allMatches.push(...futureMatches);
-      } catch (error) {
-        console.error("Error parsing matches from localStorage:", error);
-      }
-    }
-  }
-  
-  // If no matches are found, return an empty array (no fallback data)
-  return allMatches.sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return dateA.getTime() - dateB.getTime();
-  });
+  // Return empty array - no matches to display on index page
+  return [];
 };
 
 /**
