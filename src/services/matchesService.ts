@@ -37,14 +37,16 @@ export const getAvailableMatches = (): Match[] => {
  * Convert a match to a format suitable for the ticket card component
  */
 export const matchToTicket = (match: Match) => {
-  // Convert date from ISO format to Arabic format
+  // Convert date from ISO format to Gregorian format (English)
   const date = new Date(match.date);
   const options: Intl.DateTimeFormatOptions = { 
     day: 'numeric', 
     month: 'long', 
     year: 'numeric' 
   };
-  const arabicDate = date.toLocaleDateString('ar-SA', options);
+  
+  // Format the date in Gregorian calendar but with Arabic numerals and month names
+  const arabicDate = date.toLocaleDateString('ar', options);
   
   // Convert time format
   const timeParts = match.time.split(':');
