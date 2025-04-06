@@ -9,6 +9,33 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      fans: {
+        Row: {
+          created_at: string
+          favorite_team: string
+          id: string
+          id_number: string
+          mobile: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          favorite_team: string
+          id: string
+          id_number: string
+          mobile: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          favorite_team?: string
+          id?: string
+          id_number?: string
+          mobile?: string
+          name?: string
+        }
+        Relationships: []
+      }
       hackathons: {
         Row: {
           category: string
@@ -57,6 +84,33 @@ export type Database = {
           prizes?: string | null
           registration_deadline?: string
           telegram_link?: string | null
+        }
+        Relationships: []
+      }
+      teams: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          mobile: string
+          registration_number: string
+          team_name: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id: string
+          mobile: string
+          registration_number: string
+          team_name: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          mobile?: string
+          registration_number?: string
+          team_name?: string
         }
         Relationships: []
       }

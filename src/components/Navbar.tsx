@@ -1,12 +1,21 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from './Logo';
+import { useAuth } from '@/context/AuthContext';
 
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+    setIsMenuOpen(false);
+  };
 
   return (
     <nav className="bg-white shadow-md py-4">
@@ -17,16 +26,34 @@ const Navbar: React.FC = () => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-4">
-          <Link to="/register" className="mx-2">
-            <Button variant="outline" className="border-tazkara-green text-tazkara-green hover:bg-tazkara-green hover:text-white">
-              تسجيل
-            </Button>
-          </Link>
-          <Link to="/login" className="mx-2">
-            <Button className="bg-tazkara-green text-white hover:bg-tazkara-green/90">
-              تسجيل الدخول
-            </Button>
-          </Link>
+          {user ? (
+            <>
+              <Link to="/dashboard" className="mx-2">
+                <Button variant="outline" className="border-tazkara-green text-tazkara-green hover:bg-tazkara-green hover:text-white">
+                  لوحة التحكم
+                </Button>
+              </Link>
+              <Button 
+                onClick={handleSignOut}
+                className="bg-tazkara-green text-white hover:bg-tazkara-green/90"
+              >
+                تسجيل الخروج
+              </Button>
+            </>
+          ) : (
+            <>
+              <Link to="/register" className="mx-2">
+                <Button variant="outline" className="border-tazkara-green text-tazkara-green hover:bg-tazkara-green hover:text-white">
+                  تسجيل
+                </Button>
+              </Link>
+              <Link to="/login" className="mx-2">
+                <Button className="bg-tazkara-green text-white hover:bg-tazkara-green/90">
+                  تسجيل الدخول
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile menu button */}
@@ -45,16 +72,34 @@ const Navbar: React.FC = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white py-2 px-4 shadow-inner animate-fade-in">
           <div className="flex flex-col space-y-3">
-            <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-              <Button variant="outline" className="w-full border-tazkara-green text-tazkara-green hover:bg-tazkara-green hover:text-white">
-                تسجيل
-              </Button>
-            </Link>
-            <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-              <Button className="w-full bg-tazkara-green text-white hover:bg-tazkara-green/90">
-                تسجيل الدخول
-              </Button>
-            </Link>
+            {user ? (
+              <>
+                <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-full border-tazkara-green text-tazkara-green hover:bg-tazkara-green hover:text-white">
+                    لوحة التحكم
+                  </Button>
+                </Link>
+                <Button 
+                  onClick={handleSignOut}
+                  className="w-full bg-tazkara-green text-white hover:bg-tazkara-green/90"
+                >
+                  تسجيل الخروج
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/register" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" className="w-full border-tazkara-green text-tazkara-green hover:bg-tazkara-green hover:text-white">
+                    تسجيل
+                  </Button>
+                </Link>
+                <Link to="/login" onClick={() => setIsMenuOpen(false)}>
+                  <Button className="w-full bg-tazkara-green text-white hover:bg-tazkara-green/90">
+                    تسجيل الدخول
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       )}
