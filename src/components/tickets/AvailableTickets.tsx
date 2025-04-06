@@ -2,22 +2,20 @@
 import React, { useState, useEffect } from 'react';
 import TicketCard, { TicketProps } from './TicketCard';
 import { getAvailableMatches, matchToTicket } from '@/services/matchesService';
+import { Loader2 } from 'lucide-react';
 
 const AvailableTickets: React.FC = () => {
   const [tickets, setTickets] = useState<TicketProps[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Fetch all available matches when component mounts
   useEffect(() => {
     const loadTickets = () => {
+      setIsLoading(true);
       const matches = getAvailableMatches();
       const ticketList = matches.map(match => matchToTicket(match));
-      
-      // If we have no matches from localStorage, use fallback mock data
-      if (ticketList.length === 0) {
-        setTickets(fallbackTickets);
-      } else {
-        setTickets(ticketList);
-      }
+      setTickets(ticketList);
+      setIsLoading(false);
     };
     
     loadTickets();
@@ -38,72 +36,25 @@ const AvailableTickets: React.FC = () => {
           <p className="text-gray-600 mt-2 rtl">احجز تذاكرك الآن لأقوى مباريات الدوري السعودي</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {tickets.map((ticket) => (
-            <TicketCard key={ticket.id} {...ticket} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-tazkara-green" />
+          </div>
+        ) : tickets.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {tickets.map((ticket) => (
+              <TicketCard key={ticket.id} {...ticket} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-16">
+            <p className="text-xl text-gray-500 rtl">لا توجد تذاكر متاحة حالياً</p>
+            <p className="text-gray-400 mt-2 rtl">ترقبوا إضافة مباريات جديدة قريباً</p>
+          </div>
+        )}
       </div>
     </section>
   );
 };
-
-// Fallback mock data in case no matches are found
-const fallbackTickets: TicketProps[] = [
-  {
-    id: '1',
-    homeTeam: 'الهلال',
-    awayTeam: 'النصر',
-    city: 'الرياض',
-    stadium: 'مملكة آرينا',
-    date: '١٥ أبريل ٢٠٢٥',
-    time: '٨:٠٠ مساءً',
-  },
-  {
-    id: '2',
-    homeTeam: 'الاتحاد',
-    awayTeam: 'الأهلي',
-    city: 'جدة',
-    stadium: 'الجوهرة',
-    date: '١٧ أبريل ٢٠٢٥',
-    time: '٩:٣٠ مساءً',
-  },
-  {
-    id: '3',
-    homeTeam: 'الشباب',
-    awayTeam: 'الهلال',
-    city: 'الرياض',
-    stadium: 'مملكة آرينا',
-    date: '٢٠ أبريل ٢٠٢٥',
-    time: '١٠:٠٠ مساءً',
-  },
-  {
-    id: '4',
-    homeTeam: 'النصر',
-    awayTeam: 'الاتحاد',
-    city: 'الرياض',
-    stadium: 'مملكة آرينا',
-    date: '٢٢ أبريل ٢٠٢٥',
-    time: '٨:٣٠ مساءً',
-  },
-  {
-    id: '5',
-    homeTeam: 'الأهلي',
-    awayTeam: 'الشباب',
-    city: 'جدة',
-    stadium: 'الجوهرة',
-    date: '٢٥ أبريل ٢٠٢٥',
-    time: '٩:٠٠ مساءً',
-  },
-  {
-    id: '6',
-    homeTeam: 'الشباب',
-    awayTeam: 'النصر',
-    city: 'أبها',
-    stadium: 'ملعب أبها',
-    date: '٢٧ أبريل ٢٠٢٥',
-    time: '٨:٠٠ مساءً',
-  },
-];
 
 export default AvailableTickets;
