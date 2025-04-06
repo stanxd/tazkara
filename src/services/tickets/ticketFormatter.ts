@@ -8,6 +8,14 @@ import { getTeamNameFromMatch, isPriceFluctuating } from "../teams/teamUtils";
 import { formatDateToArabic, formatTimeToArabic } from "../utils/dateUtils";
 
 /**
+ * Ensure team name has the 'فريق' prefix
+ */
+const ensureTeamPrefix = (teamName: string): string => {
+  if (!teamName) return "فريق غير معروف";
+  return teamName.startsWith('فريق ') ? teamName : `فريق ${teamName}`;
+};
+
+/**
  * Convert a match to a format suitable for the ticket card component
  */
 export const matchToTicket = (match: Match) => {
@@ -28,7 +36,8 @@ export const matchToTicket = (match: Match) => {
   
   try {
     // Use the homeTeam directly from the enhanced match object if available
-    const homeTeam = match.homeTeam || getTeamNameFromMatch(match);
+    let homeTeam = match.homeTeam || getTeamNameFromMatch(match);
+    homeTeam = ensureTeamPrefix(homeTeam);
     
     // Format date and time
     const arabicDate = formatDateToArabic(match.date);
@@ -38,7 +47,9 @@ export const matchToTicket = (match: Match) => {
     const isPriceFluctuatingValue = isPriceFluctuating(match);
     
     // Basic validation on values
-    const awayTeam = match.opponent || "فريق غير معروف";
+    let awayTeam = match.opponent || "غير معروف";
+    awayTeam = ensureTeamPrefix(awayTeam);
+    
     const city = match.city || "غير متوفر";
     const stadium = match.stadium || "غير متوفر";
     const price = typeof match.ticketPrice === 'number' ? match.ticketPrice : 0;
@@ -58,8 +69,8 @@ export const matchToTicket = (match: Match) => {
     console.error("Error formatting match to ticket:", error, match);
     return {
       id: match.id?.toString() || "error",
-      homeTeam: "خطأ",
-      awayTeam: "خطأ",
+      homeTeam: "فريق غير معروف",
+      awayTeam: "فريق غير معروف",
       city: "خطأ",
       stadium: "خطأ",
       date: "خطأ",
@@ -69,4 +80,3 @@ export const matchToTicket = (match: Match) => {
     };
   }
 };
-

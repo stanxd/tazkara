@@ -17,7 +17,7 @@ export const getTeamNameFromMatch = (match: Match): string => {
   
   // If match already has homeTeam info from our enhanced matches, use it
   if (match.homeTeam) {
-    return match.homeTeam;
+    return match.homeTeam.startsWith('فريق ') ? match.homeTeam : `فريق ${match.homeTeam}`;
   }
   
   // If match has homeTeamId, try to get the team profile directly
@@ -25,8 +25,10 @@ export const getTeamNameFromMatch = (match: Match): string => {
     const teamProfile = getTeamProfileById(match.homeTeamId);
     
     if (teamProfile?.team_name) {
-      console.log(`Found team name for match ID ${match.id} using homeTeamId: ${teamProfile.team_name}`);
-      return teamProfile.team_name;
+      const teamName = teamProfile.team_name;
+      const formattedName = teamName.startsWith('فريق ') ? teamName : `فريق ${teamName}`;
+      console.log(`Found team name for match ID ${match.id} using homeTeamId: ${formattedName}`);
+      return formattedName;
     }
   }
   
@@ -44,8 +46,10 @@ export const getTeamNameFromMatch = (match: Match): string => {
           const teamProfile = getTeamProfileById(teamId);
           
           if (teamProfile?.team_name) {
-            console.log(`Found team name for match ID ${match.id}: ${teamProfile.team_name}`);
-            return teamProfile.team_name;
+            const teamName = teamProfile.team_name;
+            const formattedName = teamName.startsWith('فريق ') ? teamName : `فريق ${teamName}`;
+            console.log(`Found team name for match ID ${match.id}: ${formattedName}`);
+            return formattedName;
           }
           
           break; // Break after finding the matching team, even if name wasn't found
@@ -76,4 +80,3 @@ export const isPriceFluctuating = (match: Match): boolean => {
     (match.importanceLevel === 'متوسطة' && match.expectedDemandLevel === 'مرتفع')
   );
 };
-

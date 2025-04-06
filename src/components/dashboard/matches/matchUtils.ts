@@ -13,7 +13,7 @@ export const stadiums = {
   'أبها': ['ملعب أبها', 'استاد الأمير سلطان'],
 };
 
-export const allTeams = ['الهلال', 'النصر', 'الأهلي', 'الاتحاد', 'الشباب'];
+export const allTeams = ['فريق الهلال', 'فريق النصر', 'فريق الأهلي', 'فريق الاتحاد', 'فريق الشباب'];
 
 export const getOpponentTeams = (currentTeam: string): string[] => {
   // Normalize team names for comparison by removing "فريق " prefix if present

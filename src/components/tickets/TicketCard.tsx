@@ -34,7 +34,7 @@ const TicketCard: React.FC<TicketProps> = ({
       <div className="p-6">
         <div className="flex justify-between items-center mb-4">
           <div className="text-xl font-bold rtl">{homeTeam}</div>
-          <div className="text-sm font-bold text-gray-400">ضد</div>
+          <div className="text-sm font-bold text-gray-700 mx-2">ضد</div>
           <div className="text-xl font-bold rtl">{awayTeam}</div>
         </div>
         
