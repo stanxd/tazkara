@@ -61,8 +61,9 @@ export const matchToTicket = (match: Match) => {
   
   // Determine if price is stable based on match importance and demand
   // For demo purposes, we'll consider high-importance matches to have fluctuating prices
-  const isPriceFluctuating = match.importanceLevel === 'عالية' || 
-                            (match.importanceLevel === 'متوسطة' && match.expectedDemandLevel === 'مرتفع');
+  const isPriceFluctuating = 
+    (match.importanceLevel === 'عالية') || 
+    (match.importanceLevel === 'متوسطة' && match.expectedDemandLevel === 'مرتفع');
   
   return {
     id: match.id.toString(),
