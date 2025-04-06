@@ -51,6 +51,9 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
   useEffect(() => {
     if (matches.length > 0) {
       saveMatchesToStorage(matches, teamId);
+      
+      // Dispatch storage event to notify other components about the change
+      window.dispatchEvent(new Event('storage'));
     }
   }, [matches, teamId]);
 
