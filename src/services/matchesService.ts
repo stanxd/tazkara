@@ -25,7 +25,7 @@ export const getAvailableMatches = (): Match[] => {
     }
   }
   
-  // Sort by date (closest matches first)
+  // If no matches are found, return an empty array (no fallback data)
   return allMatches.sort((a, b) => {
     const dateA = new Date(a.date);
     const dateB = new Date(b.date);
