@@ -4,12 +4,26 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Edit, Trash2 } from 'lucide-react';
 import { Match } from '@/components/dashboard/matches/types';
+import { useToast } from '@/hooks/use-toast';
 
 interface MatchesListProps {
   matches: Match[];
+  onDeleteMatch?: (matchId: number) => void;
 }
 
-const MatchesList: React.FC<MatchesListProps> = ({ matches }) => {
+const MatchesList: React.FC<MatchesListProps> = ({ matches, onDeleteMatch }) => {
+  const { toast } = useToast();
+  
+  const handleDelete = (match: Match) => {
+    if (onDeleteMatch) {
+      onDeleteMatch(match.id);
+      toast({
+        title: "تم حذف المباراة بنجاح",
+        description: `تم حذف المباراة ضد ${match.opponent}`
+      });
+    }
+  };
+  
   return (
     <Table>
       <TableHeader>
@@ -40,7 +54,11 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches }) => {
                   <Button variant="ghost" size="icon">
                     <Edit className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon">
+                  <Button 
+                    variant="ghost" 
+                    size="icon"
+                    onClick={() => handleDelete(match)}
+                  >
                     <Trash2 className="h-4 w-4 text-red-500" />
                   </Button>
                 </div>

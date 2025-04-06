@@ -65,6 +65,8 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
     time: string;
     availableTickets: number;
     ticketPrice: number;
+    importanceLevel?: string;
+    expectedDemandLevel?: string;
   }) => {
     // Create new match with generated ID
     const newMatch: Match = {
@@ -76,7 +78,9 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
       time: data.time,
       availableTickets: data.availableTickets,
       ticketPrice: data.ticketPrice,
-      isFuture: isMatchInFuture(data.date)
+      isFuture: isMatchInFuture(data.date),
+      importanceLevel: data.importanceLevel,
+      expectedDemandLevel: data.expectedDemandLevel
     };
     
     // Add new match to state
@@ -90,6 +94,10 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
     
     // Close dialog
     setIsDialogOpen(false);
+  };
+  
+  const handleDeleteMatch = (matchId: number) => {
+    setMatches(prevMatches => prevMatches.filter(match => match.id !== matchId));
   };
 
   return (
@@ -124,7 +132,10 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
           <CardTitle>قائمة المباريات</CardTitle>
         </CardHeader>
         <CardContent>
-          <MatchesList matches={matches} />
+          <MatchesList 
+            matches={matches} 
+            onDeleteMatch={handleDeleteMatch}
+          />
         </CardContent>
       </Card>
     </div>

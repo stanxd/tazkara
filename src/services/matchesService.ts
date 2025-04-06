@@ -37,6 +37,9 @@ export const getAvailableMatches = (): Match[] => {
  * Convert a match to a format suitable for the ticket card component
  */
 export const matchToTicket = (match: Match) => {
+  // Extract team name from the localStorage key
+  const teamName = getTeamNameFromMatch(match);
+  
   // Convert date from ISO format to Gregorian format (English)
   const date = new Date(match.date);
   const options: Intl.DateTimeFormatOptions = { 
@@ -67,8 +70,8 @@ export const matchToTicket = (match: Match) => {
   
   return {
     id: match.id.toString(),
-    homeTeam: match.opponent, // The opponent team in the saved match
-    awayTeam: "الفريق المضيف", // This could be improved with actual team data
+    homeTeam: teamName,
+    awayTeam: match.opponent,
     city: match.city,
     stadium: match.stadium,
     date: arabicDate,
@@ -76,4 +79,27 @@ export const matchToTicket = (match: Match) => {
     price: match.ticketPrice,
     isPriceFluctuating: isPriceFluctuating
   };
+};
+
+/**
+ * Helper function to get the team name associated with a match
+ */
+const getTeamNameFromMatch = (match: Match): string => {
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key && key.startsWith("tazkara_team_matches_")) {
+      try {
+        const matches = JSON.parse(localStorage.getItem(key) || "[]");
+        if (matches.some((m: Match) => m.id === match.id)) {
+          // Extract the team ID from the key
+          const teamId = key.replace("tazkara_team_matches_", "");
+          // Try to get the team data from another storage if available (fallback to ID)
+          return teamId;
+        }
+      } catch (error) {
+        console.error("Error finding team for match:", error);
+      }
+    }
+  }
+  return "فريق غير معروف"; // Default if team name cannot be found
 };
