@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Ticket, Stadium } from 'lucide-react';
+import { Ticket, Map } from 'lucide-react';
 import { getAvailableMatches, matchToTicket } from '@/services/matchesService';
 import ModernTicketCard from '@/components/tickets/ModernTicketCard';
 import { Match } from '@/components/dashboard/matches/types';
@@ -65,7 +65,7 @@ const AvailableTickets: React.FC = () => {
           </div>
         ) : (
           <div className="text-center py-16 bg-white rounded-lg shadow-sm border border-gray-100">
-            <Stadium className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+            <Map className="w-16 h-16 text-gray-300 mx-auto mb-4" />
             <p className="text-xl text-gray-500 rtl">لا توجد تذاكر متوفرة حالياً</p>
             <p className="text-gray-400 mt-2 rtl">سيتم إضافة تذاكر جديدة قريباً</p>
           </div>
