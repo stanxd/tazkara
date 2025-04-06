@@ -90,7 +90,11 @@ const Dashboard = () => {
       <main className="flex-1 container mx-auto px-4 py-8">
         {userType === 'team' ? (
           <div className="w-full">
-            <h1 className="text-2xl font-bold mb-6 rtl">لوحة تحكم الفريق</h1>
+            <div className="mb-6 rtl text-center">
+              <h1 className="text-3xl font-bold">فريق {userProfile?.team_name}</h1>
+              <p className="text-muted-foreground mt-2">مرحباً بك في لوحة تحكم الفريق</p>
+            </div>
+
             <Tabs defaultValue="home" className="w-full rtl">
               <TabsList className="w-full mb-6 grid grid-cols-2 md:grid-cols-5">
                 <TabsTrigger value="home">الرئيسية</TabsTrigger>
