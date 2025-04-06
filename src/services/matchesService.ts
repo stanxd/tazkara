@@ -77,7 +77,7 @@ export const matchToTicket = (match: Match) => {
     date: arabicDate,
     time: arabicTime,
     price: match.ticketPrice,
-    isPriceFluctuating: isPriceFluctuating
+    isPriceFluctuating
   };
 };
 
@@ -93,8 +93,17 @@ const getTeamNameFromMatch = (match: Match): string => {
         if (matches.some((m: Match) => m.id === match.id)) {
           // Extract the team ID from the key
           const teamId = key.replace("tazkara_team_matches_", "");
-          // Try to get the team data from another storage if available (fallback to ID)
-          return teamId;
+          
+          // Try to get the team profile from localStorage
+          const teamProfileKey = `tazkara_team_profile_${teamId}`;
+          const teamProfileData = localStorage.getItem(teamProfileKey);
+          
+          if (teamProfileData) {
+            const teamProfile = JSON.parse(teamProfileData);
+            return teamProfile.team_name || "فريق غير معروف";
+          }
+          
+          return "فريق غير معروف";
         }
       } catch (error) {
         console.error("Error finding team for match:", error);
