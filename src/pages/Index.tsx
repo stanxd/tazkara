@@ -12,7 +12,7 @@ const Index = () => {
       <main className="flex-1">
         <Hero />
         <div id="tickets">
-          {/* Ticket section removed */}
+          {/* Placeholder for future ticket section */}
         </div>
         <Founders />
       </main>
