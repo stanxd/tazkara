@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Plus } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 import MatchForm from '@/components/dashboard/matches/MatchForm';
 import MatchesList from '@/components/dashboard/matches/MatchesList';
@@ -17,10 +18,12 @@ import {
   cities, 
   stadiums, 
   getOpponentTeams, 
-  mockMatches 
+  getStoredMatches,
+  saveMatchesToStorage,
+  generateMatchId,
+  isMatchInFuture
 } from '@/components/dashboard/matches/matchUtils';
-import { TeamProfile } from '@/components/dashboard/matches/types';
-import * as z from 'zod';
+import { Match, TeamProfile } from '@/components/dashboard/matches/types';
 
 interface TeamMatchesManagerProps {
   teamProfile: TeamProfile;
@@ -28,18 +31,61 @@ interface TeamMatchesManagerProps {
 
 const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [matches, setMatches] = useState<Match[]>([]);
+  const { toast } = useToast();
   
   // Get current team name, ensuring we have a fallback
   const currentTeam = teamProfile?.team_name || '';
+  const teamId = teamProfile?.id || 'default';
   
   // Filter out the current team from opponents
   const opponentTeams = getOpponentTeams(currentTeam);
   
-  const matches = mockMatches;
+  // Load matches from localStorage on component mount
+  useEffect(() => {
+    const storedMatches = getStoredMatches(teamId);
+    setMatches(storedMatches);
+  }, [teamId]);
 
-  const onSubmit = (data: z.AnyZodObject) => {
-    console.log('Form submitted:', data);
-    // Here you would typically send the data to your API
+  // Save matches to localStorage when they change
+  useEffect(() => {
+    if (matches.length > 0) {
+      saveMatchesToStorage(matches, teamId);
+    }
+  }, [matches, teamId]);
+
+  const onSubmit = (data: {
+    opponent: string;
+    city: string;
+    stadium: string;
+    date: string;
+    time: string;
+    availableTickets: number;
+    ticketPrice: number;
+  }) => {
+    // Create new match with generated ID
+    const newMatch: Match = {
+      id: generateMatchId(matches),
+      opponent: data.opponent,
+      city: data.city,
+      stadium: data.stadium,
+      date: data.date,
+      time: data.time,
+      availableTickets: data.availableTickets,
+      ticketPrice: data.ticketPrice,
+      isFuture: isMatchInFuture(data.date)
+    };
+    
+    // Add new match to state
+    setMatches(prevMatches => [...prevMatches, newMatch]);
+    
+    // Show success toast
+    toast({
+      title: "تمت إضافة المباراة بنجاح",
+      description: `تمت إضافة مباراة ${currentTeam} ضد ${data.opponent}`
+    });
+    
+    // Close dialog
     setIsDialogOpen(false);
   };
 

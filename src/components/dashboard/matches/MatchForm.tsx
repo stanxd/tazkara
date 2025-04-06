@@ -19,11 +19,14 @@ const formSchema = z.object({
   ticketPrice: z.coerce.number().positive({ message: 'يجب أن يكون سعر التذكرة أكبر من 0' }),
 });
 
+// Type for the form data
+export type MatchFormData = z.infer<typeof formSchema>;
+
 interface MatchFormProps {
   opponentTeams: string[];
   cities: string[];
   stadiums: Record<string, string[]>;
-  onSubmit: (data: z.infer<typeof formSchema>) => void;
+  onSubmit: (data: MatchFormData) => void;
   onOpenChange: (open: boolean) => void;
 }
 
@@ -37,7 +40,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
   const [citySelection, setCitySelection] = useState('الرياض');
   const [filteredStadiums, setFilteredStadiums] = useState(stadiums['الرياض']);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<MatchFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       opponent: '',
@@ -57,9 +60,8 @@ const MatchForm: React.FC<MatchFormProps> = ({
     setFilteredStadiums(stadiums[value as keyof typeof stadiums]);
   };
 
-  const handleFormSubmit = (data: z.infer<typeof formSchema>) => {
+  const handleFormSubmit = (data: MatchFormData) => {
     onSubmit(data);
-    onOpenChange(false);
     form.reset();
   };
 
