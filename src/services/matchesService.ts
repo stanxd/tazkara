@@ -59,6 +59,11 @@ export const matchToTicket = (match: Match) => {
   hours = hours === 0 ? 12 : hours;
   const arabicTime = `${hours}:${minutes} ${period}`;
   
+  // Determine if price is stable based on match importance and demand
+  // For demo purposes, we'll consider high-importance matches to have fluctuating prices
+  const isPriceFluctuating = match.importanceLevel === 'عالية' || 
+                            (match.importanceLevel === 'متوسطة' && match.expectedDemandLevel === 'مرتفع');
+  
   return {
     id: match.id.toString(),
     homeTeam: match.opponent, // The opponent team in the saved match
@@ -67,5 +72,7 @@ export const matchToTicket = (match: Match) => {
     stadium: match.stadium,
     date: arabicDate,
     time: arabicTime,
+    price: match.ticketPrice,
+    isPriceFluctuating: isPriceFluctuating
   };
 };

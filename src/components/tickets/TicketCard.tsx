@@ -1,7 +1,9 @@
 
 import React from 'react';
-import { Calendar, Clock, MapPin } from 'lucide-react';
+import { Calendar, Clock, MapPin, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 export interface TicketProps {
   homeTeam: string;
@@ -11,6 +13,8 @@ export interface TicketProps {
   date: string;
   time: string;
   id: string;
+  price?: number;
+  isPriceFluctuating?: boolean;
 }
 
 const TicketCard: React.FC<TicketProps> = ({
@@ -21,6 +25,8 @@ const TicketCard: React.FC<TicketProps> = ({
   date,
   time,
   id,
+  price = 0,
+  isPriceFluctuating = false
 }) => {
   return (
     <div className="ticket-card animate-slide-up">
@@ -44,6 +50,31 @@ const TicketCard: React.FC<TicketProps> = ({
           <div className="flex items-center gap-2 text-gray-600 rtl">
             <Clock size={18} className="text-tazkara-green" />
             <span>{time}</span>
+          </div>
+          <div className="flex items-center gap-2 rtl">
+            <Tag size={18} className="text-tazkara-green" />
+            <div className="flex items-center">
+              {isPriceFluctuating ? (
+                <Badge 
+                  variant="destructive"
+                  className={cn(
+                    "font-bold animate-pulse",
+                    isPriceFluctuating && "bg-red-500"
+                  )}
+                >
+                  {price} ر.س
+                </Badge>
+              ) : (
+                <Badge className="bg-tazkara-green font-bold">
+                  {price} ر.س
+                </Badge>
+              )}
+              {isPriceFluctuating && (
+                <span className="mr-2 text-xs text-red-500 font-medium">
+                  *سعر متغير
+                </span>
+              )}
+            </div>
           </div>
         </div>
         
