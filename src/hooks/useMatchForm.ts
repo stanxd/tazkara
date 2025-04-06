@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { MatchFormData, matchFormSchema } from '@/components/dashboard/matches/form/formTypes';
-import { PricingModelInput } from '@/components/dashboard/matches/pricingModel';
+import { PricingModelInput } from '@/components/dashboard/matches/pricing';
 
 interface UseMatchFormProps {
   onSubmit: (data: MatchFormData) => void;

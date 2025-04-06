@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Calculator } from 'lucide-react';
-import { PricingModelInput, PricingModelOutput, calculateRecommendedPrice } from './pricingModel';
+import { PricingModelInput, PricingModelOutput, calculateRecommendedPrice } from './pricing';
 
 interface PricingRecommendationModalProps {
   matchData: Partial<PricingModelInput>;
