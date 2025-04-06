@@ -11,25 +11,62 @@ import { formatDateToArabic, formatTimeToArabic } from "../utils/dateUtils";
  * Convert a match to a format suitable for the ticket card component
  */
 export const matchToTicket = (match: Match) => {
-  // Use the homeTeam directly from the enhanced match object if available
-  const homeTeam = match.homeTeam || getTeamNameFromMatch(match);
+  if (!match) {
+    console.error("matchToTicket called with invalid match object");
+    return {
+      id: "error",
+      homeTeam: "فريق غير معروف",
+      awayTeam: "فريق غير معروف",
+      city: "غير متوفر",
+      stadium: "غير متوفر",
+      date: "تاريخ غير متوفر",
+      time: "وقت غير متوفر",
+      price: 0,
+      isPriceFluctuating: false
+    };
+  }
   
-  // Format date and time
-  const arabicDate = formatDateToArabic(match.date);
-  const arabicTime = formatTimeToArabic(match.time);
-  
-  // Determine if price is stable based on match importance and demand
-  const isPriceFluctuatingValue = isPriceFluctuating(match);
-  
-  return {
-    id: match.id.toString(),
-    homeTeam: homeTeam,
-    awayTeam: match.opponent,
-    city: match.city,
-    stadium: match.stadium,
-    date: arabicDate,
-    time: arabicTime,
-    price: match.ticketPrice,
-    isPriceFluctuating: isPriceFluctuatingValue
-  };
+  try {
+    // Use the homeTeam directly from the enhanced match object if available
+    const homeTeam = match.homeTeam || getTeamNameFromMatch(match);
+    
+    // Format date and time
+    const arabicDate = formatDateToArabic(match.date);
+    const arabicTime = formatTimeToArabic(match.time);
+    
+    // Determine if price is stable based on match importance and demand
+    const isPriceFluctuatingValue = isPriceFluctuating(match);
+    
+    // Basic validation on values
+    const awayTeam = match.opponent || "فريق غير معروف";
+    const city = match.city || "غير متوفر";
+    const stadium = match.stadium || "غير متوفر";
+    const price = typeof match.ticketPrice === 'number' ? match.ticketPrice : 0;
+    
+    return {
+      id: match.id?.toString() || "error",
+      homeTeam: homeTeam,
+      awayTeam: awayTeam,
+      city: city,
+      stadium: stadium,
+      date: arabicDate,
+      time: arabicTime,
+      price: price,
+      isPriceFluctuating: isPriceFluctuatingValue
+    };
+  } catch (error) {
+    console.error("Error formatting match to ticket:", error, match);
+    return {
+      id: match.id?.toString() || "error",
+      homeTeam: "خطأ",
+      awayTeam: "خطأ",
+      city: "خطأ",
+      stadium: "خطأ",
+      date: "خطأ",
+      time: "خطأ",
+      price: 0,
+      isPriceFluctuating: false
+    };
+  }
 };
+

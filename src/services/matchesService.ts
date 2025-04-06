@@ -13,13 +13,15 @@ export const getAvailableMatches = (): Match[] => {
   
   console.log("Starting to fetch available matches from localStorage");
   
-  // First, collect all team profiles to ensure we have team names
-  const teamProfiles = getTeamProfiles();
-  
-  // Iterate through localStorage to find all matches
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.startsWith("tazkara_team_matches_")) {
+  try {
+    // First, collect all team profiles to ensure we have team names
+    const teamProfiles = getTeamProfiles();
+    
+    // Iterate through localStorage to find all matches
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith("tazkara_team_matches_")) continue;
+      
       try {
         const teamId = key.replace("tazkara_team_matches_", "");
         const matchesData = localStorage.getItem(key);
@@ -46,10 +48,13 @@ export const getAvailableMatches = (): Match[] => {
         // Enhance matches with team information
         const enhancedMatches = futureMatches.map((match: Match) => {
           // Add the home team ID to the match object for better identification
+          const teamName = teamProfiles[teamId]?.team_name || "فريق غير معروف";
+          console.log(`Enhancing match ${match.id} with team name: ${teamName}`);
+          
           return {
             ...match,
             homeTeamId: teamId,
-            homeTeam: teamProfiles[teamId]?.team_name || "فريق"
+            homeTeam: teamName
           };
         });
         
@@ -57,23 +62,40 @@ export const getAvailableMatches = (): Match[] => {
         
         console.log(`Added ${enhancedMatches.length} future matches from team ID: ${teamId}`);
         if (enhancedMatches.length > 0) {
-          console.log("Sample match details:", enhancedMatches[0]);
+          console.log("Sample match details:", JSON.stringify(enhancedMatches[0]));
         }
       } catch (error) {
-        console.error("Error parsing matches from localStorage:", error);
+        console.error(`Error processing matches for key ${key}:`, error);
       }
     }
+  } catch (error) {
+    console.error("Fatal error accessing localStorage:", error);
   }
   
   console.log(`Total available matches found: ${allMatches.length}`);
   
   // Sort matches by date
-  return allMatches.sort((a, b) => {
-    const dateA = new Date(a.date);
-    const dateB = new Date(b.date);
-    return dateA.getTime() - dateB.getTime();
-  });
+  try {
+    return allMatches.sort((a, b) => {
+      if (!a.date || !b.date) return 0;
+      
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+      
+      // Handle invalid dates
+      if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
+        console.warn("Invalid date encountered during sort:", a.date, b.date);
+        return 0;
+      }
+      
+      return dateA.getTime() - dateB.getTime();
+    });
+  } catch (error) {
+    console.error("Error sorting matches:", error);
+    return allMatches;
+  }
 };
 
 // Re-export ticketFormatter function for easier imports
 export { matchToTicket };
+

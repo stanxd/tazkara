@@ -4,14 +4,21 @@
  */
 
 import { Match } from "@/components/dashboard/matches/types";
-import { getTeamProfileById } from "../storage/localStorageUtils";
+import { getTeamProfileById, getMatchesByTeamId } from "../storage/localStorageUtils";
 
 /**
  * Helper function to get the team name associated with a match
  */
 export const getTeamNameFromMatch = (match: Match): string => {
+  if (!match) {
+    console.warn("getTeamNameFromMatch called with invalid match object");
+    return "فريق غير معروف";
+  }
+  
   // If match already has homeTeam info from our enhanced matches, use it
-  if (match.homeTeam) return match.homeTeam;
+  if (match.homeTeam) {
+    return match.homeTeam;
+  }
   
   // If match has homeTeamId, try to get the team profile directly
   if (match.homeTeamId) {
@@ -24,14 +31,16 @@ export const getTeamNameFromMatch = (match: Match): string => {
   }
   
   // Legacy lookup method - search all team matches
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key && key.startsWith("tazkara_team_matches_")) {
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key || !key.startsWith("tazkara_team_matches_")) continue;
+      
       try {
-        const matches = JSON.parse(localStorage.getItem(key) || "[]");
-        if (matches.some((m: Match) => m.id === match.id)) {
-          // Extract the team ID from the key
-          const teamId = key.replace("tazkara_team_matches_", "");
+        const teamId = key.replace("tazkara_team_matches_", "");
+        const matches = getMatchesByTeamId(teamId);
+        
+        if (matches.some(m => m.id === match.id)) {
           const teamProfile = getTeamProfileById(teamId);
           
           if (teamProfile?.team_name) {
@@ -39,22 +48,32 @@ export const getTeamNameFromMatch = (match: Match): string => {
             return teamProfile.team_name;
           }
           
-          return "فريق";
+          break; // Break after finding the matching team, even if name wasn't found
         }
       } catch (error) {
-        console.error("Error finding team for match:", error);
+        console.error(`Error searching matches for team in localStorage key ${key}:`, error);
       }
     }
+  } catch (error) {
+    console.error("Error accessing localStorage:", error);
   }
-  return "فريق"; // Default if team name cannot be found
+  
+  console.warn(`Could not find team name for match ID ${match.id}`);
+  return "فريق غير معروف"; // Default if team name cannot be found
 };
 
 /**
  * Determine if price is fluctuating based on match parameters
  */
 export const isPriceFluctuating = (match: Match): boolean => {
+  if (!match || !match.importanceLevel || !match.expectedDemandLevel) {
+    console.warn(`Missing match criteria for price fluctuation check: ${JSON.stringify(match)}`);
+    return false;
+  }
+  
   return (
     (match.importanceLevel === 'عالية') || 
     (match.importanceLevel === 'متوسطة' && match.expectedDemandLevel === 'مرتفع')
   );
 };
+
