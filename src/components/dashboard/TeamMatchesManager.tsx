@@ -110,6 +110,7 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
               stadiums={stadiums}
               onSubmit={onSubmit}
               onOpenChange={setIsDialogOpen}
+              currentTeam={currentTeam}
             />
           </DialogContent>
         </Dialog>

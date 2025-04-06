@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -7,6 +7,8 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import PricingRecommendationModal from './PricingRecommendationModal';
+import { PricingModelInput } from './pricingModel';
 
 // Define the form schema
 const formSchema = z.object({
@@ -28,6 +30,7 @@ interface MatchFormProps {
   stadiums: Record<string, string[]>;
   onSubmit: (data: MatchFormData) => void;
   onOpenChange: (open: boolean) => void;
+  currentTeam?: string;
 }
 
 const MatchForm: React.FC<MatchFormProps> = ({ 
@@ -35,10 +38,12 @@ const MatchForm: React.FC<MatchFormProps> = ({
   cities, 
   stadiums, 
   onSubmit, 
-  onOpenChange 
+  onOpenChange,
+  currentTeam = ''
 }) => {
   const [citySelection, setCitySelection] = useState('الرياض');
   const [filteredStadiums, setFilteredStadiums] = useState(stadiums['الرياض']);
+  const [pricingData, setPricingData] = useState<Partial<PricingModelInput>>({});
 
   const form = useForm<MatchFormData>({
     resolver: zodResolver(formSchema),
@@ -47,7 +52,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
       city: 'الرياض',
       stadium: '',
       date: '',
-      time: '',
+      time: '20:00',
       availableTickets: undefined,
       ticketPrice: undefined,
     },
@@ -58,11 +63,54 @@ const MatchForm: React.FC<MatchFormProps> = ({
     form.setValue('city', value);
     form.setValue('stadium', '');
     setFilteredStadiums(stadiums[value as keyof typeof stadiums]);
+    
+    // Update pricing data
+    updatePricingData({ city: value });
   };
+  
+  const handleOpponentChange = (value: string) => {
+    form.setValue('opponent', value);
+    
+    // Update pricing data with opponent team
+    updatePricingData({ awayTeam: value });
+  };
+  
+  const handleStadiumChange = (value: string) => {
+    form.setValue('stadium', value);
+    
+    // Update pricing data with stadium
+    updatePricingData({ stadium: value });
+  };
+  
+  const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    form.setValue('time', event.target.value);
+    
+    // Update pricing data with time
+    updatePricingData({ time: event.target.value });
+  };
+
+  // Update pricing data helper
+  const updatePricingData = (newData: Partial<PricingModelInput>) => {
+    setPricingData(prevData => ({
+      ...prevData,
+      ...newData
+    }));
+  };
+  
+  // Set home team when component mounts
+  useEffect(() => {
+    if (currentTeam) {
+      updatePricingData({ homeTeam: currentTeam });
+    }
+  }, [currentTeam]);
 
   const handleFormSubmit = (data: MatchFormData) => {
     onSubmit(data);
     form.reset();
+  };
+  
+  const handleSetRecommendedPrice = (price: number) => {
+    form.setValue('ticketPrice', price);
   };
 
   return (
@@ -75,7 +123,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
             <FormItem>
               <FormLabel>الفريق المنافس</FormLabel>
               <Select 
-                onValueChange={field.onChange} 
+                onValueChange={(value) => handleOpponentChange(value)}
                 defaultValue={field.value}
               >
                 <FormControl>
@@ -127,7 +175,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
             <FormItem>
               <FormLabel>الملعب</FormLabel>
               <Select 
-                onValueChange={field.onChange} 
+                onValueChange={(value) => handleStadiumChange(value)}
                 defaultValue={field.value}
               >
                 <FormControl>
@@ -168,7 +216,7 @@ const MatchForm: React.FC<MatchFormProps> = ({
               <FormItem>
                 <FormLabel>الوقت</FormLabel>
                 <FormControl>
-                  <Input type="time" min="20:00" max="23:00" {...field} />
+                  <Input type="time" min="20:00" max="23:00" {...field} onChange={(e) => handleTimeChange(e)} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -201,6 +249,11 @@ const MatchForm: React.FC<MatchFormProps> = ({
                   <Input type="number" min="1" {...field} />
                 </FormControl>
                 <FormMessage />
+                <PricingRecommendationModal
+                  matchData={pricingData}
+                  onSelectPrice={handleSetRecommendedPrice}
+                  disabled={!form.getValues('opponent') || !form.getValues('stadium')}
+                />
               </FormItem>
             )}
           />
