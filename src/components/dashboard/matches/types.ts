@@ -9,8 +9,10 @@ export interface Match {
   availableTickets: number;
   ticketPrice: number;
   isFuture: boolean;
-  importanceLevel?: string; // Added this property
-  expectedDemandLevel?: string; // Added this property
+  importanceLevel?: string; 
+  expectedDemandLevel?: string;
+  homeTeam?: string;  // Added this property
+  homeTeamId?: string; // Added this property
 }
 
 export interface TeamProfile {
