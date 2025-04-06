@@ -9,6 +9,73 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      fan_preferences: {
+        Row: {
+          created_at: string
+          fan_id: string
+          favorite_team: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          fan_id: string
+          favorite_team: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          fan_id?: string
+          favorite_team?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_preferences_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fan_tickets: {
+        Row: {
+          away_team: string
+          fan_id: string
+          home_team: string
+          id: string
+          match_id: number
+          purchase_date: string
+          ticket_price: number
+        }
+        Insert: {
+          away_team: string
+          fan_id: string
+          home_team: string
+          id?: string
+          match_id: number
+          purchase_date?: string
+          ticket_price: number
+        }
+        Update: {
+          away_team?: string
+          fan_id?: string
+          home_team?: string
+          id?: string
+          match_id?: number
+          purchase_date?: string
+          ticket_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_tickets_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fans: {
         Row: {
           created_at: string
@@ -33,57 +100,6 @@ export type Database = {
           id_number?: string
           mobile?: string
           name?: string
-        }
-        Relationships: []
-      }
-      hackathons: {
-        Row: {
-          category: string
-          conditions: string[] | null
-          created_at: string
-          description: string
-          id: string
-          image_url: string | null
-          is_archived: boolean | null
-          link: string
-          location: string
-          name: string
-          organizer: string
-          prizes: string | null
-          registration_deadline: string
-          telegram_link: string | null
-        }
-        Insert: {
-          category: string
-          conditions?: string[] | null
-          created_at?: string
-          description: string
-          id?: string
-          image_url?: string | null
-          is_archived?: boolean | null
-          link: string
-          location: string
-          name: string
-          organizer: string
-          prizes?: string | null
-          registration_deadline: string
-          telegram_link?: string | null
-        }
-        Update: {
-          category?: string
-          conditions?: string[] | null
-          created_at?: string
-          description?: string
-          id?: string
-          image_url?: string | null
-          is_archived?: boolean | null
-          link?: string
-          location?: string
-          name?: string
-          organizer?: string
-          prizes?: string | null
-          registration_deadline?: string
-          telegram_link?: string | null
         }
         Relationships: []
       }
