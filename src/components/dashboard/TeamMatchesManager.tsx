@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -29,19 +28,20 @@ const formSchema = z.object({
   stadium: z.string().min(1, { message: 'يجب اختيار الملعب' }),
   date: z.string().min(1, { message: 'يجب إدخال التاريخ' }),
   time: z.string().min(1, { message: 'يجب إدخال الوقت' }),
-  availableTickets: z.string().transform(val => Number(val)).pipe(
-    z.number().positive({ message: 'يجب أن يكون عدد التذاكر أكبر من 0' })
-  ),
-  ticketPrice: z.string().transform(val => Number(val)).pipe(
-    z.number().positive({ message: 'يجب أن يكون سعر التذكرة أكبر من 0' })
-  ),
+  availableTickets: z.coerce.number().positive({ message: 'يجب أن يكون عدد التذاكر أكبر من 0' }),
+  ticketPrice: z.coerce.number().positive({ message: 'يجب أن يكون سعر التذكرة أكبر من 0' }),
 });
 
 const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
-  // Placeholder data - in a real application this would come from the database
-  const teams = ['الهلال', 'النصر', 'الأهلي', 'الاتحاد', 'الشباب'];
+  // All available teams - we'll filter out the current team
+  const allTeams = ['الهلال', 'النصر', 'الأهلي', 'الاتحاد', 'الشباب'];
+  
+  // Filter out the current team from opponents
+  const currentTeam = teamProfile?.team_name || 'النصر'; // Default to النصر if not available
+  const opponentTeams = allTeams.filter(team => team !== currentTeam);
+  
   const cities = ['الرياض', 'جدة', 'أبها'];
   const stadiums = {
     'الرياض': ['مملكة آرينا', 'استاد الملك فهد الدولي'],
@@ -63,7 +63,7 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
     },
     { 
       id: 2, 
-      opponent: 'النصر', 
+      opponent: 'الأهلي', 
       city: 'جدة', 
       stadium: 'الجوهرة', 
       date: '2025-05-01', 
@@ -74,7 +74,7 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
     },
     { 
       id: 3, 
-      opponent: 'الأهلي', 
+      opponent: 'الشباب', 
       city: 'الرياض', 
       stadium: 'مملكة آرينا', 
       date: '2025-03-15', 
@@ -96,8 +96,8 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
       stadium: '',
       date: '',
       time: '',
-      availableTickets: '',
-      ticketPrice: '',
+      availableTickets: undefined,
+      ticketPrice: undefined,
     },
   });
 
@@ -148,7 +148,7 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          {teams.map(team => (
+                          {opponentTeams.map(team => (
                             <SelectItem key={team} value={team}>{team}</SelectItem>
                           ))}
                         </SelectContent>
