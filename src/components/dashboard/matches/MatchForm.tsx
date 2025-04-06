@@ -1,16 +1,14 @@
 
-import React, { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import React from 'react';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
-import { PricingModelInput } from './pricingModel';
 
-import { matchFormSchema, MatchFormData } from './form/formTypes';
+import { MatchFormData } from './form/formTypes';
 import OpponentField from './form/OpponentField';
 import LocationFields from './form/LocationFields';
 import DateTimeFields from './form/DateTimeFields';
 import TicketFields from './form/TicketFields';
+import { useMatchForm } from '@/hooks/useMatchForm';
 
 interface MatchFormProps {
   opponentTeams: string[];
@@ -29,77 +27,21 @@ const MatchForm: React.FC<MatchFormProps> = ({
   onOpenChange,
   currentTeam = ''
 }) => {
-  const [citySelection, setCitySelection] = useState('الرياض');
-  const [filteredStadiums, setFilteredStadiums] = useState(stadiums['الرياض']);
-  const [pricingData, setPricingData] = useState<Partial<PricingModelInput>>({});
-
-  const form = useForm<MatchFormData>({
-    resolver: zodResolver(matchFormSchema),
-    defaultValues: {
-      opponent: '',
-      city: 'الرياض',
-      stadium: '',
-      date: '',
-      time: '20:00',
-      availableTickets: undefined,
-      ticketPrice: undefined,
-    },
+  const {
+    form,
+    filteredStadiums,
+    pricingData,
+    handleCityChange,
+    handleOpponentChange,
+    handleStadiumChange,
+    handleTimeChange,
+    handleSetRecommendedPrice,
+    handleFormSubmit
+  } = useMatchForm({
+    onSubmit,
+    currentTeam,
+    stadiums
   });
-
-  const handleCityChange = (value: string) => {
-    setCitySelection(value);
-    form.setValue('city', value);
-    form.setValue('stadium', '');
-    setFilteredStadiums(stadiums[value as keyof typeof stadiums]);
-    
-    // Update pricing data
-    updatePricingData({ city: value });
-  };
-  
-  const handleOpponentChange = (value: string) => {
-    form.setValue('opponent', value);
-    
-    // Update pricing data with opponent team
-    updatePricingData({ awayTeam: value });
-  };
-  
-  const handleStadiumChange = (value: string) => {
-    form.setValue('stadium', value);
-    
-    // Update pricing data with stadium
-    updatePricingData({ stadium: value });
-  };
-  
-  const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    form.setValue('time', event.target.value);
-    
-    // Update pricing data with time
-    updatePricingData({ time: event.target.value });
-  };
-
-  // Update pricing data helper
-  const updatePricingData = (newData: Partial<PricingModelInput>) => {
-    setPricingData(prevData => ({
-      ...prevData,
-      ...newData
-    }));
-  };
-  
-  // Set home team when component mounts
-  useEffect(() => {
-    if (currentTeam) {
-      updatePricingData({ homeTeam: currentTeam });
-    }
-  }, [currentTeam]);
-
-  const handleFormSubmit = (data: MatchFormData) => {
-    onSubmit(data);
-    form.reset();
-  };
-  
-  const handleSetRecommendedPrice = (price: number) => {
-    form.setValue('ticketPrice', price);
-  };
 
   return (
     <Form {...form}>
