@@ -33,7 +33,7 @@ const AvailableTickets: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-tazkara-dark rtl">التذاكر المتوفرة</h2>
-          <p className="text-gray-600 mt-2 rtl">سيتم إضافة تذاكر جديدة قريباً</p>
+          <p className="text-gray-600 mt-2 rtl">احجز تذاكرك الآن لأقوى مباريات الدوري السعودي</p>
         </div>
         
         {isLoading ? (
