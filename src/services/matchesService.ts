@@ -19,11 +19,19 @@ export const getAvailableMatches = (): Match[] => {
           (match: Match) => match.isFuture && match.availableTickets > 0
         );
         allMatches.push(...futureMatches);
+        
+        // Debug information to help troubleshoot
+        console.log(`Found ${futureMatches.length} future matches from team key: ${key}`);
+        if (futureMatches.length > 0) {
+          console.log("Match details:", futureMatches);
+        }
       } catch (error) {
         console.error("Error parsing matches from localStorage:", error);
       }
     }
   }
+  
+  console.log(`Total available matches found: ${allMatches.length}`);
   
   // If no matches are found, return an empty array (no fallback data)
   return allMatches.sort((a, b) => {
@@ -100,6 +108,7 @@ const getTeamNameFromMatch = (match: Match): string => {
           
           if (teamProfileData) {
             const teamProfile = JSON.parse(teamProfileData);
+            console.log(`Found team name for match ID ${match.id}: ${teamProfile.team_name}`);
             return teamProfile.team_name || "فريق غير معروف";
           }
           
