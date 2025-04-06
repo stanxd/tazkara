@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,12 +36,20 @@ const formSchema = z.object({
 const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
-  // All available teams - we'll filter out the current team
+  // All available teams
   const allTeams = ['الهلال', 'النصر', 'الأهلي', 'الاتحاد', 'الشباب'];
   
+  // Get current team name, ensuring we have a fallback
+  const currentTeam = teamProfile?.team_name || '';
+  
   // Filter out the current team from opponents
-  const currentTeam = teamProfile?.team_name || 'النصر'; // Default to النصر if not available
-  const opponentTeams = allTeams.filter(team => team !== currentTeam);
+  const opponentTeams = allTeams.filter(team => {
+    // Normalize team names for comparison by removing "فريق " prefix if present
+    const normalizedCurrentTeam = currentTeam.replace('فريق ', '');
+    const normalizedTeam = team.replace('فريق ', '');
+    
+    return normalizedTeam !== normalizedCurrentTeam;
+  });
   
   const cities = ['الرياض', 'جدة', 'أبها'];
   const stadiums = {
