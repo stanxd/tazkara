@@ -13,6 +13,13 @@ interface TeamFansDataProps {
   teamProfile: any;
 }
 
+interface Fan {
+  id: string;
+  name: string;
+  mobile: string;
+  favorite_team: string;
+}
+
 interface FanTicket {
   id: string;
   fan_id: string;
@@ -22,13 +29,6 @@ interface FanTicket {
   purchase_date: string;
   ticket_price: number;
   fan?: Fan;
-}
-
-interface Fan {
-  id: string;
-  name: string;
-  mobile: string;
-  favorite_team: string;
 }
 
 interface FanPreference {
@@ -70,7 +70,8 @@ const TeamFansData: React.FC<TeamFansDataProps> = ({ teamProfile }) => {
         if (ticketsError) throw ticketsError;
 
         // Set tickets data
-        setTickets(ticketsData || []);
+        const typedTickets = ticketsData as FanTicket[] || [];
+        setTickets(typedTickets);
 
         // Get fan preferences for the pie chart
         const { data: preferencesData, error: preferencesError } = await supabase
