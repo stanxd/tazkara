@@ -6,6 +6,7 @@ import PlatformBenefits from '@/components/home/PlatformBenefits';
 import AvailableTickets from '@/components/tickets/AvailableTickets';
 import Founders from '@/components/about/Founders';
 import Footer from '@/components/Footer';
+import ScrollToTickets from '@/components/home/ScrollToTickets';
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
         <Founders />
       </main>
       <Footer />
+      <ScrollToTickets />
     </div>
   );
 };
