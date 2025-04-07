@@ -1,8 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import { Ticket, Map } from 'lucide-react';
 import { getAvailableMatches, matchToTicket } from '@/services/matchesService';
-import ModernTicketCard from '@/components/tickets/ModernTicketCard';
+import ModernTicketCard from './card/ModernTicketCard';
 import { Match } from '@/components/dashboard/matches/types';
 import { TicketProps } from '@/components/tickets/TicketCard';
 import { Skeleton } from '@/components/ui/skeleton';
