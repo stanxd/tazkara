@@ -7,6 +7,8 @@ import AccountStatus from './fans/AccountStatus';
 import FanTickets from './fans/FanTickets';
 import AccountStats from './fans/AccountStats';
 import AccountSettings from './fans/AccountSettings';
+import FanWaitlistTickets from './fans/FanWaitlistTickets';
+import AttendanceHistory from './fans/AttendanceHistory';
 import { supabase } from '@/integrations/supabase/client';
 
 interface FanDashboardProps {
@@ -90,14 +92,24 @@ const FanDashboard: React.FC<FanDashboardProps> = ({ fanProfile: initialProfile 
       <AccountStatus userId={user?.id || ''} />
 
       <Tabs defaultValue="tickets" className="w-full max-w-4xl mx-auto">
-        <TabsList className="grid w-full grid-cols-3 rtl">
+        <TabsList className="grid w-full grid-cols-5 rtl">
           <TabsTrigger value="tickets">التذاكر</TabsTrigger>
+          <TabsTrigger value="waitlist">قائمة الانتظار</TabsTrigger>
+          <TabsTrigger value="attendance">سجل الحضور</TabsTrigger>
           <TabsTrigger value="stats">الإحصاءات</TabsTrigger>
-          <TabsTrigger value="settings">إعدادات الحساب</TabsTrigger>
+          <TabsTrigger value="settings">الإعدادات</TabsTrigger>
         </TabsList>
         
         <TabsContent value="tickets">
           <FanTickets userId={user?.id || ''} />
+        </TabsContent>
+        
+        <TabsContent value="waitlist">
+          <FanWaitlistTickets userId={user?.id || ''} />
+        </TabsContent>
+        
+        <TabsContent value="attendance">
+          <AttendanceHistory userId={user?.id || ''} />
         </TabsContent>
         
         <TabsContent value="stats">
