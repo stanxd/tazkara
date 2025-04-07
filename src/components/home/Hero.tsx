@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Ticket } from 'lucide-react';
@@ -9,6 +10,7 @@ import PaymentDialog from '../tickets/PaymentDialog';
 import WaitlistDialog from '../tickets/WaitlistDialog';
 import PenaltyDialog from '../tickets/PenaltyDialog';
 import MatchCountdown from './MatchCountdown';
+
 const Hero = () => {
   const navigate = useNavigate();
 
@@ -84,8 +86,8 @@ const Hero = () => {
           <MatchCountdown />
           
           {/* Book Button */}
-          <div className="mt-8">
-            <Button onClick={handleBookTicket} className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white text-lg px-8 py-6 rounded-full w-full md:w-auto rtl text-center">
+          <div className="mt-8 flex justify-center">
+            <Button onClick={handleBookTicket} className="bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white text-lg px-8 py-6 rounded-full rtl text-center">
               <Ticket className="ml-2 h-5 w-5" /> احجز تذكرتك الآن
             </Button>
           </div>
@@ -127,4 +129,5 @@ const Hero = () => {
       <PenaltyDialog open={showPenaltyDialog} onOpenChange={setShowPenaltyDialog} matchesRemaining={penaltyMatches} onClose={handlePenaltyAcknowledged} />
     </div>;
 };
+
 export default Hero;
