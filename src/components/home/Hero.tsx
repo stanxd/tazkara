@@ -7,11 +7,9 @@ import MatchCountdown from './MatchCountdown';
 
 const Hero: React.FC = () => {
   return (
-    <section className="relative bg-gradient-to-br from-[#520082] to-[#1E0040] overflow-hidden min-h-[90vh] flex items-center">
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1624880357913-a8539238245b')] bg-cover bg-center opacity-5"></div>
-      
-      {/* Purple gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#520082]/90 to-[#1E0040]/80"></div>
+    <section className="relative bg-[#190038] overflow-hidden min-h-[90vh] flex items-center">
+      {/* Subtle pattern overlay */}
+      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1624880357913-a8539238245b')] bg-cover bg-center opacity-[0.03]"></div>
       
       <div className="container mx-auto px-4 py-20 md:py-32 relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-8">
@@ -23,7 +21,7 @@ const Hero: React.FC = () => {
           </p>
           
           {/* Featured Match Card */}
-          <div className="bg-[#13002A]/80 backdrop-blur-sm rounded-xl p-6 mb-10 border border-purple-500/20 shadow-lg shadow-purple-500/10">
+          <div className="bg-[#190038]/80 backdrop-blur-sm rounded-xl p-6 mb-10 border border-purple-500/20 shadow-lg shadow-purple-500/10">
             <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse mb-1">
               <span className="bg-gradient-to-r from-pink-500 to-purple-500 text-white text-xs font-bold px-2 py-1 rounded-full">نفاذ سريع</span>
             </div>
