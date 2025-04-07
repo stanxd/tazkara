@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -38,19 +39,24 @@ const ModernTicketCard: React.FC<TicketProps> = ({
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Find user's favorite team from metadata
+  // أضفنا إخراج بيانات المستخدم للتحقق من البيانات المخزنة
+  console.log("User data:", user);
+  console.log("User metadata:", user?.user_metadata);
+  console.log("User favorite team:", user?.user_metadata?.favorite_team);
+  
+  // الحصول على الفريق المفضل للمستخدم من بيانات التعريف
   const userFavoriteTeam = user?.user_metadata?.favorite_team;
   
-  // Calculate price adjustments for selected team and location
+  // حساب تعديلات السعر للفريق المحدد والموقع
   const calculateAdjustedPrice = (team: string): number => {
     let calculatedPrice = price;
     
-    // Popular teams get 60% price increase
+    // زيادة سعر الفرق الشهيرة بنسبة 60%
     if (isPopularTeam(team)) {
       calculatedPrice = Math.round(price * 1.6);
     }
     
-    // Riyadh matches are more expensive
+    // مباريات الرياض أكثر تكلفة
     if (city === "الرياض") {
       calculatedPrice = Math.round(calculatedPrice * 1.15);
     }
@@ -60,17 +66,17 @@ const ModernTicketCard: React.FC<TicketProps> = ({
   
   const handleBookTicket = () => {
     if (!user) {
-      // User is not logged in
+      // المستخدم غير مسجل الدخول
       setShowLoginDialog(true);
     } else {
-      // Check if user is a fan or team
+      // التحقق مما إذا كان المستخدم مشجعًا أم فريقًا
       const userType = user.user_metadata?.user_type;
       
       if (userType === 'fan') {
-        // User is a fan, proceed with team selection
+        // المستخدم مشجع، المتابعة مع اختيار الفريق
         setShowTeamSelectionDialog(true);
       } else {
-        // User is logged in but not as a fan
+        // المستخدم مسجل الدخول ولكن ليس كمشجع
         toast({
           title: "لا يمكن إكمال الحجز",
           description: "يجب تسجيل الدخول بحساب مشجع لحجز التذاكر",
@@ -85,14 +91,20 @@ const ModernTicketCard: React.FC<TicketProps> = ({
     setAdjustedPrice(calculateAdjustedPrice(team));
     setShowTeamSelectionDialog(false);
     
-    // Check if selected team is the user's favorite team
-    const isUserFavoriteTeam = team === userFavoriteTeam;
+    console.log("Selected team:", team);
+    console.log("User favorite team:", userFavoriteTeam);
+    
+    // التحقق مما إذا كان الفريق المحدد هو الفريق المفضل للمستخدم
+    // تأكدنا من أن المقارنة تتم بشكل صحيح وبنفس التنسيق
+    const isUserFavoriteTeam = team.trim().toLowerCase() === userFavoriteTeam?.trim().toLowerCase();
+    
+    console.log("Is user favorite team?", isUserFavoriteTeam);
     
     if (isUserFavoriteTeam) {
-      // Case 1: If the selected team is the user's favorite team, show payment dialog directly
+      // الحالة 1: إذا كان الفريق المحدد هو الفريق المفضل للمستخدم، عرض مربع حوار الدفع مباشرة
       setShowPaymentDialog(true);
     } else {
-      // Case 2: If not the favorite team, show waitlist dialog
+      // الحالة 2: إذا لم يكن الفريق المفضل، عرض مربع حوار قائمة الانتظار
       setShowWaitlistDialog(true);
     }
   };
@@ -112,7 +124,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
       description: `تم حجز تذكرة لمباراة ${homeTeam} ضد ${awayTeam}`,
     });
     
-    // Actual payment processing would happen here
+    // معالجة الدفع الفعلية ستحدث هنا
   };
   
   return (

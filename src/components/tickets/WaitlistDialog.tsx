@@ -1,13 +1,16 @@
+
 import React from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Flame, AlertCircle, Heart } from 'lucide-react';
+
 interface WaitlistDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   teamName: string;
   onJoinWaitlist: () => void;
 }
+
 const WaitlistDialog: React.FC<WaitlistDialogProps> = ({
   open,
   onOpenChange,
@@ -18,7 +21,11 @@ const WaitlistDialog: React.FC<WaitlistDialogProps> = ({
       <DialogContent className="sm:max-w-md bg-[#13002A] text-white border border-purple-500/20">
         <DialogHeader>
           <DialogTitle className="text-center text-xl rtl">قائمة الانتظار</DialogTitle>
+          <DialogDescription className="text-center text-purple-200">
+            انتظر حتى تتوفر التذاكر للفرق التي ليست ضمن المفضلة لديك
+          </DialogDescription>
         </DialogHeader>
+        
         <div className="space-y-4 py-6 rtl text-center">
           <div className="flex justify-center">
             <Heart className="h-12 w-12 text-pink-500" />
@@ -51,4 +58,5 @@ const WaitlistDialog: React.FC<WaitlistDialogProps> = ({
       </DialogContent>
     </Dialog>;
 };
+
 export default WaitlistDialog;

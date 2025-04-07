@@ -1,12 +1,23 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from '@/context/AuthContext';
 
 interface FanDashboardProps {
   fanProfile: any;
 }
 
 const FanDashboard: React.FC<FanDashboardProps> = ({ fanProfile }) => {
+  const { user } = useAuth();
+
+  useEffect(() => {
+    // إضافة سجل للتحقق من بيانات المستخدم
+    console.log("Fan Dashboard - User data:", user);
+    console.log("Fan Dashboard - User metadata:", user?.user_metadata);
+    console.log("Fan Dashboard - Favorite team:", user?.user_metadata?.favorite_team);
+    console.log("Fan Dashboard - Fan profile:", fanProfile);
+  }, [user, fanProfile]);
+
   return (
     <div className="space-y-6">
       <Card className="w-full max-w-2xl mx-auto">
@@ -29,7 +40,7 @@ const FanDashboard: React.FC<FanDashboardProps> = ({ fanProfile }) => {
           </div>
           <div className="space-y-2">
             <h3 className="text-lg font-medium">الفريق المفضل:</h3>
-            <p>{fanProfile?.favorite_team}</p>
+            <p>{fanProfile?.favorite_team || user?.user_metadata?.favorite_team || "غير محدد"}</p>
           </div>
         </CardContent>
       </Card>
