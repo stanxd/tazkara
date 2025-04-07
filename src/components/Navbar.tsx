@@ -1,9 +1,11 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from './Logo';
 import { useAuth } from '@/context/AuthContext';
+
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const {
@@ -11,12 +13,14 @@ const Navbar: React.FC = () => {
     signOut
   } = useAuth();
   const navigate = useNavigate();
+
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
     setIsMenuOpen(false);
   };
-  return <nav className="bg-[#190038]/90 backdrop-blur-sm py-4 border-b border-purple-500/20">
+
+  return <nav className="fixed top-0 left-0 right-0 z-50 bg-[#190038]/90 backdrop-blur-sm py-4 border-b border-purple-500/20">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <Logo />
@@ -83,4 +87,5 @@ const Navbar: React.FC = () => {
         </div>}
     </nav>;
 };
+
 export default Navbar;
