@@ -5,29 +5,32 @@ import { Card, CardContent } from '@/components/ui/card';
 interface FounderProps {
   name: string;
   title: string;
-  image: string;
 }
 
 const founders: FounderProps[] = [
   {
-    name: 'محمد العمري',
-    title: 'الرئيس التنفيذي',
-    image: 'https://randomuser.me/api/portraits/men/32.jpg',
+    name: 'عفاف المطرفي',
+    title: 'مدير فريق',
   },
   {
-    name: 'سارة الزهراني',
-    title: 'مدير التكنولوجيا',
-    image: 'https://randomuser.me/api/portraits/women/44.jpg',
+    name: 'ليان الجهني',
+    title: 'عضو فريق',
   },
   {
-    name: 'أحمد السليم',
-    title: 'مدير التسويق',
-    image: 'https://randomuser.me/api/portraits/men/36.jpg',
+    name: 'شوق الاحمدي',
+    title: 'عضو فريق',
   },
   {
-    name: 'نورة القحطاني',
-    title: 'مدير العمليات',
-    image: 'https://randomuser.me/api/portraits/women/68.jpg',
+    name: 'آمل العلوي',
+    title: 'عضو فريق',
+  },
+  {
+    name: 'شموخ سعيد',
+    title: 'مستشار',
+  },
+  {
+    name: 'سلطان الصاعدي',
+    title: 'مطور نماذج آولية',
   },
 ];
 
@@ -40,19 +43,12 @@ const Founders: React.FC = () => {
           <p className="text-purple-200 mt-2 rtl">تعرف على فريق عمل تذكرة+</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
           {founders.map((founder, index) => (
             <Card key={index} className="overflow-hidden border-none shadow-md hover:shadow-lg transition-shadow bg-[#13002A]/80 backdrop-blur-sm border border-purple-500/20">
-              <div className="h-52 overflow-hidden">
-                <img 
-                  src={founder.image} 
-                  alt={founder.name} 
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <CardContent className="text-center py-4 rtl">
-                <h3 className="font-bold text-lg text-white">{founder.name}</h3>
-                <p className="text-purple-200">{founder.title}</p>
+              <CardContent className="text-center py-8 rtl">
+                <h3 className="font-bold text-xl text-white">{founder.name}</h3>
+                <p className="text-purple-200 mt-2">{founder.title}</p>
               </CardContent>
             </Card>
           ))}
