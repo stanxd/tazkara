@@ -56,7 +56,8 @@ const Hero = () => {
       });
     }
   };
-  return <div className="py-20 relative bg-[#13002A] overflow-hidden min-h-[85vh] flex items-center">
+  return (
+    <div className="py-20 relative bg-[#13002A] overflow-hidden min-h-[85vh] flex items-center" id="hero">
       <div className="absolute inset-0 bg-[url('/stadium-bg.jpg')] bg-center bg-cover opacity-5 mix-blend-overlay"></div>
       
       <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center">
@@ -113,21 +114,47 @@ const Hero = () => {
       {/* Dialogs */}
       <LoginDialog open={showLoginDialog} onOpenChange={setShowLoginDialog} />
       
-      <TeamSelectionDialog open={showTeamSelectionDialog} onOpenChange={setShowTeamSelectionDialog} homeTeam={featuredMatch.homeTeam} awayTeam={featuredMatch.awayTeam} onTeamSelect={team => handleTeamSelection(team, featuredMatch.location)} price={150} city={featuredMatch.location} />
+      <TeamSelectionDialog 
+        open={showTeamSelectionDialog} 
+        onOpenChange={setShowTeamSelectionDialog} 
+        homeTeam={featuredMatch.homeTeam} 
+        awayTeam={featuredMatch.awayTeam} 
+        onTeamSelect={team => handleTeamSelection(team, featuredMatch.location)} 
+        price={150} 
+        city={featuredMatch.location} 
+      />
       
-      <PaymentDialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog} teamName={selectedTeam} matchDetails={{
-      homeTeam: featuredMatch.homeTeam,
-      awayTeam: featuredMatch.awayTeam,
-      city: featuredMatch.location,
-      stadium: featuredMatch.stadium,
-      date: featuredMatch.date,
-      time: featuredMatch.time
-    }} price={adjustedPrice} onProcessPayment={handleProcessPayment} />
+      <PaymentDialog 
+        open={showPaymentDialog} 
+        onOpenChange={setShowPaymentDialog} 
+        teamName={selectedTeam} 
+        matchDetails={{
+          homeTeam: featuredMatch.homeTeam,
+          awayTeam: featuredMatch.awayTeam,
+          city: featuredMatch.location,
+          stadium: featuredMatch.stadium,
+          date: featuredMatch.date,
+          time: featuredMatch.time
+        }} 
+        price={adjustedPrice} 
+        onProcessPayment={handleProcessPayment} 
+      />
       
-      <WaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} teamName={selectedTeam} onJoinWaitlist={handleJoinWaitlist} />
+      <WaitlistDialog 
+        open={showWaitlistDialog} 
+        onOpenChange={setShowWaitlistDialog} 
+        teamName={selectedTeam} 
+        onJoinWaitlist={handleJoinWaitlist} 
+      />
 
-      <PenaltyDialog open={showPenaltyDialog} onOpenChange={setShowPenaltyDialog} matchesRemaining={penaltyMatches} onClose={handlePenaltyAcknowledged} />
-    </div>;
+      <PenaltyDialog 
+        open={showPenaltyDialog} 
+        onOpenChange={setShowPenaltyDialog} 
+        matchesRemaining={penaltyMatches} 
+        onClose={handlePenaltyAcknowledged} 
+      />
+    </div>
+  );
 };
 
 export default Hero;
