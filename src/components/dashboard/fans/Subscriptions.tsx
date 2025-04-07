@@ -3,9 +3,11 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check, Crown, Star, Award } from 'lucide-react';
+
 interface SubscriptionsProps {
   userId: string;
 }
+
 const Subscriptions: React.FC<SubscriptionsProps> = ({
   userId
 }) => {
@@ -13,6 +15,7 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({
     console.log(`Subscribing to ${planType} plan for user ${userId}`);
     // Here you would typically redirect to payment or show a payment modal
   };
+
   return <div className="space-y-6">
       <div className="mb-4 text-center">
         <h2 className="text-2xl font-bold mb-2 rtl">باقات الاشتراك</h2>
@@ -31,8 +34,8 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({
             <CardHeader className="pb-4">
               <CardTitle className="text-xl rtl">للمشجعين الحماسيين</CardTitle>
               <div className="mt-2 rtl">
-                <span className="text-gray-500 ml-1">ريال</span>
                 <span className="text-3xl font-bold">99</span>
+                <span className="text-gray-500 mr-1">ريال</span>
               </div>
             </CardHeader>
             <CardContent className="rtl flex-grow">
@@ -69,8 +72,8 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({
             <CardHeader className="pb-4">
               <CardTitle className="text-xl rtl">للمشجعين المتميزين</CardTitle>
               <div className="mt-2 rtl">
-                <span className="text-gray-500 ml-1">ريال</span>
                 <span className="text-3xl font-bold">499</span>
+                <span className="text-gray-500 mr-1">ريال</span>
               </div>
             </CardHeader>
             <CardContent className="rtl flex-grow">
@@ -100,4 +103,5 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({
       </div>
     </div>;
 };
+
 export default Subscriptions;
