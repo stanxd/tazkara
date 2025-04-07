@@ -1,4 +1,3 @@
-
 /**
  * Service providing predefined match data
  */
@@ -101,6 +100,48 @@ export const getPredefinedMatches = (): Match[] => {
       isFuture: true,
       importanceLevel: "متوسطة",
       expectedDemandLevel: "منخفض"
+    },
+    {
+      id: 2001,
+      homeTeam: "فريق الهلال",
+      opponent: "فريق الفتح",
+      city: "الرياض",
+      stadium: "مرسول بارك",
+      date: getNextDate(7),
+      time: "20:00",
+      availableTickets: 1000,
+      ticketPrice: 120,
+      isFuture: true,
+      importanceLevel: "متوسطة",
+      expectedDemandLevel: "منخفض",
+      alwaysShow: true
+    },
+    {
+      id: 2002,
+      homeTeam: "فريق الفيصلي",
+      opponent: "فريق ضمك",
+      city: "الرياض",
+      stadium: "مدينة الملك سلمان الرياضية",
+      date: getNextDate(10),
+      time: "19:00",
+      availableTickets: 800,
+      ticketPrice: 80,
+      isFuture: true,
+      importanceLevel: "منخفضة",
+      expectedDemandLevel: "منخفض",
+      alwaysShow: true
     }
+  ];
+};
+
+/**
+ * Function to get teams with lower popularity
+ * @returns Array of team names with lower popularity
+ */
+export const getLowerPopularityTeams = (): string[] => {
+  return [
+    "فريق الفتح",
+    "فريق الفيصلي",
+    "فريق ضمك"
   ];
 };

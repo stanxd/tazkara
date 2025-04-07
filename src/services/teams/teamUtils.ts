@@ -5,6 +5,7 @@
 
 import { Match } from "@/components/dashboard/matches/types";
 import { getTeamProfileById, getMatchesByTeamId } from "../storage/localStorageUtils";
+import { getLowerPopularityTeams } from "../matches/predefinedMatches";
 
 /**
  * Helper function to get the team name associated with a match
@@ -85,3 +86,15 @@ export const isPriceFluctuating = (match: Match): boolean => {
   );
 };
 
+/**
+ * Check if a team is considered low popularity
+ */
+export const isLowPopularityTeam = (teamName: string): boolean => {
+  if (!teamName) return false;
+  
+  // Remove 'فريق ' prefix if it exists for comparison
+  const normalizedName = teamName.startsWith('فريق ') ? teamName : `فريق ${teamName}`;
+  
+  // Check against our list of lower popularity teams
+  return getLowerPopularityTeams().includes(normalizedName);
+};

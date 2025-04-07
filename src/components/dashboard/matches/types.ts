@@ -11,10 +11,11 @@ export interface Match {
   isFuture: boolean;
   importanceLevel?: string; 
   expectedDemandLevel?: string;
-  homeTeam?: string;  // Added this property
-  homeTeamId?: string; // Added this property
-  giftTickets?: number; // Added for gift feature
-  giftDistributed?: boolean; // Track if gifts have been distributed
+  homeTeam?: string;
+  homeTeamId?: string;
+  giftTickets?: number;
+  giftDistributed?: boolean;
+  alwaysShow?: boolean; // New flag to force showing certain matches
 }
 
 export interface TeamProfile {

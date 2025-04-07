@@ -1,6 +1,7 @@
 
 import { Match } from '@/components/dashboard/matches/types';
 import { getStoredMatches } from '@/components/dashboard/matches/matchUtils';
+import { getPredefinedMatches } from './predefinedMatches';
 
 /**
  * Get available matches from all teams that have future dates
@@ -8,6 +9,9 @@ import { getStoredMatches } from '@/components/dashboard/matches/matchUtils';
  */
 export const getAvailableMatches = (): Match[] => {
   try {
+    // Get predefined matches that should always be shown
+    const predefinedMatches = getPredefinedMatches().filter(match => match.alwaysShow);
+    
     // Get all teams from localStorage (temporary implementation)
     const allTeamIds = getAllTeamIds();
     
@@ -24,15 +28,33 @@ export const getAvailableMatches = (): Match[] => {
       match.availableTickets > 0
     );
     
-    console.log('Available matches found:', availableMatches.length);
-    if (availableMatches.length === 0) {
-      console.log('No available matches found, team IDs checked:', allTeamIds);
+    // Combine predefined matches with available matches
+    // Use a Map to prevent duplicates by ID
+    const matchesMap = new Map<number, Match>();
+    
+    // Add predefined matches first
+    predefinedMatches.forEach(match => {
+      matchesMap.set(match.id, match);
+    });
+    
+    // Then add available matches, which will overwrite predefined matches if they have the same ID
+    availableMatches.forEach(match => {
+      matchesMap.set(match.id, match);
+    });
+    
+    // Convert Map back to array
+    const combinedMatches = Array.from(matchesMap.values());
+    
+    console.log('Combined matches found:', combinedMatches.length, 'including predefined matches');
+    if (combinedMatches.length === 0) {
+      console.log('No matches found, team IDs checked:', allTeamIds);
     }
     
-    return availableMatches;
+    return combinedMatches;
   } catch (error) {
     console.error("Error getting available matches:", error);
-    return [];
+    // Return at least the predefined matches as a fallback
+    return getPredefinedMatches().filter(match => match.alwaysShow);
   }
 };
 

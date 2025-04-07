@@ -62,8 +62,17 @@ const AvailableTickets: React.FC = () => {
     };
     
     window.addEventListener('storage', handleStorageChange);
+    
+    // Also set an interval to periodically refresh tickets
+    // This ensures our predefined matches are always displayed
+    const refreshInterval = setInterval(() => {
+      console.log('Refreshing tickets on interval');
+      loadTickets();
+    }, 30000); // Refresh every 30 seconds
+    
     return () => {
       window.removeEventListener('storage', handleStorageChange);
+      clearInterval(refreshInterval);
     };
   }, [user]);
 
