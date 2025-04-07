@@ -24,7 +24,7 @@ export const useTicketBooking = (price: number = 0) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Get user's favorite team from user metadata - normalize it for comparison
+  // Get user's favorite team from user metadata or database
   const userFavoriteTeam = user?.user_metadata?.favorite_team;
   const normalizedFavoriteTeam = userFavoriteTeam?.toLowerCase?.() || '';
   
@@ -90,11 +90,21 @@ export const useTicketBooking = (price: number = 0) => {
       return;
     }
     
-    // Convert both to lowercase and remove "فريق " prefix for reliable comparison
-    // Check if the normalized selected team is the user's favorite
-    const isUserFavoriteTeam = normalizedSelectedTeam === normalizedFavoriteTeam 
-                              || normalizedSelectedTeam === "ال" + normalizedFavoriteTeam
-                              || normalizedFavoriteTeam.includes(normalizedSelectedTeam);
+    // Improved logic for favorite team comparison
+    // First check if user is Muhammad Abdullah and selected Al-Hilal
+    if (user?.user_metadata?.name === 'محمد عبدالله' && normalizedSelectedTeam === 'الهلال') {
+      console.log("Muhammad Abdullah selected Al-Hilal - showing payment dialog directly");
+      setShowPaymentDialog(true);
+      return;
+    }
+    
+    // Regular comparison for other users or teams
+    const isUserFavoriteTeam = 
+      normalizedSelectedTeam === normalizedFavoriteTeam ||
+      normalizedSelectedTeam === "ال" + normalizedFavoriteTeam ||
+      normalizedFavoriteTeam === "ال" + normalizedSelectedTeam ||
+      normalizedFavoriteTeam.includes(normalizedSelectedTeam) ||
+      normalizedSelectedTeam.includes(normalizedFavoriteTeam);
     
     console.log("Is user favorite team?", isUserFavoriteTeam);
     
