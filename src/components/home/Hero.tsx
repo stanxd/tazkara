@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Ticket } from 'lucide-react';
@@ -10,7 +9,6 @@ import PaymentDialog from '../tickets/PaymentDialog';
 import WaitlistDialog from '../tickets/WaitlistDialog';
 import PenaltyDialog from '../tickets/PenaltyDialog';
 import MatchCountdown from './MatchCountdown';
-
 const Hero = () => {
   const navigate = useNavigate();
 
@@ -56,8 +54,7 @@ const Hero = () => {
       });
     }
   };
-  return (
-    <div className="py-20 relative bg-[#13002A] overflow-hidden min-h-[85vh] flex items-center" id="hero">
+  return <div className="py-20 relative bg-[#13002A] overflow-hidden min-h-[85vh] flex items-center" id="hero">
       <div className="absolute inset-0 bg-[url('/stadium-bg.jpg')] bg-center bg-cover opacity-5 mix-blend-overlay"></div>
       
       <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center">
@@ -98,15 +95,15 @@ const Hero = () => {
         <div className="grid grid-cols-3 gap-8 w-full max-w-4xl mx-auto mt-8">
           <div className="text-center">
             <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">+40</p>
-            <p className="text-gray-300 mt-2 rtl">مباراة شهريا</p>
+            <p className="text-gray-300 mt-2 rtl text-center">مباراة شهريا</p>
           </div>
           <div className="text-center">
             <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">+100K</p>
-            <p className="text-gray-300 mt-2 rtl">مشجع مسجل</p>
+            <p className="text-gray-300 mt-2 rtl text-center">مشجع مسجل</p>
           </div>
           <div className="text-center">
             <p className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">16</p>
-            <p className="text-gray-300 mt-2 rtl">فريق مشارك</p>
+            <p className="text-gray-300 mt-2 rtl text-center">فريق مشارك</p>
           </div>
         </div>
       </div>
@@ -114,47 +111,20 @@ const Hero = () => {
       {/* Dialogs */}
       <LoginDialog open={showLoginDialog} onOpenChange={setShowLoginDialog} />
       
-      <TeamSelectionDialog 
-        open={showTeamSelectionDialog} 
-        onOpenChange={setShowTeamSelectionDialog} 
-        homeTeam={featuredMatch.homeTeam} 
-        awayTeam={featuredMatch.awayTeam} 
-        onTeamSelect={team => handleTeamSelection(team, featuredMatch.location)} 
-        price={150} 
-        city={featuredMatch.location} 
-      />
+      <TeamSelectionDialog open={showTeamSelectionDialog} onOpenChange={setShowTeamSelectionDialog} homeTeam={featuredMatch.homeTeam} awayTeam={featuredMatch.awayTeam} onTeamSelect={team => handleTeamSelection(team, featuredMatch.location)} price={150} city={featuredMatch.location} />
       
-      <PaymentDialog 
-        open={showPaymentDialog} 
-        onOpenChange={setShowPaymentDialog} 
-        teamName={selectedTeam} 
-        matchDetails={{
-          homeTeam: featuredMatch.homeTeam,
-          awayTeam: featuredMatch.awayTeam,
-          city: featuredMatch.location,
-          stadium: featuredMatch.stadium,
-          date: featuredMatch.date,
-          time: featuredMatch.time
-        }} 
-        price={adjustedPrice} 
-        onProcessPayment={handleProcessPayment} 
-      />
+      <PaymentDialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog} teamName={selectedTeam} matchDetails={{
+      homeTeam: featuredMatch.homeTeam,
+      awayTeam: featuredMatch.awayTeam,
+      city: featuredMatch.location,
+      stadium: featuredMatch.stadium,
+      date: featuredMatch.date,
+      time: featuredMatch.time
+    }} price={adjustedPrice} onProcessPayment={handleProcessPayment} />
       
-      <WaitlistDialog 
-        open={showWaitlistDialog} 
-        onOpenChange={setShowWaitlistDialog} 
-        teamName={selectedTeam} 
-        onJoinWaitlist={handleJoinWaitlist} 
-      />
+      <WaitlistDialog open={showWaitlistDialog} onOpenChange={setShowWaitlistDialog} teamName={selectedTeam} onJoinWaitlist={handleJoinWaitlist} />
 
-      <PenaltyDialog 
-        open={showPenaltyDialog} 
-        onOpenChange={setShowPenaltyDialog} 
-        matchesRemaining={penaltyMatches} 
-        onClose={handlePenaltyAcknowledged} 
-      />
-    </div>
-  );
+      <PenaltyDialog open={showPenaltyDialog} onOpenChange={setShowPenaltyDialog} matchesRemaining={penaltyMatches} onClose={handlePenaltyAcknowledged} />
+    </div>;
 };
-
 export default Hero;
