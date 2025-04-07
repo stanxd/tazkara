@@ -32,15 +32,19 @@ const ModernTicketCard: React.FC<TicketProps> = ({
     setShowPaymentDialog,
     showWaitlistDialog,
     setShowWaitlistDialog,
+    showPenaltyDialog,
+    setShowPenaltyDialog,
     selectedTeam,
     adjustedPrice,
+    penaltyMatches,
     handleBookTicket,
     handleTeamSelection,
     handleJoinWaitlist,
-    handleProcessPayment
+    handleProcessPayment,
+    handlePenaltyAcknowledged
   } = useTicketBooking(price);
   
-  // أضفنا إخراج بيانات المستخدم للتحقق من البيانات المخزنة
+  // Output match details for debugging
   console.log("Match details:", { homeTeam, awayTeam, city, stadium, date, time });
   
   return (
@@ -104,6 +108,9 @@ const ModernTicketCard: React.FC<TicketProps> = ({
         setShowPaymentDialog={setShowPaymentDialog}
         showWaitlistDialog={showWaitlistDialog}
         setShowWaitlistDialog={setShowWaitlistDialog}
+        showPenaltyDialog={showPenaltyDialog}
+        setShowPenaltyDialog={setShowPenaltyDialog}
+        penaltyMatches={penaltyMatches}
         selectedTeam={selectedTeam}
         adjustedPrice={adjustedPrice}
         matchDetails={{
@@ -117,6 +124,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
         onTeamSelect={(team) => handleTeamSelection(team, city)}
         onJoinWaitlist={handleJoinWaitlist}
         onProcessPayment={handleProcessPayment}
+        onPenaltyAcknowledged={handlePenaltyAcknowledged}
       />
     </motion.div>
   );

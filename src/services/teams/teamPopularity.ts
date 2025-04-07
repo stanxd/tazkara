@@ -4,7 +4,7 @@
  */
 
 /**
- * Array of teams considered to be popular
+ * Array of teams considered to be popular/major
  */
 const popularTeams = [
   "الهلال",
@@ -26,4 +26,11 @@ export const isPopularTeam = (teamName: string): boolean => {
   return popularTeams.some(
     popularTeam => cleanTeamName.toLowerCase() === popularTeam.toLowerCase()
   );
+};
+
+/**
+ * List of all major/popular teams for reference
+ */
+export const getMajorTeamsList = (): string[] => {
+  return [...popularTeams];
 };

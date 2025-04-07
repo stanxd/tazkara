@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { isPopularTeam } from '@/services/teams/teamPopularity';
 
 interface PriceDisplayProps {
   teamName: string;
@@ -7,14 +8,16 @@ interface PriceDisplayProps {
 }
 
 const PriceDisplay: React.FC<PriceDisplayProps> = ({ teamName, price }) => {
+  const isMajorTeam = isPopularTeam(teamName);
+
   return (
     <div className="text-center">
       <p className="text-purple-200 mt-1">
         السعر: <span className="font-bold text-white">{price} ر.س</span>
       </p>
-      {price >= 130 && (
+      {isMajorTeam && (
         <p className="text-xs text-pink-400 animate-pulse-glow">
-          *مباراة قمة
+          *فريق رئيسي
         </p>
       )}
     </div>

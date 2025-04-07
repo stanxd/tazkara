@@ -1,17 +1,24 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { isPopularTeam } from '@/services/teams/teamPopularity';
+import { 
+  isUserPenalized, 
+  getUserPenaltyInfo,
+  reducePenaltyCounter
+} from '@/services/fans/attendanceService';
 
 export const useTicketBooking = (price: number = 0) => {
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [showTeamSelectionDialog, setShowTeamSelectionDialog] = useState(false);
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [showWaitlistDialog, setShowWaitlistDialog] = useState(false);
+  const [showPenaltyDialog, setShowPenaltyDialog] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<string>('');
   const [adjustedPrice, setAdjustedPrice] = useState<number>(price);
+  const [penaltyMatches, setPenaltyMatches] = useState(0);
   
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -75,6 +82,14 @@ export const useTicketBooking = (price: number = 0) => {
     console.log("Normalized selected team:", normalizedSelectedTeam);
     console.log("Normalized favorite team:", normalizedFavoriteTeam);
     
+    // Check if the user is penalized
+    if (user && isUserPenalized(user.id)) {
+      const penaltyInfo = getUserPenaltyInfo(user.id);
+      setPenaltyMatches(penaltyInfo.matchesRemaining);
+      setShowPenaltyDialog(true);
+      return;
+    }
+    
     // Convert both to lowercase and remove "فريق " prefix for reliable comparison
     // Check if the normalized selected team is the user's favorite
     const isUserFavoriteTeam = normalizedSelectedTeam === normalizedFavoriteTeam 
@@ -88,10 +103,26 @@ export const useTicketBooking = (price: number = 0) => {
       console.log("Showing payment dialog for favorite team");
       setShowPaymentDialog(true);
     } else {
-      // Case 2: If not the favorite team, show waitlist dialog
-      console.log("Showing waitlist dialog for non-favorite team");
-      setShowWaitlistDialog(true);
+      // Case 2: Check if it's a major team that isn't the user's favorite
+      const isMajorTeam = isPopularTeam(team);
+      
+      if (isMajorTeam) {
+        // Major team but not favorite - show waitlist
+        console.log("Showing waitlist dialog for non-favorite major team");
+        setShowWaitlistDialog(true);
+      } else {
+        // Non-major team and not favorite - direct to payment
+        console.log("Showing payment dialog for non-favorite, non-major team");
+        setShowPaymentDialog(true);
+      }
     }
+  };
+  
+  const handlePenaltyAcknowledged = () => {
+    setShowPenaltyDialog(false);
+    
+    // After showing penalty notification, always redirect to waitlist
+    setShowWaitlistDialog(true);
   };
   
   const handleJoinWaitlist = () => {
@@ -104,6 +135,13 @@ export const useTicketBooking = (price: number = 0) => {
   
   const handleProcessPayment = (method: 'card' | 'applepay') => {
     setShowPaymentDialog(false);
+    
+    // If user was penalized, reduce their penalty counter
+    if (user && isUserPenalized(user.id)) {
+      const remainingMatches = reducePenaltyCounter(user.id);
+      console.log(`Reduced penalty counter. Remaining: ${remainingMatches}`);
+    }
+    
     toast({
       title: "تم إكمال عملية الدفع بنجاح",
       description: `تم حجز تذكرة لمباراة`,
@@ -121,11 +159,15 @@ export const useTicketBooking = (price: number = 0) => {
     setShowPaymentDialog,
     showWaitlistDialog,
     setShowWaitlistDialog,
+    showPenaltyDialog,
+    setShowPenaltyDialog,
     selectedTeam,
     adjustedPrice,
+    penaltyMatches,
     handleBookTicket,
     handleTeamSelection,
     handleJoinWaitlist,
     handleProcessPayment,
+    handlePenaltyAcknowledged
   };
 };

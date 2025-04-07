@@ -4,6 +4,7 @@ import LoginDialog from '../dialogs/LoginDialog';
 import TeamSelectionDialog from '../TeamSelectionDialog';
 import PaymentDialog from '../PaymentDialog';
 import WaitlistDialog from '../WaitlistDialog';
+import PenaltyDialog from '../PenaltyDialog';
 
 interface TicketDialogsProps {
   showLoginDialog: boolean;
@@ -14,6 +15,9 @@ interface TicketDialogsProps {
   setShowPaymentDialog: (show: boolean) => void;
   showWaitlistDialog: boolean;
   setShowWaitlistDialog: (show: boolean) => void;
+  showPenaltyDialog?: boolean;
+  setShowPenaltyDialog?: (show: boolean) => void;
+  penaltyMatches?: number;
   selectedTeam: string;
   adjustedPrice: number;
   matchDetails: {
@@ -27,6 +31,7 @@ interface TicketDialogsProps {
   onTeamSelect: (team: string) => void;
   onJoinWaitlist: () => void;
   onProcessPayment: (method: 'card' | 'applepay') => void;
+  onPenaltyAcknowledged?: () => void;
 }
 
 const TicketDialogs: React.FC<TicketDialogsProps> = ({
@@ -38,12 +43,16 @@ const TicketDialogs: React.FC<TicketDialogsProps> = ({
   setShowPaymentDialog,
   showWaitlistDialog,
   setShowWaitlistDialog,
+  showPenaltyDialog = false,
+  setShowPenaltyDialog = () => {},
+  penaltyMatches = 0,
   selectedTeam,
   adjustedPrice,
   matchDetails,
   onTeamSelect,
   onJoinWaitlist,
-  onProcessPayment
+  onProcessPayment,
+  onPenaltyAcknowledged = () => {}
 }) => {
   return (
     <>
@@ -83,6 +92,13 @@ const TicketDialogs: React.FC<TicketDialogsProps> = ({
         onOpenChange={setShowWaitlistDialog}
         teamName={selectedTeam}
         onJoinWaitlist={onJoinWaitlist}
+      />
+
+      <PenaltyDialog
+        open={showPenaltyDialog}
+        onOpenChange={setShowPenaltyDialog}
+        matchesRemaining={penaltyMatches}
+        onClose={onPenaltyAcknowledged}
       />
     </>
   );
