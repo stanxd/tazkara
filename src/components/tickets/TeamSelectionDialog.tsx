@@ -1,6 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
-import { Flame } from 'lucide-react';
+import React from 'react';
 import { 
   Dialog, 
   DialogContent,
@@ -8,7 +7,9 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { isPopularTeam } from '@/services/teams/teamPopularity';
+import TeamButton from './TeamButton';
+import PriceDisplay from './PriceDisplay';
+import { useTeamSelection } from '@/hooks/useTeamSelection';
 
 interface TeamSelectionDialogProps {
   open: boolean;
@@ -29,45 +30,12 @@ const TeamSelectionDialog: React.FC<TeamSelectionDialogProps> = ({
   price,
   city
 }) => {
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
-  const [calculatedPrice, setCalculatedPrice] = useState<number>(price);
-  
-  // Calculate adjusted price based on team and city
-  const calculateAdjustedPrice = (team: string) => {
-    let adjustedPrice = price;
-    
-    // Popular teams get 60% price increase
-    if (isPopularTeam(team)) {
-      adjustedPrice = Math.round(price * 1.6);
-    }
-    
-    // Riyadh matches are more expensive
-    if (city === "الرياض") {
-      adjustedPrice = Math.round(adjustedPrice * 1.15);
-    }
-    
-    return adjustedPrice;
-  };
-  
-  // Update price when team is selected
-  const handleTeamSelect = (team: string) => {
-    setSelectedTeam(team);
-    setCalculatedPrice(calculateAdjustedPrice(team));
-  };
-  
-  // Reset selection when dialog closes
-  useEffect(() => {
-    if (!open) {
-      setSelectedTeam(null);
-    }
-  }, [open]);
-  
-  // Submit selection
-  const handleSubmit = () => {
-    if (selectedTeam) {
-      onTeamSelect(selectedTeam);
-    }
-  };
+  const {
+    selectedTeam,
+    calculatedPrice,
+    handleTeamSelect,
+    handleSubmit
+  } = useTeamSelection({ price, city, onOpenChange });
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -82,48 +50,24 @@ const TeamSelectionDialog: React.FC<TeamSelectionDialogProps> = ({
           
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col">
-              <Button 
-                variant="outline" 
-                onClick={() => handleTeamSelect(homeTeam)}
-                className={`relative border-purple-500/40 bg-purple-900/20 hover:bg-purple-900/40 mb-3 h-20 ${selectedTeam === homeTeam ? 'ring-2 ring-pink-500' : ''}`}
-              >
-                <span className="text-lg font-bold">{homeTeam}</span>
-                {isPopularTeam(homeTeam) && (
-                  <span className="absolute top-2 right-2">
-                    <Flame className="h-5 w-5 text-orange-500" />
-                  </span>
-                )}
-              </Button>
-              {isPopularTeam(homeTeam) && (
-                <p className="text-xs text-orange-400 text-center">فريق ذو شعبية عالية</p>
-              )}
+              <TeamButton 
+                teamName={homeTeam}
+                isSelected={selectedTeam === homeTeam}
+                onSelect={handleTeamSelect}
+              />
               {selectedTeam === homeTeam && (
-                <p className="text-center text-purple-200 mt-1">
-                  السعر: <span className="font-bold text-white">{calculateAdjustedPrice(homeTeam)} ر.س</span>
-                </p>
+                <PriceDisplay teamName={homeTeam} price={calculatedPrice} />
               )}
             </div>
             
             <div className="flex flex-col">
-              <Button 
-                variant="outline"
-                onClick={() => handleTeamSelect(awayTeam)}
-                className={`relative border-purple-500/40 bg-purple-900/20 hover:bg-purple-900/40 mb-3 h-20 ${selectedTeam === awayTeam ? 'ring-2 ring-pink-500' : ''}`}
-              >
-                <span className="text-lg font-bold">{awayTeam}</span>
-                {isPopularTeam(awayTeam) && (
-                  <span className="absolute top-2 right-2">
-                    <Flame className="h-5 w-5 text-orange-500" />
-                  </span>
-                )}
-              </Button>
-              {isPopularTeam(awayTeam) && (
-                <p className="text-xs text-orange-400 text-center">فريق ذو شعبية عالية</p>
-              )}
+              <TeamButton 
+                teamName={awayTeam}
+                isSelected={selectedTeam === awayTeam}
+                onSelect={handleTeamSelect}
+              />
               {selectedTeam === awayTeam && (
-                <p className="text-center text-purple-200 mt-1">
-                  السعر: <span className="font-bold text-white">{calculateAdjustedPrice(awayTeam)} ر.س</span>
-                </p>
+                <PriceDisplay teamName={awayTeam} price={calculatedPrice} />
               )}
             </div>
           </div>
@@ -131,7 +75,7 @@ const TeamSelectionDialog: React.FC<TeamSelectionDialogProps> = ({
           <div className="mt-6 pt-4 border-t border-purple-500/20 flex justify-between items-center">
             {selectedTeam ? (
               <Button 
-                onClick={handleSubmit}
+                onClick={() => handleSubmit(onTeamSelect)}
                 className="bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 border-none w-full"
               >
                 متابعة بسعر {calculatedPrice} ر.س
