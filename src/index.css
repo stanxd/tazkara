@@ -45,7 +45,7 @@
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    --navbar-height: 72px;
+    --navbar-height: 80px;
   }
 
   * {
@@ -76,7 +76,7 @@
   /* Section targeting for smooth scrolling with navbar offset */
   section[id],
   div[id]:not([id=""]) {
-    scroll-margin-top: calc(var(--navbar-height) + 16px);
+    scroll-margin-top: calc(var(--navbar-height) + 20px);
   }
 
   /* Add padding to main content areas */

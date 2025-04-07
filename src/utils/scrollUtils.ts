@@ -18,3 +18,16 @@ export const scrollToElement = (elementId: string) => {
     behavior: 'smooth'
   });
 };
+
+/**
+ * Handles hash navigation scrolling with navbar offset
+ */
+export const handleHashScroll = () => {
+  if (window.location.hash) {
+    const targetId = window.location.hash.substring(1); // Remove the # character
+    setTimeout(() => {
+      scrollToElement(targetId);
+    }, 100); // Small delay to ensure DOM is ready
+  }
+};
+
