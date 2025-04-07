@@ -4,7 +4,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsContent, TabsTrigger } from '@/components/ui/tabs';
+import { Eye } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import TicketDetailsDialog from './TicketDetailsDialog';
 
 interface Ticket {
   id: string;
@@ -34,6 +36,8 @@ const pastTickets: Ticket[] = [
 const FanTickets: React.FC<FanTicketsProps> = ({ userId }) => {
   const { toast } = useToast();
   const [tickets, setTickets] = useState({ upcoming: [...upcomingTickets], past: [...pastTickets] });
+  const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null);
+  const [showTicketDetails, setShowTicketDetails] = useState(false);
   
   const canSellTicket = (date: string, time: string): boolean => {
     const ticketDateTime = new Date(`${date}T${time}`);
@@ -53,6 +57,11 @@ const FanTickets: React.FC<FanTicketsProps> = ({ userId }) => {
       title: "تم بيع التذكرة",
       description: "تم بيع التذكرة بنجاح وسيتم إضافة المبلغ لحسابك",
     });
+  };
+  
+  const handleViewTicket = (ticket: Ticket) => {
+    setSelectedTicket(ticket);
+    setShowTicketDetails(true);
   };
   
   return (
@@ -90,7 +99,15 @@ const FanTickets: React.FC<FanTicketsProps> = ({ userId }) => {
                         <TableCell className="text-right">{ticket.time}</TableCell>
                         <TableCell className="text-right">{ticket.stadium}</TableCell>
                         <TableCell className="text-right">{ticket.price} ريال</TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="text-right flex items-center gap-2">
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => handleViewTicket(ticket)}
+                            title="عرض التذكرة"
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
                           <Button 
                             onClick={() => handleSellTicket(ticket.id)}
                             disabled={!sellable}
@@ -122,6 +139,7 @@ const FanTickets: React.FC<FanTicketsProps> = ({ userId }) => {
                     <TableHead className="text-right">الوقت</TableHead>
                     <TableHead className="text-right">الملعب</TableHead>
                     <TableHead className="text-right">السعر</TableHead>
+                    <TableHead className="text-right">الإجراءات</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -132,6 +150,16 @@ const FanTickets: React.FC<FanTicketsProps> = ({ userId }) => {
                       <TableCell className="text-right">{ticket.time}</TableCell>
                       <TableCell className="text-right">{ticket.stadium}</TableCell>
                       <TableCell className="text-right">{ticket.price} ريال</TableCell>
+                      <TableCell className="text-right">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          onClick={() => handleViewTicket(ticket)}
+                          title="عرض التذكرة"
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -144,6 +172,14 @@ const FanTickets: React.FC<FanTicketsProps> = ({ userId }) => {
           </TabsContent>
         </Tabs>
       </CardContent>
+      
+      {selectedTicket && (
+        <TicketDetailsDialog
+          open={showTicketDetails}
+          onOpenChange={setShowTicketDetails}
+          ticket={selectedTicket}
+        />
+      )}
     </Card>
   );
 };
