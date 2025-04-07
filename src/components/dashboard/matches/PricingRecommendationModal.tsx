@@ -9,7 +9,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Calculator } from 'lucide-react';
+import { Brain } from 'lucide-react';
 import { PricingModelInput, PricingModelOutput, calculateRecommendedPrice } from './pricing';
 
 interface PricingRecommendationModalProps {
@@ -60,8 +60,8 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
           disabled={disabled}
           className="w-full mt-2"
         >
-          <Calculator className="ml-2 h-4 w-4" />
-          حساب السعر المناسب
+          <Brain className="ml-2 h-4 w-4" />
+          تحليل سعر مقترح
         </Button>
       </DialogTrigger>
       <DialogContent className="rtl">

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -5,6 +6,7 @@ import { UseFormReturn } from 'react-hook-form';
 import { MatchFormData } from './formTypes';
 import PricingRecommendationModal from '../PricingRecommendationModal';
 import { PricingModelInput } from '../pricing';
+import { Brain } from 'lucide-react';
 
 interface TicketFieldsProps {
   form: UseFormReturn<MatchFormData>;
