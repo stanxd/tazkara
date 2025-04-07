@@ -96,10 +96,22 @@ const TeamSalesReports: React.FC<TeamSalesReportsProps> = ({ teamProfile }) => {
                   <XAxis 
                     dataKey="name" 
                     height={70}
-                    tick={{ 
-                      angle: -45, 
-                      textAnchor: 'end',
-                      dy: 20
+                    tick={(props) => {
+                      const { x, y, payload } = props;
+                      return (
+                        <g transform={`translate(${x},${y})`}>
+                          <text
+                            x={0}
+                            y={0}
+                            dy={20}
+                            textAnchor="end"
+                            fill="#666"
+                            transform="rotate(-45)"
+                          >
+                            {payload.value}
+                          </text>
+                        </g>
+                      );
                     }}
                   />
                   <YAxis 
