@@ -75,8 +75,13 @@ export const useMatchForm = ({ onSubmit, currentTeam = '', stadiums }: UseMatchF
   const handleFormSubmit = (data: MatchFormData) => {
     onSubmit(data);
     form.reset({
-      ...form.formValues,
-      opponent: 'فريق الأهلي' // Reset to Al-Ahli after submission
+      opponent: 'فريق الأهلي', // Reset to Al-Ahli after submission
+      city: 'الرياض',
+      stadium: '',
+      date: '',
+      time: '20:00',
+      availableTickets: undefined,
+      ticketPrice: undefined,
     });
   };
 
