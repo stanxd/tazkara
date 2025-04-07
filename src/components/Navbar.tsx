@@ -26,7 +26,7 @@ const Navbar: React.FC = () => {
         <div className="hidden md:flex items-center space-x-4">
           {user ? <>
               <Link to="/dashboard" className="mx-2">
-                <Button variant="outline" className="border-purple-500/50 hover:bg-purple-900/40 text-zinc-50">
+                <Button variant="outline" className="border-purple-500/50 text-gray-50 bg-purple-950 hover:bg-purple-800">
                   لوحة التحكم
                 </Button>
               </Link>
