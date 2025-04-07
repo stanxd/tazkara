@@ -1,22 +1,8 @@
 
 import React, { useState } from 'react';
-import { Calendar, Clock, MapPin, Tag, Users, Shield, Ticket, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { 
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '@/components/ui/hover-card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader
-} from '@/components/ui/card';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { TicketProps } from './TicketCard';
 import { useAuth } from '@/context/AuthContext';
@@ -26,6 +12,9 @@ import TeamSelectionDialog from './TeamSelectionDialog';
 import PaymentDialog from './PaymentDialog';
 import WaitlistDialog from './WaitlistDialog';
 import { isPopularTeam } from '@/services/teams/teamPopularity';
+import TicketCardHeader from './TicketCardHeader';
+import TicketCardContent from './TicketCardContent';
+import LoginDialog from './dialogs/LoginDialog';
 
 const ModernTicketCard: React.FC<TicketProps> = ({
   homeTeam,
@@ -72,11 +61,6 @@ const ModernTicketCard: React.FC<TicketProps> = ({
         });
       }
     }
-  };
-  
-  const handleLoginRedirect = () => {
-    setShowLoginDialog(false);
-    navigate('/login');
   };
   
   const handleTeamSelection = (team: string) => {
@@ -133,90 +117,23 @@ const ModernTicketCard: React.FC<TicketProps> = ({
         onMouseLeave={() => setIsHovered(false)}
       >
         <CardHeader className="pb-2 pt-4 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-pink-500 to-purple-500"></div>
-          
-          <div className="flex justify-between items-center">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex items-center">
-                    <Ticket className="h-5 w-5 text-purple-400 mr-1" />
-                    <span className="text-xs font-medium text-purple-300">#{id.substring(0, 6)}</span>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p className="rtl text-xs">رمز التذكرة: {id}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-            
-            {isPriceFluctuating && (
-              <Badge variant="destructive" className="text-xs animate-pulse bg-gradient-to-r from-pink-500 to-purple-500 border-none">
-                سعر متغير
-              </Badge>
-            )}
-          </div>
-          
-          <div className="flex justify-between items-center mt-3 rtl">
-            <div className="text-lg font-bold text-white flex items-center">
-              {homeTeam}
-              {isPopularTeam(homeTeam) && (
-                <Flame className="h-4 w-4 text-orange-500 mr-1" />
-              )}
-            </div>
-            <div className="flex flex-col items-center mx-2">
-              <span className="text-xs font-bold text-purple-300">ضد</span>
-              <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">VS</span>
-            </div>
-            <div className="text-lg font-bold text-white flex items-center">
-              {awayTeam}
-              {isPopularTeam(awayTeam) && (
-                <Flame className="h-4 w-4 text-orange-500 mr-1" />
-              )}
-            </div>
-          </div>
+          <TicketCardHeader 
+            id={id}
+            homeTeam={homeTeam}
+            awayTeam={awayTeam}
+            isPriceFluctuating={isPriceFluctuating}
+            isHovered={isHovered}
+          />
         </CardHeader>
         
         <CardContent className="space-y-4 pt-4">
-          <div className="space-y-3">
-            <div className="flex items-center gap-2 text-purple-200 rtl">
-              <MapPin size={16} className={cn(
-                "transition-colors",
-                isHovered ? "text-pink-400" : "text-purple-400"
-              )} />
-              <HoverCard>
-                <HoverCardTrigger asChild>
-                  <span className="cursor-help">{stadium}</span>
-                </HoverCardTrigger>
-                <HoverCardContent className="rtl bg-[#13002A] border border-purple-500/20 text-purple-100">
-                  <p>المدينة: {city}</p>
-                </HoverCardContent>
-              </HoverCard>
-            </div>
-            
-            <div className="flex items-center gap-2 text-purple-200 rtl">
-              <Calendar size={16} className={cn(
-                "transition-colors",
-                isHovered ? "text-pink-400" : "text-purple-400"
-              )} />
-              <span>{date}</span>
-            </div>
-            
-            <div className="flex items-center gap-2 text-purple-200 rtl">
-              <Clock size={16} className={cn(
-                "transition-colors",
-                isHovered ? "text-pink-400" : "text-purple-400"
-              )} />
-              <span>{time}</span>
-            </div>
-            
-            <div className="flex items-center justify-end rtl">
-              <div className="flex items-center gap-1">
-                <Users size={14} className="text-purple-400" />
-                <span className="text-xs text-purple-300">محدود</span>
-              </div>
-            </div>
-          </div>
+          <TicketCardContent 
+            stadium={stadium}
+            city={city}
+            date={date}
+            time={time}
+            isHovered={isHovered}
+          />
         </CardContent>
         
         <CardFooter className="pt-2">
@@ -234,38 +151,12 @@ const ModernTicketCard: React.FC<TicketProps> = ({
         </CardFooter>
       </Card>
 
-      {/* Login Dialog */}
-      <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
-        <DialogContent className="sm:max-w-md bg-[#13002A] text-white border border-purple-500/20">
-          <DialogHeader>
-            <DialogTitle className="text-center text-xl rtl">تسجيل الدخول مطلوب</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-4 text-center rtl">
-            <p className="text-purple-200">
-              يجب تسجيل الدخول بحساب مشجع لتتمكن من حجز هذه التذكرة
-            </p>
-          </div>
-          <DialogFooter className="sm:justify-center gap-2 rtl">
-            <Button
-              type="button"
-              variant="ghost"
-              className="border border-purple-500/20 text-purple-200"
-              onClick={() => setShowLoginDialog(false)}
-            >
-              إلغاء
-            </Button>
-            <Button 
-              type="button" 
-              className="bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 border-none"
-              onClick={handleLoginRedirect}
-            >
-              تسجيل الدخول
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Dialogs */}
+      <LoginDialog 
+        open={showLoginDialog} 
+        onOpenChange={setShowLoginDialog} 
+      />
       
-      {/* Team Selection Dialog */}
       <TeamSelectionDialog
         open={showTeamSelectionDialog}
         onOpenChange={setShowTeamSelectionDialog}
@@ -275,7 +166,6 @@ const ModernTicketCard: React.FC<TicketProps> = ({
         price={price}
       />
       
-      {/* Payment Dialog */}
       <PaymentDialog
         open={showPaymentDialog}
         onOpenChange={setShowPaymentDialog}
@@ -292,7 +182,6 @@ const ModernTicketCard: React.FC<TicketProps> = ({
         onProcessPayment={handleProcessPayment}
       />
       
-      {/* Waitlist Dialog */}
       <WaitlistDialog
         open={showWaitlistDialog}
         onOpenChange={setShowWaitlistDialog}
