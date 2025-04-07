@@ -1,58 +1,49 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, Check, X } from 'lucide-react';
-
 interface AttendanceHistoryProps {
   userId: string;
 }
 
 // Mock data for demonstration
-const MOCK_ATTENDANCE = [
-  {
-    id: 'at1',
-    match: 'الهلال ضد النصر',
-    date: '2025-03-15',
-    attended: true
-  },
-  {
-    id: 'at2',
-    match: 'الاتحاد ضد الهلال',
-    date: '2025-03-08',
-    attended: true
-  },
-  {
-    id: 'at3',
-    match: 'الهلال ضد الفتح',
-    date: '2025-02-28',
-    attended: false
-  },
-  {
-    id: 'at4',
-    match: 'الأهلي ضد الهلال',
-    date: '2025-02-20',
-    attended: true
-  }
-];
-
-const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({ userId }) => {
+const MOCK_ATTENDANCE = [{
+  id: 'at1',
+  match: 'الهلال ضد النصر',
+  date: '2025-03-15',
+  attended: true
+}, {
+  id: 'at2',
+  match: 'الاتحاد ضد الهلال',
+  date: '2025-03-08',
+  attended: true
+}, {
+  id: 'at3',
+  match: 'الهلال ضد الفتح',
+  date: '2025-02-28',
+  attended: false
+}, {
+  id: 'at4',
+  match: 'الأهلي ضد الهلال',
+  date: '2025-02-20',
+  attended: true
+}];
+const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({
+  userId
+}) => {
   const [attendanceHistory, setAttendanceHistory] = useState(MOCK_ATTENDANCE);
-  
+
   // Calculate stats
   const totalMatches = attendanceHistory.length;
   const attendedMatches = attendanceHistory.filter(match => match.attended).length;
   const missedMatches = totalMatches - attendedMatches;
-  const attendanceRate = totalMatches > 0 ? Math.round((attendedMatches / totalMatches) * 100) : 0;
-  
+  const attendanceRate = totalMatches > 0 ? Math.round(attendedMatches / totalMatches * 100) : 0;
+
   // Check for consecutive misses (in a real app, the order would come from DB)
   const checkConsecutiveMisses = () => {
     // Sort by date in descending order (most recent first)
-    const sortedHistory = [...attendanceHistory].sort((a, b) => 
-      new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-    
+    const sortedHistory = [...attendanceHistory].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     let consecutiveMisses = 0;
     for (const match of sortedHistory) {
       if (!match.attended) {
@@ -61,15 +52,12 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({ userId }) => {
         break; // Break the streak if an attended match is found
       }
     }
-    
     return consecutiveMisses;
   };
-  
   const consecutiveMisses = checkConsecutiveMisses();
   const isWarningNeeded = consecutiveMisses >= 2; // Warning if 2+ consecutive misses
-  
-  return (
-    <Card>
+
+  return <Card>
       <CardHeader>
         <CardTitle className="rtl">سجل الحضور</CardTitle>
       </CardHeader>
@@ -89,15 +77,13 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({ userId }) => {
           </div>
         </div>
         
-        {isWarningNeeded && (
-          <div className="mb-4 bg-red-50 p-3 rounded-md border border-red-200 flex rtl">
+        {isWarningNeeded && <div className="mb-4 bg-red-50 p-3 rounded-md border border-red-200 flex rtl">
             <AlertTriangle className="h-5 w-5 text-red-500 ml-2" />
             <div>
               <p className="text-sm text-red-700 font-semibold">تحذير: لديك {consecutiveMisses} غيابات متتالية</p>
               <p className="text-sm text-red-600">في حال الغياب عن مباراة أخرى سيتم تحويل حسابك إلى قائمة الانتظار لمدة 3 مباريات.</p>
             </div>
-          </div>
-        )}
+          </div>}
         
         <Table>
           <TableHeader>
@@ -108,33 +94,25 @@ const AttendanceHistory: React.FC<AttendanceHistoryProps> = ({ userId }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {attendanceHistory.map((record) => (
-              <TableRow key={record.id}>
+            {attendanceHistory.map(record => <TableRow key={record.id}>
                 <TableCell className="rtl">{record.match}</TableCell>
                 <TableCell className="rtl">{new Date(record.date).toLocaleDateString('ar-SA')}</TableCell>
                 <TableCell>
-                  {record.attended ? (
-                    <Badge className="bg-green-500 flex items-center w-20 justify-center rtl">
+                  {record.attended ? <Badge className="bg-green-500 flex items-center w-20 justify-center rtl">
                       <Check className="h-4 w-4 mr-1" /> حضور
-                    </Badge>
-                  ) : (
-                    <Badge className="bg-red-500 flex items-center w-20 justify-center rtl">
+                    </Badge> : <Badge className="bg-red-500 flex items-center w-20 justify-center rtl">
                       <X className="h-4 w-4 mr-1" /> غياب
-                    </Badge>
-                  )}
+                    </Badge>}
                 </TableCell>
-              </TableRow>
-            ))}
+              </TableRow>)}
           </TableBody>
         </Table>
         
         <div className="mt-4 bg-blue-50 p-3 rounded-md border border-blue-200 flex rtl">
           <AlertTriangle className="h-5 w-5 text-blue-500 ml-2" />
-          <p className="text-sm text-blue-700">تنبيه هام: في حال الغياب عن 3 مباريات متتالية سيتم تحويل الحساب من نشط إلى قائمة الانتظار لمدة 3 مباريات قادمة.</p>
+          <p className="text-sm text-blue-700">تنبيه هام: في حال الغياب عن 3 مباريات متتالية مؤكدة الحجوزات سيتم تحويل الحساب من نشط إلى قائمة الانتظار لمدة 3 مباريات قادمة.</p>
         </div>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
-
 export default AttendanceHistory;
