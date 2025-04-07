@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md py-4">
+    <nav className="bg-[#190038]/90 backdrop-blur-sm py-4 border-b border-purple-500/20">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <Logo />
@@ -29,13 +29,13 @@ const Navbar: React.FC = () => {
           {user ? (
             <>
               <Link to="/dashboard" className="mx-2">
-                <Button variant="outline" className="border-tazkara-green text-tazkara-green hover:bg-tazkara-green hover:text-white">
+                <Button variant="outline" className="border-purple-500/50 text-white hover:bg-purple-900/40">
                   لوحة التحكم
                 </Button>
               </Link>
               <Button 
                 onClick={handleSignOut}
-                className="bg-tazkara-green text-white hover:bg-tazkara-green/90"
+                className="bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 text-white"
               >
                 تسجيل الخروج
               </Button>
@@ -43,12 +43,12 @@ const Navbar: React.FC = () => {
           ) : (
             <>
               <Link to="/register" className="mx-2">
-                <Button variant="outline" className="border-tazkara-green text-tazkara-green hover:bg-tazkara-green hover:text-white">
+                <Button variant="outline" className="border-purple-500/50 text-white hover:bg-purple-900/40">
                   تسجيل
                 </Button>
               </Link>
               <Link to="/login" className="mx-2">
-                <Button className="bg-tazkara-green text-white hover:bg-tazkara-green/90">
+                <Button className="bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 text-white">
                   تسجيل الدخول
                 </Button>
               </Link>
@@ -61,6 +61,7 @@ const Navbar: React.FC = () => {
           <Button 
             variant="ghost" 
             size="icon"
+            className="text-white hover:bg-purple-900/40"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -70,18 +71,18 @@ const Navbar: React.FC = () => {
 
       {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden bg-white py-2 px-4 shadow-inner animate-fade-in">
+        <div className="md:hidden bg-[#190038]/90 backdrop-blur-sm py-2 px-4 border-t border-purple-500/20 animate-fade-in">
           <div className="flex flex-col space-y-3">
             {user ? (
               <>
                 <Link to="/dashboard" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="outline" className="w-full border-tazkara-green text-tazkara-green hover:bg-tazkara-green hover:text-white">
+                  <Button variant="outline" className="w-full border-purple-500/50 text-white hover:bg-purple-900/40">
                     لوحة التحكم
                   </Button>
                 </Link>
                 <Button 
                   onClick={handleSignOut}
-                  className="w-full bg-tazkara-green text-white hover:bg-tazkara-green/90"
+                  className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 text-white"
                 >
                   تسجيل الخروج
                 </Button>
@@ -89,12 +90,12 @@ const Navbar: React.FC = () => {
             ) : (
               <>
                 <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="outline" className="w-full border-tazkara-green text-tazkara-green hover:bg-tazkara-green hover:text-white">
+                  <Button variant="outline" className="w-full border-purple-500/50 text-white hover:bg-purple-900/40">
                     تسجيل
                   </Button>
                 </Link>
                 <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                  <Button className="w-full bg-tazkara-green text-white hover:bg-tazkara-green/90">
+                  <Button className="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 text-white">
                     تسجيل الدخول
                   </Button>
                 </Link>

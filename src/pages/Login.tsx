@@ -6,7 +6,7 @@ import LoginForm from '@/components/auth/LoginForm';
 
 const Login = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#190038]">
       <Navbar />
       <main className="flex-1">
         <LoginForm />
