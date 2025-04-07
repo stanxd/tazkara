@@ -25,7 +25,8 @@ const OpponentField: React.FC<OpponentFieldProps> = ({
           <FormLabel>الفريق المنافس</FormLabel>
           <Select 
             onValueChange={(value) => onOpponentChange(value)}
-            defaultValue={field.value}
+            defaultValue="فريق الأهلي" // Default to Al-Ahli
+            value={field.value}
           >
             <FormControl>
               <SelectTrigger>

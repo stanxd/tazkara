@@ -48,13 +48,16 @@ export const getAvailableMatches = (): Match[] => {
         // Enhance matches with team information
         const enhancedMatches = futureMatches.map((match: Match) => {
           // Add the home team ID to the match object for better identification
-          const teamName = teamProfiles[teamId]?.team_name || "فريق غير معروف";
+          // Default to Al-Nasr if no team found
+          const teamName = teamProfiles[teamId]?.team_name || "النصر";
           console.log(`Enhancing match ${match.id} with team name: ${teamName}`);
           
           return {
             ...match,
             homeTeamId: teamId,
-            homeTeam: teamName
+            homeTeam: teamName.startsWith('فريق ') ? teamName : `فريق ${teamName}`,
+            importanceLevel: match.importanceLevel || 'متوسطة', // Add default importance
+            expectedDemandLevel: match.expectedDemandLevel || 'متوسط' // Add default demand
           };
         });
         
@@ -98,4 +101,3 @@ export const getAvailableMatches = (): Match[] => {
 
 // Re-export ticketFormatter function for easier imports
 export { matchToTicket };
-

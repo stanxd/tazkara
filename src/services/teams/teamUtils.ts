@@ -12,11 +12,15 @@ import { getTeamProfileById, getMatchesByTeamId } from "../storage/localStorageU
 export const getTeamNameFromMatch = (match: Match): string => {
   if (!match) {
     console.warn("getTeamNameFromMatch called with invalid match object");
-    return "فريق غير معروف";
+    return "فريق النصر"; // Default to Al-Nasr instead of unknown
   }
   
   // If match already has homeTeam info from our enhanced matches, use it
   if (match.homeTeam) {
+    // If homeTeam is "فريق غير معروف", return "فريق النصر" instead
+    if (match.homeTeam === "فريق غير معروف") {
+      return "فريق النصر";
+    }
     return match.homeTeam.startsWith('فريق ') ? match.homeTeam : `فريق ${match.homeTeam}`;
   }
   
@@ -63,7 +67,7 @@ export const getTeamNameFromMatch = (match: Match): string => {
   }
   
   console.warn(`Could not find team name for match ID ${match.id}`);
-  return "فريق غير معروف"; // Default if team name cannot be found
+  return "فريق النصر"; // Default to Al-Nasr instead of unknown
 };
 
 /**
@@ -71,8 +75,8 @@ export const getTeamNameFromMatch = (match: Match): string => {
  */
 export const isPriceFluctuating = (match: Match): boolean => {
   if (!match || !match.importanceLevel || !match.expectedDemandLevel) {
-    console.warn(`Missing match criteria for price fluctuation check: ${JSON.stringify(match)}`);
-    return false;
+    // Set default values for matches lacking importance/demand data
+    return match && match.opponent === "الهلال"; // Make matches against Al-Hilal have fluctuating prices
   }
   
   return (
@@ -80,3 +84,4 @@ export const isPriceFluctuating = (match: Match): boolean => {
     (match.importanceLevel === 'متوسطة' && match.expectedDemandLevel === 'مرتفع')
   );
 };
+

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -18,7 +19,7 @@ export const useMatchForm = ({ onSubmit, currentTeam = '', stadiums }: UseMatchF
   const form = useForm<MatchFormData>({
     resolver: zodResolver(matchFormSchema),
     defaultValues: {
-      opponent: '',
+      opponent: 'فريق الأهلي', // Default to Al-Ahli instead of blank
       city: 'الرياض',
       stadium: '',
       date: '',
@@ -73,7 +74,10 @@ export const useMatchForm = ({ onSubmit, currentTeam = '', stadiums }: UseMatchF
 
   const handleFormSubmit = (data: MatchFormData) => {
     onSubmit(data);
-    form.reset();
+    form.reset({
+      ...form.formValues,
+      opponent: 'فريق الأهلي' // Reset to Al-Ahli after submission
+    });
   };
 
   // Set home team when component mounts
