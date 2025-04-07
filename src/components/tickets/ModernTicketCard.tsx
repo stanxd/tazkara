@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -89,15 +88,12 @@ const ModernTicketCard: React.FC<TicketProps> = ({
     // Check if selected team is the user's favorite team
     const isUserFavoriteTeam = team === userFavoriteTeam;
     
-    // Check if the selected team is popular
-    const isPopular = isPopularTeam(team);
-    
-    if (!isUserFavoriteTeam && isPopular) {
-      // Case 1: Not favorite and popular team - show waitlist
-      setShowWaitlistDialog(true);
-    } else {
-      // Case 2: Either favorite or non-popular team - show payment dialog
+    if (isUserFavoriteTeam) {
+      // Case 1: If the selected team is the user's favorite team, show payment dialog directly
       setShowPaymentDialog(true);
+    } else {
+      // Case 2: If not the favorite team, show waitlist dialog
+      setShowWaitlistDialog(true);
     }
   };
   

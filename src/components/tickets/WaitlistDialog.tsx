@@ -8,7 +8,7 @@ import {
   DialogFooter
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Flame, AlertCircle } from 'lucide-react';
+import { Flame, AlertCircle, Heart } from 'lucide-react';
 
 interface WaitlistDialogProps {
   open: boolean;
@@ -31,15 +31,15 @@ const WaitlistDialog: React.FC<WaitlistDialogProps> = ({
         </DialogHeader>
         <div className="space-y-4 py-6 rtl text-center">
           <div className="flex justify-center">
-            <Flame className="h-12 w-12 text-orange-500" />
+            <Heart className="h-12 w-12 text-pink-500" />
           </div>
           
           <h3 className="text-lg font-bold text-white">
-            {teamName} من الفرق ذات الشعبية العالية
+            {teamName} ليس فريقك المفضل
           </h3>
           
           <p className="text-purple-200">
-            بسبب الطلب العالي على تذاكر هذا الفريق، يجب الانضمام لقائمة الانتظار للحصول على فرصة حجز التذكرة.
+            نظراً لأنك اخترت فريقاً ليس هو فريقك المفضل، يجب عليك الانضمام لقائمة الانتظار للحصول على فرصة حجز التذكرة.
           </p>
           
           <div className="bg-purple-900/20 p-4 rounded-md border border-purple-500/30 mt-4">
