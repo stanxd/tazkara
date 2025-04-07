@@ -4,7 +4,7 @@ import { useFanData } from './fans/useFanData';
 import TeamDistributionChart from './fans/TeamDistributionChart';
 import FansTicketsList from './fans/FansTicketsList';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Ticket, ChartPie, UsersRound } from 'lucide-react';
+import { Users, Ticket, Gift, UsersRound } from 'lucide-react';
 
 interface TeamFansDataProps {
   teamProfile: any;
@@ -19,12 +19,19 @@ const TeamFansData: React.FC<TeamFansDataProps> = ({ teamProfile }) => {
     team => team.name.toLowerCase() === teamProfile.team_name.replace(/^فريق\s+/i, '').toLowerCase()
   )?.value || 0;
   const loyaltyPercentage = totalFans > 0 ? Math.round((teamFans / totalFans) * 100) : 0;
+  
+  // Calculate gift stats
+  const giftTickets = tickets.filter(ticket => ticket.isGift);
+  const acceptedGifts = giftTickets.filter(ticket => ticket.giftAccepted);
+  const giftAcceptanceRate = giftTickets.length > 0 
+    ? Math.round((acceptedGifts.length / giftTickets.length) * 100) 
+    : 0;
 
   return (
     <div className="space-y-6">
       <h2 className="text-xl font-semibold mb-4">بيانات الجمهور</h2>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium">إجمالي المشجعين</CardTitle>
@@ -53,8 +60,19 @@ const TeamFansData: React.FC<TeamFansDataProps> = ({ teamProfile }) => {
             <Ticket className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{tickets.length}</div>
+            <div className="text-2xl font-bold">{tickets.length - giftTickets.length}</div>
             <p className="text-xs text-muted-foreground mt-1">عدد التذاكر المباعة لمباريات الفريق</p>
+          </CardContent>
+        </Card>
+        
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">هدايا التذاكر</CardTitle>
+            <Gift className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{giftTickets.length}</div>
+            <p className="text-xs text-muted-foreground mt-1">معدل القبول: {giftAcceptanceRate}%</p>
           </CardContent>
         </Card>
       </div>

@@ -32,8 +32,19 @@ export const useFanData = (teamProfile: any) => {
 
         if (ticketsError) throw ticketsError;
 
+        // Process tickets and add gift fields (for demo purposes)
+        // In a real app, these would come from the database
+        const processedTickets = (ticketsData || []).map(ticket => {
+          const isRandomGift = Math.random() > 0.5;
+          return {
+            ...ticket,
+            isGift: isRandomGift,
+            giftAccepted: isRandomGift ? Math.random() > 0.3 : false
+          };
+        });
+
         // Set tickets data
-        setTickets(ticketsData as FanTicket[] || []);
+        setTickets(processedTickets as FanTicket[]);
 
         // Fetch data for all fans to analyze their favorite team preferences
         const { data: fansData, error: fansError } = await supabase

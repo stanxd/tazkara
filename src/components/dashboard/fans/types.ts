@@ -15,6 +15,8 @@ export interface FanTicket {
   purchase_date: string;
   ticket_price: number;
   fan?: Fan;
+  isGift?: boolean;
+  giftAccepted?: boolean;
 }
 
 export interface FanPreference {
