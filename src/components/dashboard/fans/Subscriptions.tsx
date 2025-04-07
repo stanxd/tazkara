@@ -1,21 +1,18 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check, Crown, Star, Award } from 'lucide-react';
-
 interface SubscriptionsProps {
   userId: string;
 }
-
-const Subscriptions: React.FC<SubscriptionsProps> = ({ userId }) => {
+const Subscriptions: React.FC<SubscriptionsProps> = ({
+  userId
+}) => {
   const handleSubscribe = (planType: string) => {
     console.log(`Subscribing to ${planType} plan for user ${userId}`);
     // Here you would typically redirect to payment or show a payment modal
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       <div className="mb-4 text-center">
         <h2 className="text-2xl font-bold mb-2 rtl">باقات الاشتراك</h2>
         <p className="text-gray-500 rtl">
@@ -33,7 +30,7 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({ userId }) => {
             <CardHeader className="pb-4">
               <CardTitle className="text-xl rtl">للمشجعين الحماسيين</CardTitle>
               <div className="mt-2">
-                <span className="text-3xl font-bold">٩٩</span>
+                <span className="text-3xl font-bold">99</span>
                 <span className="text-gray-500 rtl mr-1">ريال</span>
               </div>
             </CardHeader>
@@ -41,7 +38,7 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({ userId }) => {
               <ul className="space-y-2">
                 <li className="flex items-center">
                   <Check className="h-5 w-5 text-green-500 ml-2" />
-                  <span>تغيير الفريق المفضل مرة واحدة كل ٦٠ يوم</span>
+                  <span>تغيير الفريق المفضل مرة واحدة كل 60 يوم</span>
                 </li>
                 <li className="flex items-center">
                   <Check className="h-5 w-5 text-green-500 ml-2" />
@@ -54,10 +51,7 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({ userId }) => {
               </ul>
             </CardContent>
             <CardFooter className="pt-2">
-              <Button 
-                className="w-full bg-purple-500 hover:bg-purple-600" 
-                onClick={() => handleSubscribe('standard')}
-              >
+              <Button className="w-full bg-purple-500 hover:bg-purple-600" onClick={() => handleSubscribe('standard')}>
                 <Star className="ml-2 h-4 w-4" />
                 اشترك الآن
               </Button>
@@ -74,7 +68,7 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({ userId }) => {
             <CardHeader className="pb-4">
               <CardTitle className="text-xl rtl">للمشجعين المتميزين</CardTitle>
               <div className="mt-2">
-                <span className="text-3xl font-bold">٤٩٩</span>
+                <span className="text-3xl font-bold">499</span>
                 <span className="text-gray-500 rtl mr-1">ريال</span>
               </div>
             </CardHeader>
@@ -95,10 +89,7 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({ userId }) => {
               </ul>
             </CardContent>
             <CardFooter className="pt-2">
-              <Button 
-                className="w-full bg-amber-500 hover:bg-amber-600" 
-                onClick={() => handleSubscribe('leadership')}
-              >
+              <Button className="w-full bg-amber-500 hover:bg-amber-600" onClick={() => handleSubscribe('leadership')}>
                 <Crown className="ml-2 h-4 w-4" />
                 اشترك الآن
               </Button>
@@ -106,8 +97,6 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({ userId }) => {
           </Card>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Subscriptions;
