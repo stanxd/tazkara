@@ -33,6 +33,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
   const [showPaymentDialog, setShowPaymentDialog] = useState(false);
   const [showWaitlistDialog, setShowWaitlistDialog] = useState(false);
   const [selectedTeam, setSelectedTeam] = useState<string>('');
+  const [adjustedPrice, setAdjustedPrice] = useState<number>(price);
   
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -40,6 +41,23 @@ const ModernTicketCard: React.FC<TicketProps> = ({
   
   // Find user's favorite team from metadata
   const userFavoriteTeam = user?.user_metadata?.favorite_team;
+  
+  // Calculate price adjustments for selected team and location
+  const calculateAdjustedPrice = (team: string): number => {
+    let calculatedPrice = price;
+    
+    // Popular teams get 60% price increase
+    if (isPopularTeam(team)) {
+      calculatedPrice = Math.round(price * 1.6);
+    }
+    
+    // Riyadh matches are more expensive
+    if (city === "الرياض") {
+      calculatedPrice = Math.round(calculatedPrice * 1.15);
+    }
+    
+    return calculatedPrice;
+  };
   
   const handleBookTicket = () => {
     if (!user) {
@@ -65,6 +83,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
   
   const handleTeamSelection = (team: string) => {
     setSelectedTeam(team);
+    setAdjustedPrice(calculateAdjustedPrice(team));
     setShowTeamSelectionDialog(false);
     
     // Check if selected team is the user's favorite team
@@ -164,6 +183,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
         awayTeam={awayTeam}
         onTeamSelect={handleTeamSelection}
         price={price}
+        city={city}
       />
       
       <PaymentDialog
@@ -178,7 +198,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
           stadium,
           city
         }}
-        price={price}
+        price={adjustedPrice}
         onProcessPayment={handleProcessPayment}
       />
       
