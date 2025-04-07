@@ -1,20 +1,16 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import Logo from './Logo';
-
 const Footer: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Contact form submitted');
     // Handle form submission
   };
-
-  return (
-    <footer className="bg-[#13002A] border-t border-purple-500/20 text-white">
+  return <footer className="bg-[#13002A] border-t border-purple-500/20 text-white">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
           {/* Contact Form */}
@@ -45,8 +41,8 @@ const Footer: React.FC = () => {
             
             <div className="mt-6 rtl text-purple-200 space-y-2">
               <p>المملكة العربية السعودية، الرياض</p>
-              <p>هاتف: 966-123-456789+</p>
-              <p>البريد الإلكتروني: info@tazkara-plus.sa</p>
+              <p></p>
+              
             </div>
             
             <div className="mt-8">
@@ -63,8 +59,6 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
