@@ -63,11 +63,11 @@ export const calculateImportanceLevel = (homeTeam: string, awayTeam: string, mat
 export const calculateSelloutProbability = (importanceMultiplier: number, demandMultiplier: number): 'Low' | 'Medium' | 'High' | 'Very High' => {
   const selloutScore = importanceMultiplier * demandMultiplier;
   
-  if (selloutScore > 1.3) {
+  if (selloutScore > 1.4) {
     return 'Very High';
-  } else if (selloutScore > 1.1) {
+  } else if (selloutScore > 1.2) {
     return 'High';
-  } else if (selloutScore > 0.9) {
+  } else if (selloutScore > 1.0) {
     return 'Medium';
   } else {
     return 'Low';
@@ -80,20 +80,25 @@ export const calculateSelloutProbability = (importanceMultiplier: number, demand
 export const generatePricingNotes = (importanceLevel: string, expectedDemandLevel: string): string => {
   let notes = '';
   
+  // Importance level notes
   if (importanceLevel === 'عالية') {
-    notes = 'مباراة ذات أهمية عالية مع اهتمام كبير من المشجعين. ';
+    notes = 'مباراة ذات أهمية عالية تحظى باهتمام كبير من المشجعين. ';
   } else if (importanceLevel === 'متوسطة') {
-    notes = 'مباراة ذات أهمية متوسطة. ';
+    notes = 'مباراة ذات أهمية متوسطة مع جمهور متوقع جيد. ';
   } else {
-    notes = 'مباراة عادية. ';
+    notes = 'مباراة ذات أهمية عادية. ';
   }
   
+  // Demand level notes
   if (expectedDemandLevel === 'مرتفع') {
-    notes += 'يتوقع طلب مرتفع على التذاكر. ينصح بالتسعير في النطاق الأعلى لتعظيم العائدات.';
+    notes += 'من المتوقع طلب مرتفع على التذاكر، ربما تنفد بسرعة. ';
+    notes += 'ينصح بالتسعير في النطاق الأعلى لتعظيم العائدات مع الحفاظ على معدل حضور جيد.';
   } else if (expectedDemandLevel === 'منخفض') {
-    notes += 'يتوقع طلب منخفض على التذاكر. ينصح بتخفيض السعر لتشجيع الحضور.';
+    notes += 'من المتوقع طلب منخفض على التذاكر. ';
+    notes += 'ينصح بتخفيض السعر لتشجيع الحضور والحفاظ على نسبة إشغال جيدة للملعب.';
   } else {
-    notes += 'يتوقع طلب متوسط على التذاكر. ينصح بتسعير متوازن.';
+    notes += 'من المتوقع طلب متوسط على التذاكر. ';
+    notes += 'ينصح بتسعير متوازن يجمع بين تعظيم العائدات وضمان إقبال جيد من الجماهير.';
   }
   
   return notes;
