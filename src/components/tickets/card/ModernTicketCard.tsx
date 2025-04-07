@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -19,7 +18,8 @@ const ModernTicketCard: React.FC<TicketProps> = ({
   time,
   id,
   price = 0,
-  isPriceFluctuating = false
+  isPriceFluctuating = false,
+  extraIcon
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   
@@ -70,6 +70,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
             awayTeam={awayTeam}
             isPriceFluctuating={isPriceFluctuating}
             isHovered={isHovered}
+            extraIcon={extraIcon}
           />
         </CardHeader>
         

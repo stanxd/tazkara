@@ -26,6 +26,7 @@ export const useMatchForm = ({ onSubmit, currentTeam = '', stadiums }: UseMatchF
       time: '20:00',
       availableTickets: undefined,
       ticketPrice: undefined,
+      giftTickets: 0,
     },
   });
 
@@ -82,6 +83,7 @@ export const useMatchForm = ({ onSubmit, currentTeam = '', stadiums }: UseMatchF
       time: '20:00',
       availableTickets: undefined,
       ticketPrice: undefined,
+      giftTickets: 0,
     });
   };
 

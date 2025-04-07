@@ -13,6 +13,8 @@ export interface Match {
   expectedDemandLevel?: string;
   homeTeam?: string;  // Added this property
   homeTeamId?: string; // Added this property
+  giftTickets?: number; // Added for gift feature
+  giftDistributed?: boolean; // Track if gifts have been distributed
 }
 
 export interface TeamProfile {

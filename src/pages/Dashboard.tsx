@@ -13,8 +13,9 @@ import TeamMatchesManager from '@/components/dashboard/TeamMatchesManager';
 import TeamSalesReports from '@/components/dashboard/TeamSalesReports';
 import TeamFansData from '@/components/dashboard/TeamFansData';
 import TeamSettings from '@/components/dashboard/TeamSettings';
+import TeamGiftsManager from '@/components/dashboard/TeamGiftsManager';
 import FanDashboard from '@/components/dashboard/FanDashboard';
-import { Loader2, Info } from 'lucide-react';
+import { Loader2, Info, Gift } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
@@ -97,9 +98,10 @@ const Dashboard = () => {
             </div>
 
             <Tabs defaultValue="home" className="w-full rtl">
-              <TabsList className="w-full mb-6 grid grid-cols-2 md:grid-cols-5">
+              <TabsList className="w-full mb-6 grid grid-cols-2 md:grid-cols-6">
                 <TabsTrigger value="home">الرئيسية</TabsTrigger>
                 <TabsTrigger value="matches">إدارة المباريات</TabsTrigger>
+                <TabsTrigger value="gifts">الهدايا</TabsTrigger>
                 <TabsTrigger value="sales">تقارير المبيعات</TabsTrigger>
                 <TabsTrigger value="fans">بيانات الجمهور</TabsTrigger>
                 <TabsTrigger value="settings">الإعدادات</TabsTrigger>
@@ -109,6 +111,9 @@ const Dashboard = () => {
               </TabsContent>
               <TabsContent value="matches">
                 <TeamMatchesManager teamProfile={userProfile} />
+              </TabsContent>
+              <TabsContent value="gifts">
+                <TeamGiftsManager teamProfile={userProfile} />
               </TabsContent>
               <TabsContent value="sales">
                 <TeamSalesReports teamProfile={userProfile} />

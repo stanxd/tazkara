@@ -2,16 +2,17 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Edit, Trash2 } from 'lucide-react';
+import { Edit, Trash2, Gift } from 'lucide-react';
 import { Match } from '@/components/dashboard/matches/types';
 import { useToast } from '@/hooks/use-toast';
 
 interface MatchesListProps {
   matches: Match[];
   onDeleteMatch?: (matchId: number) => void;
+  showGiftColumn?: boolean;
 }
 
-const MatchesList: React.FC<MatchesListProps> = ({ matches, onDeleteMatch }) => {
+const MatchesList: React.FC<MatchesListProps> = ({ matches, onDeleteMatch, showGiftColumn = false }) => {
   const { toast } = useToast();
   
   const handleDelete = (match: Match) => {
@@ -35,6 +36,7 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches, onDeleteMatch }) => 
           <TableHead>الوقت</TableHead>
           <TableHead>التذاكر المتاحة</TableHead>
           <TableHead>سعر التذكرة</TableHead>
+          {showGiftColumn && <TableHead>تذاكر الهدايا</TableHead>}
           <TableHead>إجراءات</TableHead>
         </TableRow>
       </TableHeader>
@@ -48,6 +50,18 @@ const MatchesList: React.FC<MatchesListProps> = ({ matches, onDeleteMatch }) => 
             <TableCell>{match.time}</TableCell>
             <TableCell>{match.availableTickets}</TableCell>
             <TableCell>{match.ticketPrice} ر.س</TableCell>
+            {showGiftColumn && (
+              <TableCell>
+                {match.giftTickets && match.giftTickets > 0 ? (
+                  <span className="flex items-center">
+                    {match.giftTickets}
+                    {match.giftDistributed && <span className="ml-2 text-green-500 text-xs">تم التوزيع</span>}
+                  </span>
+                ) : (
+                  <span className="text-gray-400">-</span>
+                )}
+              </TableCell>
+            )}
             <TableCell>
               {match.isFuture && (
                 <div className="flex space-x-2">

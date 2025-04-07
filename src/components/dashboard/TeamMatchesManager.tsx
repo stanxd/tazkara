@@ -67,6 +67,7 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
     ticketPrice: number;
     importanceLevel?: string;
     expectedDemandLevel?: string;
+    giftTickets?: number;
   }) => {
     // Create new match with generated ID
     const newMatch: Match = {
@@ -80,7 +81,10 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
       ticketPrice: data.ticketPrice,
       isFuture: isMatchInFuture(data.date),
       importanceLevel: data.importanceLevel,
-      expectedDemandLevel: data.expectedDemandLevel
+      expectedDemandLevel: data.expectedDemandLevel,
+      homeTeam: currentTeam,
+      homeTeamId: teamId,
+      giftTickets: data.giftTickets || 0
     };
     
     // Add new match to state

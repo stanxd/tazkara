@@ -1,145 +1,67 @@
+import { Match } from '@/components/dashboard/matches/types';
+import { getStoredMatches } from '@/components/dashboard/matches/matchUtils';
 
 /**
- * Service for fetching and managing match data for the home page
- */
-import { Match } from "@/components/dashboard/matches/types";
-import { getTeamProfiles } from "../storage/localStorageUtils";
-import { isMatchInFuture } from "../utils/dateUtils";
-import { getPredefinedMatches } from "./predefinedMatches";
-
-/**
- * Service for fetching available matches from localStorage
+ * Get available matches from all teams that have future dates
+ * @returns Array of match objects
  */
 export const getAvailableMatches = (): Match[] => {
-  // Fetch all matches from localStorage for all teams
-  const allMatches: Match[] = [];
-  
-  console.log("Starting to fetch available matches from localStorage");
-  
   try {
-    // First, collect all team profiles to ensure we have team names
-    const teamProfiles = getTeamProfiles();
+    // Get all teams from localStorage (temporary implementation)
+    const allTeamIds = getAllTeamIds();
     
-    // Check if there are matches in localStorage
-    let hasMatchesInStorage = false;
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith("tazkara_team_matches_")) {
-        hasMatchesInStorage = true;
-        break;
-      }
-    }
-    
-    // If no matches in storage, use our predefined matches
-    if (!hasMatchesInStorage) {
-      console.log("No matches found in localStorage, using predefined matches");
-      return getPredefinedMatches();
-    }
-    
-    // Iterate through localStorage to find all matches
-    allMatches.push(...collectMatchesFromStorage(teamProfiles));
-  } catch (error) {
-    console.error("Fatal error accessing localStorage:", error);
-    // Return predefined matches if there's an error accessing localStorage
-    return getPredefinedMatches();
-  }
-  
-  console.log(`Total available matches found: ${allMatches.length}`);
-  
-  // If no matches found in localStorage, use predefined matches
-  if (allMatches.length === 0) {
-    console.log("No matches found in localStorage, using predefined matches");
-    return getPredefinedMatches();
-  }
-  
-  // Sort matches by date
-  return sortMatchesByDate(allMatches);
-};
-
-/**
- * Helper function to collect matches from localStorage
- */
-const collectMatchesFromStorage = (teamProfiles: Record<string, any>): Match[] => {
-  const matches: Match[] = [];
-  
-  for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (!key || !key.startsWith("tazkara_team_matches_")) continue;
-    
-    try {
-      const teamId = key.replace("tazkara_team_matches_", "");
-      const matchesData = localStorage.getItem(key);
-      
-      if (!matchesData) {
-        console.log(`No match data found for team key: ${key}`);
-        continue;
-      }
-      
-      const teamMatches = JSON.parse(matchesData);
-      console.log(`Processing ${teamMatches.length} matches from team ID: ${teamId}`);
-      
-      // Only add future matches that have available tickets
-      const futureMatches = teamMatches.filter((match: Match) => {
-        const isFuture = isMatchInFuture(match.date);
-        const hasTickets = match.availableTickets > 0;
-        
-        if (!isFuture) console.log(`Match ${match.id} is not in the future: ${match.date}`);
-        if (!hasTickets) console.log(`Match ${match.id} has no tickets available: ${match.availableTickets}`);
-        
-        return isFuture && hasTickets;
-      });
-      
-      // Enhance matches with team information
-      const enhancedMatches = futureMatches.map((match: Match) => {
-        // Add the home team ID to the match object for better identification
-        // Default to Al-Nasr if no team found
-        const teamName = teamProfiles[teamId]?.team_name || "النصر";
-        console.log(`Enhancing match ${match.id} with team name: ${teamName}`);
-        
-        return {
-          ...match,
-          homeTeamId: teamId,
-          homeTeam: teamName.startsWith('فريق ') ? teamName : `فريق ${teamName}`,
-          importanceLevel: match.importanceLevel || 'متوسطة', // Add default importance
-          expectedDemandLevel: match.expectedDemandLevel || 'متوسط' // Add default demand
-        };
-      });
-      
-      matches.push(...enhancedMatches);
-      
-      console.log(`Added ${enhancedMatches.length} future matches from team ID: ${teamId}`);
-      if (enhancedMatches.length > 0) {
-        console.log("Sample match details:", JSON.stringify(enhancedMatches[0]));
-      }
-    } catch (error) {
-      console.error(`Error processing matches for key ${key}:`, error);
-    }
-  }
-  
-  return matches;
-};
-
-/**
- * Helper function to sort matches by date
- */
-const sortMatchesByDate = (matches: Match[]): Match[] => {
-  try {
-    return matches.sort((a, b) => {
-      if (!a.date || !b.date) return 0;
-      
-      const dateA = new Date(a.date);
-      const dateB = new Date(b.date);
-      
-      // Handle invalid dates
-      if (isNaN(dateA.getTime()) || isNaN(dateB.getTime())) {
-        console.warn("Invalid date encountered during sort:", a.date, b.date);
-        return 0;
-      }
-      
-      return dateA.getTime() - dateB.getTime();
+    // Collect all matches from all teams
+    let allMatches: Match[] = [];
+    allTeamIds.forEach(teamId => {
+      const teamMatches = getStoredMatches(teamId);
+      allMatches = [...allMatches, ...teamMatches];
     });
+    
+    // Filter only future matches with available tickets
+    const availableMatches = allMatches.filter(match => 
+      match.isFuture && 
+      match.availableTickets > 0
+    );
+    
+    return availableMatches;
   } catch (error) {
-    console.error("Error sorting matches:", error);
-    return matches;
+    console.error("Error getting available matches:", error);
+    return [];
   }
+};
+
+/**
+ * Get all team IDs from localStorage (temporary implementation)
+ * In a real app, this would come from the database
+ */
+const getAllTeamIds = (): string[] => {
+  try {
+    // Get all keys from localStorage
+    const allKeys = Object.keys(localStorage);
+    
+    // Filter keys that start with 'matches-'
+    const teamIds = allKeys
+      .filter(key => key.startsWith('matches-'))
+      .map(key => key.replace('matches-', ''));
+    
+    return teamIds;
+  } catch (error) {
+    console.error("Error getting team IDs:", error);
+    return ['default']; // Fallback to default
+  }
+};
+
+/**
+ * Check if a user has received a gift ticket for a match
+ * @param userId User ID to check
+ * @param matchId Match ID to check
+ * @returns Boolean indicating if user has a gift ticket
+ */
+export const hasGiftTicket = (userId: string, matchId: number): boolean => {
+  // This is a placeholder implementation
+  // In a real app, you would check this from a database
+  
+  // For now, simulate a 20% chance of having a gift ticket
+  // This makes it testable in the UI
+  return Math.random() < 0.2;
 };

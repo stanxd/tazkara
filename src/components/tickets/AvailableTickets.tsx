@@ -1,17 +1,19 @@
 
 import React, { useState, useEffect } from 'react';
-import { Ticket, Map } from 'lucide-react';
-import { getAvailableMatches, matchToTicket } from '@/services/matches';
+import { Ticket, Map, Gift } from 'lucide-react';
+import { getAvailableMatches, matchToTicket, hasGiftTicket } from '@/services/matches';
 import ModernTicketCard from './card/ModernTicketCard';
 import { Match } from '@/components/dashboard/matches/types';
 import { TicketProps } from '@/components/tickets/TicketCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/context/AuthContext';
 
 const AvailableTickets: React.FC = () => {
   const [tickets, setTickets] = useState<TicketProps[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [activeCity, setActiveCity] = useState<string>("all");
+  const { user } = useAuth();
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -22,7 +24,20 @@ const AvailableTickets: React.FC = () => {
         
         if (matches && matches.length > 0) {
           // Convert matches to ticket format
-          const ticketData = matches.map(match => matchToTicket(match));
+          const ticketData = matches.map(match => {
+            const ticket = matchToTicket(match);
+            
+            // Check if the current user has a gift ticket for this match
+            if (user?.id && match.giftDistributed) {
+              const hasGift = hasGiftTicket(user.id, match.id);
+              if (hasGift) {
+                ticket.isGift = true;
+              }
+            }
+            
+            return ticket;
+          });
+          
           setTickets(ticketData);
         } else {
           console.log("No available matches found");
@@ -35,7 +50,17 @@ const AvailableTickets: React.FC = () => {
     };
 
     loadTickets();
-  }, []);
+    
+    // Listen for storage events to refresh tickets when matches are updated
+    const handleStorageChange = () => {
+      loadTickets();
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [user]);
 
   const filteredTickets = activeCity === "all" 
     ? tickets 
@@ -90,6 +115,7 @@ const AvailableTickets: React.FC = () => {
               <ModernTicketCard 
                 key={ticket.id} 
                 {...ticket} 
+                extraIcon={ticket.isGift ? <Gift className="h-5 w-5 text-amber-400" /> : undefined}
               />
             ))}
           </div>

@@ -10,6 +10,7 @@ export const matchFormSchema = z.object({
   time: z.string().min(1, { message: 'يجب إدخال الوقت' }),
   availableTickets: z.coerce.number().positive({ message: 'يجب أن يكون عدد التذاكر أكبر من 0' }),
   ticketPrice: z.coerce.number().positive({ message: 'يجب أن يكون سعر التذكرة أكبر من 0' }),
+  giftTickets: z.coerce.number().min(0, { message: 'عدد تذاكر الهدايا لا يمكن أن يكون سالباً' }).optional().default(0),
 });
 
 // Type for the form data
