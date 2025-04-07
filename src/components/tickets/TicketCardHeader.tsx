@@ -12,6 +12,7 @@ interface TicketCardHeaderProps {
   awayTeam: string;
   isPriceFluctuating?: boolean;
   isHovered: boolean;
+  extraIcon?: React.ReactNode;
 }
 
 const TicketCardHeader: React.FC<TicketCardHeaderProps> = ({
@@ -19,7 +20,8 @@ const TicketCardHeader: React.FC<TicketCardHeaderProps> = ({
   homeTeam,
   awayTeam,
   isPriceFluctuating = false,
-  isHovered
+  isHovered,
+  extraIcon
 }) => {
   return (
     <div className="pb-2 pt-4 relative overflow-hidden">
@@ -40,11 +42,15 @@ const TicketCardHeader: React.FC<TicketCardHeaderProps> = ({
           </Tooltip>
         </TooltipProvider>
         
-        {isPriceFluctuating && (
-          <Badge variant="destructive" className="text-xs animate-pulse bg-gradient-to-r from-pink-500 to-purple-500 border-none">
-            سعر متغير
-          </Badge>
-        )}
+        <div className="flex items-center space-x-2">
+          {extraIcon && extraIcon}
+          
+          {isPriceFluctuating && (
+            <Badge variant="destructive" className="text-xs animate-pulse bg-gradient-to-r from-pink-500 to-purple-500 border-none">
+              سعر متغير
+            </Badge>
+          )}
+        </div>
       </div>
       
       <div className="flex justify-between items-center mt-3 rtl">

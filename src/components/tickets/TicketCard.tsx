@@ -1,6 +1,7 @@
+
 import React from 'react';
 
-// Update the TicketProps interface to include the isGift field and extraIcon
+// Update the TicketProps interface to include all needed fields
 export interface TicketProps {
   id: number;
   homeTeam: string;
@@ -13,4 +14,5 @@ export interface TicketProps {
   availableCount: number;
   isGift?: boolean;
   extraIcon?: React.ReactNode;
+  isPriceFluctuating?: boolean;
 }
