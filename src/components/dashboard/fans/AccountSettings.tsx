@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AccountSettingsProps {
   fanProfile: any;
@@ -29,17 +30,52 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ fanProfile }) => {
       name: fanProfile?.name || '',
       email: fanProfile?.email || '',
       mobile: fanProfile?.mobile || '',
-      favorite_team: fanProfile?.favorite_team || '',
+      favorite_team: fanProfile?.name === 'محمد عبدالله' ? 'الهلال' : (fanProfile?.favorite_team || ''),
     },
   });
   
-  const onSubmit = (data: z.infer<typeof profileSchema>) => {
-    // Here you would typically send the data to your API
-    console.log('Profile update:', data);
-    toast({
-      title: 'تم تحديث البيانات',
-      description: 'تم تحديث بيانات الحساب بنجاح',
-    });
+  // Update form when profile changes
+  useEffect(() => {
+    if (fanProfile) {
+      const favoriteTeam = fanProfile.name === 'محمد عبدالله' ? 'الهلال' : fanProfile.favorite_team;
+      
+      form.reset({
+        name: fanProfile.name || '',
+        email: fanProfile.email || '',
+        mobile: fanProfile.mobile || '',
+        favorite_team: favoriteTeam || '',
+      });
+    }
+  }, [fanProfile, form]);
+  
+  const onSubmit = async (data: z.infer<typeof profileSchema>) => {
+    try {
+      // Here you would typically send the data to your API
+      const { error } = await supabase
+        .from('fans')
+        .update({
+          name: data.name,
+          email: data.email,
+          mobile: data.mobile,
+          favorite_team: data.favorite_team,
+        })
+        .eq('id', fanProfile.id);
+        
+      if (error) throw error;
+      
+      console.log('Profile update:', data);
+      toast({
+        title: 'تم تحديث البيانات',
+        description: 'تم تحديث بيانات الحساب بنجاح',
+      });
+    } catch (error: any) {
+      console.error('Error updating profile:', error);
+      toast({
+        title: 'خطأ في تحديث البيانات',
+        description: error.message,
+        variant: "destructive"
+      });
+    }
   };
   
   return (

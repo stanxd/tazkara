@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -7,13 +7,44 @@ import AccountStatus from './fans/AccountStatus';
 import FanTickets from './fans/FanTickets';
 import AccountStats from './fans/AccountStats';
 import AccountSettings from './fans/AccountSettings';
+import { supabase } from '@/integrations/supabase/client';
 
 interface FanDashboardProps {
   fanProfile: any;
 }
 
-const FanDashboard: React.FC<FanDashboardProps> = ({ fanProfile }) => {
+const FanDashboard: React.FC<FanDashboardProps> = ({ fanProfile: initialProfile }) => {
   const { user } = useAuth();
+  const [fanProfile, setFanProfile] = useState(initialProfile);
+
+  // Update Mohammed Abdullah's favorite team to Al-Hilal
+  useEffect(() => {
+    if (fanProfile?.name === 'محمد عبدالله' && fanProfile?.favorite_team !== 'الهلال') {
+      const updateFavoriteTeam = async () => {
+        try {
+          const { error } = await supabase
+            .from('fans')
+            .update({ favorite_team: 'الهلال' })
+            .eq('id', user?.id);
+          
+          if (!error) {
+            // Update the local state with the new favorite team
+            setFanProfile({
+              ...fanProfile,
+              favorite_team: 'الهلال'
+            });
+            console.log('تم تحديث الفريق المفضل بنجاح');
+          } else {
+            console.error('خطأ في تحديث الفريق المفضل:', error);
+          }
+        } catch (error) {
+          console.error('خطأ:', error);
+        }
+      };
+      
+      updateFavoriteTeam();
+    }
+  }, [user, fanProfile]);
 
   useEffect(() => {
     // إضافة سجل للتحقق من بيانات المستخدم
