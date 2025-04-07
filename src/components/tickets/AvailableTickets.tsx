@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Ticket, Map } from 'lucide-react';
 import { getAvailableMatches, matchToTicket } from '@/services/matchesService';
@@ -40,6 +41,7 @@ const AvailableTickets: React.FC = () => {
     ? tickets 
     : tickets.filter(ticket => ticket.city === activeCity);
 
+  // Get unique cities from tickets, ensuring Riyadh and Jeddah are always included
   const cities = ["الرياض", "جدة", ...new Set(tickets.map(ticket => ticket.city))].filter(
     (city, index, self) => self.indexOf(city) === index
   );
@@ -76,7 +78,7 @@ const AvailableTickets: React.FC = () => {
         
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(3)].map((_, index) => (
+            {[...Array(6)].map((_, index) => (
               <div key={index} className="rounded-lg overflow-hidden">
                 <Skeleton className="h-[320px] w-full bg-[#13002A]/50" />
               </div>

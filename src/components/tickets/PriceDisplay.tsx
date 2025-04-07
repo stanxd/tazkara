@@ -8,9 +8,16 @@ interface PriceDisplayProps {
 
 const PriceDisplay: React.FC<PriceDisplayProps> = ({ teamName, price }) => {
   return (
-    <p className="text-center text-purple-200 mt-1">
-      السعر: <span className="font-bold text-white">{price} ر.س</span>
-    </p>
+    <div className="text-center">
+      <p className="text-purple-200 mt-1">
+        السعر: <span className="font-bold text-white">{price} ر.س</span>
+      </p>
+      {price >= 130 && (
+        <p className="text-xs text-pink-400 animate-pulse-glow">
+          *مباراة قمة
+        </p>
+      )}
+    </div>
   );
 };
 

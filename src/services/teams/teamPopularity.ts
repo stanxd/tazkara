@@ -1,8 +1,29 @@
 
-// Popular teams are marked with a flame icon and have higher demand
-export const popularTeams = ["الهلال", "النصر", "الاتحاد"];
+/**
+ * Service for identifying popular teams in the system
+ */
 
-// Check if a team is considered popular (has high fan demand)
+/**
+ * Array of teams considered to be popular
+ */
+const popularTeams = [
+  "الهلال",
+  "النصر",
+  "الأهلي", 
+  "الاهلي",
+  "الإتحاد",
+  "الاتحاد"
+];
+
+/**
+ * Check if a team is in the popular teams list
+ */
 export const isPopularTeam = (teamName: string): boolean => {
-  return popularTeams.includes(teamName);
+  // Clean up team name for comparison (remove "فريق " prefix if exists)
+  const cleanTeamName = teamName.replace(/فريق /i, '').trim();
+  
+  // Case insensitive check for presence in popular teams list
+  return popularTeams.some(
+    popularTeam => cleanTeamName.toLowerCase() === popularTeam.toLowerCase()
+  );
 };
