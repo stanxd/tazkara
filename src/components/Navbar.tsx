@@ -1,11 +1,9 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Logo from './Logo';
 import { useAuth } from '@/context/AuthContext';
-
 const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const {
@@ -13,13 +11,11 @@ const Navbar: React.FC = () => {
     signOut
   } = useAuth();
   const navigate = useNavigate();
-
   const handleSignOut = async () => {
     await signOut();
     navigate('/');
     setIsMenuOpen(false);
   };
-
   return <nav className="fixed top-0 left-0 right-0 z-50 bg-[#190038]/90 backdrop-blur-sm py-4 border-b border-purple-500/20">
       <div className="container mx-auto px-4 flex justify-between items-center">
         <Link to="/" className="flex items-center">
@@ -39,7 +35,7 @@ const Navbar: React.FC = () => {
               </Button>
             </> : <>
               <Link to="/register" className="mx-2">
-                <Button variant="outline" className="border-purple-500/50 text-white hover:bg-purple-900/40">
+                <Button variant="outline" className="border-purple-500/50 hover:bg-purple-900/40 text-zinc-50">
                   تسجيل
                 </Button>
               </Link>
@@ -87,5 +83,4 @@ const Navbar: React.FC = () => {
         </div>}
     </nav>;
 };
-
 export default Navbar;
