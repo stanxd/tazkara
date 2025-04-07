@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
-import { isPopularTeam } from '@/services/teams/teamPopularity';
+import { isPopularTeam } from '@/services/teams/index';
 import { 
   isUserPenalized, 
   getUserPenaltyInfo,

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { isPopularTeam } from '@/services/teams/teamPopularity';
+import { isPopularTeam } from '@/services/teams/index';
 
 interface PriceDisplayProps {
   teamName: string;

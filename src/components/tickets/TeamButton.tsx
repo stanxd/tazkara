@@ -2,7 +2,7 @@
 import React from 'react';
 import { Flame } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { isPopularTeam } from '@/services/teams/teamPopularity';
+import { isPopularTeam } from '@/services/teams/index';
 
 interface TeamButtonProps {
   teamName: string;

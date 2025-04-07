@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { isPopularTeam } from '@/services/teams/teamPopularity';
+import { isPopularTeam } from '@/services/teams/index';
 
 export interface UseTeamSelectionProps {
   price: number;
