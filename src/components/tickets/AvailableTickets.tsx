@@ -25,7 +25,7 @@ const AvailableTickets: React.FC = () => {
         if (matches && matches.length > 0) {
           // Convert matches to ticket format
           const ticketData = matches.map(match => {
-            const ticket = matchToTicket(match);
+            const ticket = matchToTicket(match) as TicketProps;
             
             // Check if the current user has a gift ticket for this match
             if (user?.id && match.giftDistributed) {

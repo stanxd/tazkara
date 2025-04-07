@@ -71,6 +71,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
             awayTeam={awayTeam}
             isPriceFluctuating={isPriceFluctuating}
             isHovered={isHovered}
+            extraIcon={extraIcon}
           />
         </CardHeader>
         

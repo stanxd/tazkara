@@ -22,7 +22,7 @@ export const matchToTicket = (match: Match) => {
   if (!match) {
     console.error("matchToTicket called with invalid match object");
     return {
-      id: "error",
+      id: 0,
       homeTeam: "فريق غير معروف",
       awayTeam: "فريق غير معروف",
       city: "غير متوفر",
@@ -30,6 +30,7 @@ export const matchToTicket = (match: Match) => {
       date: "تاريخ غير متوفر",
       time: "وقت غير متوفر",
       price: 0,
+      availableCount: 0,
       isPriceFluctuating: false
     };
   }
@@ -53,9 +54,10 @@ export const matchToTicket = (match: Match) => {
     const city = match.city || "غير متوفر";
     const stadium = match.stadium || "غير متوفر";
     const price = typeof match.ticketPrice === 'number' ? match.ticketPrice : 0;
+    const availableCount = typeof match.availableTickets === 'number' ? match.availableTickets : 0;
     
     return {
-      id: match.id?.toString() || "error",
+      id: match.id || 0,
       homeTeam: homeTeam,
       awayTeam: awayTeam,
       city: city,
@@ -63,12 +65,13 @@ export const matchToTicket = (match: Match) => {
       date: arabicDate,
       time: arabicTime,
       price: price,
+      availableCount: availableCount,
       isPriceFluctuating: isPriceFluctuatingValue
     };
   } catch (error) {
     console.error("Error formatting match to ticket:", error, match);
     return {
-      id: match.id?.toString() || "error",
+      id: match.id || 0,
       homeTeam: "فريق غير معروف",
       awayTeam: "فريق غير معروف",
       city: "خطأ",
@@ -76,6 +79,7 @@ export const matchToTicket = (match: Match) => {
       date: "خطأ",
       time: "خطأ",
       price: 0,
+      availableCount: 0,
       isPriceFluctuating: false
     };
   }
