@@ -78,7 +78,7 @@ const TeamSalesReports: React.FC<TeamSalesReportsProps> = ({ teamProfile }) => {
           <CardTitle>مبيعات التذاكر عبر الزمن</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-80">
+          <div className="h-[400px]">
             <ChartContainer
               config={{
                 tickets: {
@@ -88,12 +88,26 @@ const TeamSalesReports: React.FC<TeamSalesReportsProps> = ({ teamProfile }) => {
               }}
             >
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={salesOverTime}>
+                <BarChart 
+                  data={salesOverTime}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
+                >
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
+                  <XAxis 
+                    dataKey="name" 
+                    height={70}
+                    tick={{ 
+                      angle: -45, 
+                      textAnchor: 'end',
+                      dy: 20
+                    }}
+                  />
+                  <YAxis 
+                    width={45}
+                    tick={{ dx: -10 }}
+                  />
                   <Tooltip content={<ChartTooltipContent />} />
-                  <Legend />
+                  <Legend wrapperStyle={{ paddingTop: 20 }} />
                   <Bar dataKey="عدد التذاكر" fill="var(--color-tickets, #10b981)" />
                 </BarChart>
               </ResponsiveContainer>
