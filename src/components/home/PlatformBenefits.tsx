@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, Lock, Users, Ticket, ChevronDown, ChevronUp, Medal } from 'lucide-react';
+import { BarChart3, Lock, Users, Ticket, ChevronDown, ChevronUp, Medal, Award } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 
@@ -12,6 +12,7 @@ const PlatformBenefits: React.FC = () => {
     2: false,
     3: false,
     4: false,
+    5: false,
   });
 
   const toggleCard = (index: number) => {
@@ -67,6 +68,16 @@ const PlatformBenefits: React.FC = () => {
         "كل تذكرة مؤكدة لم يبيعا مالكها في الاوقات المحددة ولم يحضر للمباراة لايمكن ارجاعها",
         "يتم بيع التذكرة بنصف السعر لمشجع جديد وصلاحية دخول بين الشوطين",
         "في حال لم يحذر المشجع لـ 3 مباريات متتالية بحجوزات مؤكدة يتم تغيير حسابة من مشجع مفضل الى قائمة الانتظار للحجوزات الـ ثلاثة القادمة"
+      ]
+    },
+    {
+      icon: Award,
+      title: "تجربة ثرية",
+      description: [
+        "باقات لتحسين تجربة الجمهور تلبي رغباتهم",
+        "تحتوي على مسارات سريعه للدخول والخروج",
+        "توصيل بالعربات من والى المواقف",
+        "تمكين الفرق واللاعبين من تقديم باقات لفعالية او حدث"
       ]
     }
   ];
