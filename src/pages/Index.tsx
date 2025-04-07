@@ -10,11 +10,13 @@ import ScrollToTickets from '@/components/home/ScrollToTickets';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-[#190038]">
+    <div className="min-h-screen flex flex-col bg-[#13002A]">
       <Navbar />
       <main className="flex-1">
         <Hero />
-        <AvailableTickets />
+        <div id="tickets">
+          <AvailableTickets />
+        </div>
         <PlatformBenefits />
         <Founders />
       </main>
