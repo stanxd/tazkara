@@ -17,19 +17,23 @@ export const useTicketBooking = (price: number = 0) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // الحصول على الفريق المفضل للمستخدم من بيانات التعريف
+  // Get user's favorite team from user metadata - normalize it for comparison
   const userFavoriteTeam = user?.user_metadata?.favorite_team;
+  const normalizedFavoriteTeam = userFavoriteTeam?.toLowerCase?.() || '';
   
-  // حساب تعديلات السعر للفريق المحدد والموقع
+  console.log("Original favorite team from metadata:", userFavoriteTeam);
+  console.log("Normalized favorite team:", normalizedFavoriteTeam);
+  
+  // Calculate price adjustments for selected team and location
   const calculateAdjustedPrice = (team: string, city: string): number => {
     let calculatedPrice = price;
     
-    // زيادة سعر الفرق الشهيرة بنسبة 60%
+    // Popular teams get 60% price increase
     if (isPopularTeam(team)) {
       calculatedPrice = Math.round(price * 1.6);
     }
     
-    // مباريات الرياض أكثر تكلفة
+    // Riyadh matches are more expensive
     if (city === "الرياض") {
       calculatedPrice = Math.round(calculatedPrice * 1.15);
     }
@@ -39,17 +43,17 @@ export const useTicketBooking = (price: number = 0) => {
   
   const handleBookTicket = () => {
     if (!user) {
-      // المستخدم غير مسجل الدخول
+      // User not logged in
       setShowLoginDialog(true);
     } else {
-      // التحقق مما إذا كان المستخدم مشجعًا أم فريقًا
+      // Check if the user is a fan or a team
       const userType = user.user_metadata?.user_type;
       
       if (userType === 'fan') {
-        // المستخدم مشجع، المتابعة مع اختيار الفريق
+        // User is a fan, proceed with team selection
         setShowTeamSelectionDialog(true);
       } else {
-        // المستخدم مسجل الدخول ولكن ليس كمشجع
+        // User is logged in but not as a fan
         toast({
           title: "لا يمكن إكمال الحجز",
           description: "يجب تسجيل الدخول بحساب مشجع لحجز التذاكر",
@@ -64,20 +68,28 @@ export const useTicketBooking = (price: number = 0) => {
     setAdjustedPrice(calculateAdjustedPrice(team, city));
     setShowTeamSelectionDialog(false);
     
-    console.log("Selected team:", team);
-    console.log("User favorite team:", userFavoriteTeam);
+    // Clean up team names for comparison
+    const normalizedSelectedTeam = team.replace(/فريق /i, '').trim().toLowerCase();
     
-    // التحقق مما إذا كان الفريق المحدد هو الفريق المفضل للمستخدم
-    // تأكدنا من أن المقارنة تتم بشكل صحيح وبنفس التنسيق
-    const isUserFavoriteTeam = team.trim().toLowerCase() === userFavoriteTeam?.trim().toLowerCase();
+    console.log("Selected team:", team);
+    console.log("Normalized selected team:", normalizedSelectedTeam);
+    console.log("Normalized favorite team:", normalizedFavoriteTeam);
+    
+    // Convert both to lowercase and remove "فريق " prefix for reliable comparison
+    // Check if the normalized selected team is the user's favorite
+    const isUserFavoriteTeam = normalizedSelectedTeam === normalizedFavoriteTeam 
+                              || normalizedSelectedTeam === "ال" + normalizedFavoriteTeam
+                              || normalizedFavoriteTeam.includes(normalizedSelectedTeam);
     
     console.log("Is user favorite team?", isUserFavoriteTeam);
     
     if (isUserFavoriteTeam) {
-      // الحالة 1: إذا كان الفريق المحدد هو الفريق المفضل للمستخدم، عرض مربع حوار الدفع مباشرة
+      // Case 1: If selected team is user's favorite team, show payment dialog directly
+      console.log("Showing payment dialog for favorite team");
       setShowPaymentDialog(true);
     } else {
-      // الحالة 2: إذا لم يكن الفريق المفضل، عرض مربع حوار قائمة الانتظار
+      // Case 2: If not the favorite team, show waitlist dialog
+      console.log("Showing waitlist dialog for non-favorite team");
       setShowWaitlistDialog(true);
     }
   };
@@ -97,7 +109,7 @@ export const useTicketBooking = (price: number = 0) => {
       description: `تم حجز تذكرة لمباراة`,
     });
     
-    // معالجة الدفع الفعلية ستحدث هنا
+    // Actual payment processing would happen here
   };
 
   return {
