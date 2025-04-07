@@ -19,13 +19,14 @@ const TeamSalesReports: React.FC<TeamSalesReportsProps> = ({ teamProfile }) => {
     { id: 3, match: 'ضد الأهلي', date: '2025-03-15', soldTickets: 1100, totalTickets: 1200, revenue: 88000 },
   ];
 
+  // Using shorter labels for better display
   const salesOverTime = [
-    { name: 'قبل أسبوعين', 'عدد التذاكر': 120 },
-    { name: 'قبل أسبوع', 'عدد التذاكر': 300 },
+    { name: 'أسبوعين', 'عدد التذاكر': 120 },
+    { name: 'أسبوع', 'عدد التذاكر': 300 },
     { name: '5 أيام', 'عدد التذاكر': 420 },
     { name: '4 أيام', 'عدد التذاكر': 480 },
     { name: '3 أيام', 'عدد التذاكر': 520 },
-    { name: 'قبل يومين', 'عدد التذاكر': 700 },
+    { name: 'يومين', 'عدد التذاكر': 700 },
     { name: 'الأمس', 'عدد التذاكر': 850 },
     { name: 'اليوم', 'عدد التذاكر': 950 },
   ];
@@ -78,7 +79,7 @@ const TeamSalesReports: React.FC<TeamSalesReportsProps> = ({ teamProfile }) => {
           <CardTitle>مبيعات التذاكر عبر الزمن</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="h-[400px]">
+          <div className="h-[300px]">
             <ChartContainer
               config={{
                 tickets: {
@@ -90,36 +91,20 @@ const TeamSalesReports: React.FC<TeamSalesReportsProps> = ({ teamProfile }) => {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart 
                   data={salesOverTime}
-                  margin={{ top: 20, right: 30, left: 20, bottom: 70 }}
+                  margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
                 >
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis 
                     dataKey="name" 
-                    height={70}
-                    tick={(props) => {
-                      const { x, y, payload } = props;
-                      return (
-                        <g transform={`translate(${x},${y})`}>
-                          <text
-                            x={0}
-                            y={0}
-                            dy={20}
-                            textAnchor="end"
-                            fill="#666"
-                            transform="rotate(-45)"
-                          >
-                            {payload.value}
-                          </text>
-                        </g>
-                      );
-                    }}
+                    tick={{ fontSize: 11 }}
+                    height={50}
                   />
                   <YAxis 
-                    width={45}
-                    tick={{ dx: -10 }}
+                    width={40}
+                    tick={{ fontSize: 11 }}
                   />
                   <Tooltip content={<ChartTooltipContent />} />
-                  <Legend wrapperStyle={{ paddingTop: 20 }} />
+                  <Legend wrapperStyle={{ fontSize: '11px', paddingTop: 10 }} />
                   <Bar dataKey="عدد التذاكر" fill="var(--color-tickets, #10b981)" />
                 </BarChart>
               </ResponsiveContainer>
@@ -133,28 +118,30 @@ const TeamSalesReports: React.FC<TeamSalesReportsProps> = ({ teamProfile }) => {
           <CardTitle>مبيعات حسب المباريات</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>المباراة</TableHead>
-                <TableHead>التاريخ</TableHead>
-                <TableHead>التذاكر المباعة</TableHead>
-                <TableHead>النسبة المئوية</TableHead>
-                <TableHead>الإيرادات</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {matchSales.map(match => (
-                <TableRow key={match.id}>
-                  <TableCell>{match.match}</TableCell>
-                  <TableCell>{match.date}</TableCell>
-                  <TableCell>{match.soldTickets} / {match.totalTickets}</TableCell>
-                  <TableCell>{Math.round(match.soldTickets / match.totalTickets * 100)}%</TableCell>
-                  <TableCell>{match.revenue.toLocaleString()} ر.س</TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>المباراة</TableHead>
+                  <TableHead>التاريخ</TableHead>
+                  <TableHead>التذاكر المباعة</TableHead>
+                  <TableHead>النسبة المئوية</TableHead>
+                  <TableHead>الإيرادات</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {matchSales.map(match => (
+                  <TableRow key={match.id}>
+                    <TableCell>{match.match}</TableCell>
+                    <TableCell>{match.date}</TableCell>
+                    <TableCell>{match.soldTickets} / {match.totalTickets}</TableCell>
+                    <TableCell>{Math.round(match.soldTickets / match.totalTickets * 100)}%</TableCell>
+                    <TableCell>{match.revenue.toLocaleString()} ر.س</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
