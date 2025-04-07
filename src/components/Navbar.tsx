@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
                 </Button>
               </> : <>
                 <Link to="/register" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="outline" className="w-full border-purple-500/50 text-white hover:bg-purple-900/40">
+                  <Button variant="outline" className="w-full border-purple-500/50 hover:bg-purple-900/40 text-zinc-50">
                     تسجيل
                   </Button>
                 </Link>
