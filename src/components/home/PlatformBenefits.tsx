@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, Lock, Users, Ticket, ChevronDown, ChevronUp } from 'lucide-react';
+import { BarChart3, Lock, Users, Ticket, ChevronDown, ChevronUp, Medal } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { Button } from '@/components/ui/button';
 
@@ -10,7 +10,8 @@ const PlatformBenefits: React.FC = () => {
     0: false,
     1: false,
     2: false,
-    3: false
+    3: false,
+    4: false,
   });
 
   const toggleCard = (index: number) => {
@@ -24,26 +25,49 @@ const PlatformBenefits: React.FC = () => {
     {
       icon: BarChart3,
       title: "مقترح سعر تحليلي",
-      shortDescription: "منصة تقدم نموذج يتيح للفريق نشر تذاكر مبارياته القادمة مع تقديم سعر مقترح للفريق،",
-      fullDescription: "منصة تقدم نموذج يتيح للفريق نشر تذاكر مبارياته القادمة مع تقديم سعر مقترح للفريق، ونعتمد في ذلك على عدة معطيات منها حجم الجمهور للفريق، والمدينة المقام فيها الحدث، ونوع الملعب، والتوقيت، ونوع المباراة، وسلوك المشجعين المسجلين لديها"
+      description: [
+        "منصة تقدم نموذج يتيح للفريق نشر تذاكر مبارياته القادمه مع خاصية تنبؤ لتقديم سعر مقترح للفريق",
+        "نعتمد في ذلك على عدة معطيات منها حجم الجمهور للفريق، والمدينة المقام فيها الحدث، ونوع الملعب، والتوقيت، ونوع المباراة، وسلوك المشجعين المسجلين لديها"
+      ]
     },
     {
       icon: Ticket,
       title: "سعر ديناميكي ذكي",
-      shortDescription: "بغض النظر عن السعر الأساسي، فان المنصة تمكن الفريق من تفعيله للسعر الديناميكي من عدمه،",
-      fullDescription: "بغض النظر عن السعر الأساسي، فان المنصة تمكن الفريق من تفعيله للسعر الديناميكي من عدمه، ويعمل التسعير الديناميكي بعد بيع 30% من عدد التذاكر أو الست ساعات الأولى، وبعد ذلك بناءً على حجم الإقبال يتم تفعيل خاصية السعر المتغير ارتفاعاً أو انخفاضاً، ويعتمد ذلك على حجم الطلب + القوة الشرائية لجمهور النادي، ويتم تحديد القوة الشرائية للمشجع بناءً على سلوكه في منصتنا"
+      description: [
+        "بغض النظر عن السعر الأساسي، فان المنصة تمكن الفريق من تفعيله للسعر الديناميكي من عدمه",
+        "يعمل التسعير الديناميكي بعد بيع 30% من عدد التذاكر أو الست ساعات الأولى",
+        "بناءً على حجم الإقبال يتم تفعيل خاصية السعر المتغير ارتفاعاً أو انخفاضاً",
+        "يعتمد ذلك على حجم الطلب + القوة الشرائية لجمهور النادي",
+        "يتم تحديد القوة الشرائية للمشجع بناءً على سلوكه في منصتنا"
+      ]
     },
     {
       icon: Lock,
       title: "تنظيم السوق",
-      shortDescription: "كل التذاكر لدينا مؤمنة ولا يمكن إساءة استخدامها أو خلق سوق سوداء لها،",
-      fullDescription: "كل التذاكر لدينا مؤمنة ولا يمكن إساءة استخدامها أو خلق سوق سوداء لها، بحيث أن التذكرة مرتبطة بكل مشجع وتحتوي على اسمه ورقم هويته، مع تمكين المشجع من بيع تذكرته بشكل فوري داخل المنصة وسيتم إضافتها للمعروض"
+      description: [
+        "كل التذاكر لدينا مؤمنة ولا يمكن إساءة استخدامها أو خلق سوق سوداء لها",
+        "التذكرة مرتبطة بكل مشجع وتحتوي على اسمه ورقم هويته",
+        "مع تمكين المشجع من بيع تذكرته بشكل فوري داخل المنصة وسيتم إضافتها للمعروض"
+      ]
     },
     {
       icon: Users,
       title: "تحسين تجربة المشجعين",
-      shortDescription: "كل مشجع عند التسجيل يختار فريقه المفضل ولا يمكن له تغييره إلا وفقاً لشروط محددة،",
-      fullDescription: "كل مشجع عند التسجيل يختار فريقه المفضل ولا يمكن له تغييره إلا وفقاً لشروط محددة، وبذلك سيتمكن مشجعي النادي من حجز التذاكر وتكون لهم الأولوية بالحجز، وأي مشجع آخر سيتم وضعه في قائمة الانتظار لحين توفر تذاكر"
+      description: [
+        "كل مشجع عند التسجيل يختار فريقه المفضل ولا يمكن له تغييره إلا وفقاً لشروط محددة",
+        "سيتمكن مشجعي النادي من حجز التذاكر وتكون لهم الأولوية بالحجز",
+        "أي مشجع آخر سيتم وضعه في قائمة الانتظار لحين توفر تذاكر",
+        "لايحتاج المشجع الى حمل التذكرة, يتم تعريف التذاكر على البوابات برقم الهوية"
+      ]
+    },
+    {
+      icon: Medal,
+      title: "رفع نسبة الحضور والولاء",
+      description: [
+        "كل تذكرة مؤكدة لم يبيعا مالكها في الاوقات المحددة ولم يحضر للمباراة لايمكن ارجاعها",
+        "يتم بيع التذكرة بنصف السعر لمشجع جديد وصلاحية دخول بين الشوطين",
+        "في حال لم يحذر المشجع لـ 3 مباريات متتالية بحجوزات مؤكدة يتم تغيير حسابة من مشجع مفضل الى قائمة الانتظار للحجوزات الـ ثلاثة القادمة"
+      ]
     }
   ];
 
@@ -59,7 +83,7 @@ const PlatformBenefits: React.FC = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
             <Card 
               key={index}
@@ -73,9 +97,12 @@ const PlatformBenefits: React.FC = () => {
               </CardHeader>
               <CardContent className="rtl">
                 <Collapsible open={openCards[index]} onOpenChange={() => toggleCard(index)}>
-                  <div className="text-purple-100 text-sm leading-relaxed">
-                    {!openCards[index] ? feature.shortDescription : feature.fullDescription}
-                  </div>
+                  <ul className="text-purple-100 text-sm leading-relaxed list-disc pr-4 space-y-1">
+                    {openCards[index] 
+                      ? feature.description.map((item, i) => <li key={i}>{item}</li>)
+                      : <li>{feature.description[0]}</li>
+                    }
+                  </ul>
                   <div className="flex justify-end mt-2">
                     <CollapsibleTrigger asChild>
                       <Button 
