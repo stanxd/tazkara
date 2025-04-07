@@ -1,18 +1,15 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart3, Lock, Users, Ticket } from 'lucide-react';
-
 const PlatformBenefits: React.FC = () => {
-  return (
-    <section className="bg-[#13002A] py-16 relative overflow-hidden">
+  return <section className="bg-[#13002A] py-16 relative overflow-hidden">
       {/* Subtle pattern overlay */}
       <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1624880357913-a8539238245b')] bg-cover bg-center opacity-[0.03]"></div>
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 rtl">تسعير مبتكر - تجربة أذكى</h2>
-          <p className="text-lg text-purple-200 max-w-3xl mx-auto rtl">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 rtl text-center">تسعير مبتكر - تجربة أذكى</h2>
+          <p className="text-lg text-purple-200 max-w-3xl mx-auto rtl text-center">
             منصتنا توفر تجربة فريدة للمشجعين والأندية من خلال نظام متكامل للتذاكر
           </p>
         </div>
@@ -79,8 +76,6 @@ const PlatformBenefits: React.FC = () => {
           </Card>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default PlatformBenefits;
