@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
             </div>
             
             <div className="mt-8 w-full border-t border-purple-500/20 pt-8 text-center md:text-right rtl">
-              <p className="text-purple-300">© ٢٠٢٥ تذكرة+ | جميع الحقوق محفوظة</p>
+              <p className="text-purple-300">جميع الحقوق محفوظة لـ تذكرة+ 2025</p>
             </div>
           </div>
         </div>
