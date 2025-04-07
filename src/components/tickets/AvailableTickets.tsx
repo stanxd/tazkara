@@ -6,10 +6,12 @@ import ModernTicketCard from '@/components/tickets/ModernTicketCard';
 import { Match } from '@/components/dashboard/matches/types';
 import { TicketProps } from '@/components/tickets/TicketCard';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
 
 const AvailableTickets: React.FC = () => {
   const [tickets, setTickets] = useState<TicketProps[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [activeCity, setActiveCity] = useState<string>("all");
 
   useEffect(() => {
     const loadTickets = async () => {
@@ -35,28 +37,55 @@ const AvailableTickets: React.FC = () => {
     loadTickets();
   }, []);
 
+  const filteredTickets = activeCity === "all" 
+    ? tickets 
+    : tickets.filter(ticket => ticket.city === activeCity);
+
+  const cities = ["الرياض", "جدة", ...new Set(tickets.map(ticket => ticket.city))].filter(
+    (city, index, self) => self.indexOf(city) === index
+  );
+
   return (
-    <section className="py-12 bg-gradient-to-b from-white to-gray-50" id="tickets">
+    <section className="py-16 bg-gradient-to-b from-[#1A0B2E] to-[#231044]" id="tickets">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-10">
-          <div className="flex items-center justify-center mb-3">
-            <Ticket className="w-6 h-6 text-tazkara-green mr-2" />
-            <h2 className="text-3xl font-bold text-tazkara-dark rtl">التذاكر المتوفرة</h2>
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 mb-3 rtl">
+            المباريات القادمة
+          </h2>
+          <p className="text-purple-200 mt-2 mb-8 rtl">احجز تذكرتك الآن للمباريات القادمة</p>
+          
+          <div className="inline-flex bg-[#230B3F]/50 backdrop-blur-sm p-1.5 rounded-lg border border-purple-500/20 mb-10">
+            <Button 
+              variant="ghost"
+              onClick={() => setActiveCity("all")} 
+              className={`mx-1 text-sm font-medium rtl ${activeCity === "all" ? "bg-purple-600 text-white" : "text-purple-200 hover:text-white"}`}
+            >
+              جميع المباريات
+            </Button>
+            {cities.map(city => (
+              <Button 
+                key={city}
+                variant="ghost" 
+                onClick={() => setActiveCity(city)}
+                className={`mx-1 text-sm font-medium rtl ${activeCity === city ? "bg-purple-600 text-white" : "text-purple-200 hover:text-white"}`}
+              >
+                {city}
+              </Button>
+            ))}
           </div>
-          <p className="text-gray-600 mt-2 rtl">استعرض أحدث التذاكر المتوفرة للمباريات القادمة</p>
         </div>
         
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(3)].map((_, index) => (
               <div key={index} className="rounded-lg overflow-hidden">
-                <Skeleton className="h-[320px] w-full" />
+                <Skeleton className="h-[320px] w-full bg-[#230B3F]/50" />
               </div>
             ))}
           </div>
-        ) : tickets.length > 0 ? (
+        ) : filteredTickets.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {tickets.map((ticket) => (
+            {filteredTickets.map((ticket) => (
               <ModernTicketCard 
                 key={ticket.id} 
                 {...ticket} 
@@ -64,10 +93,10 @@ const AvailableTickets: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 bg-white rounded-lg shadow-sm border border-gray-100">
-            <Map className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <p className="text-xl text-gray-500 rtl">لا توجد تذاكر متوفرة حالياً</p>
-            <p className="text-gray-400 mt-2 rtl">سيتم إضافة تذاكر جديدة قريباً</p>
+          <div className="text-center py-16 bg-[#230B3F]/60 backdrop-blur-sm rounded-lg border border-purple-500/20">
+            <Map className="w-16 h-16 text-purple-400/50 mx-auto mb-4" />
+            <p className="text-xl text-purple-200 rtl">لا توجد تذاكر متوفرة حالياً</p>
+            <p className="text-purple-300/60 mt-2 rtl">سيتم إضافة تذاكر جديدة قريباً</p>
           </div>
         )}
       </div>

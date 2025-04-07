@@ -42,20 +42,22 @@ const ModernTicketCard: React.FC<TicketProps> = ({
     >
       <Card 
         className={cn(
-          "overflow-hidden h-full transition-all duration-300 border-t-4 shadow-sm hover:shadow-lg",
-          isHovered ? "border-t-tazkara-gold" : "border-t-tazkara-green"
+          "overflow-hidden h-full transition-all duration-300 bg-[#230B3F]/70 backdrop-blur-sm border border-purple-500/20 shadow-lg",
+          isHovered ? "shadow-purple-500/30" : "shadow-purple-500/10"
         )}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <CardHeader className="bg-gradient-to-r from-tazkara-green/10 to-tazkara-gold/10 pb-2 pt-4">
+        <CardHeader className="pb-2 pt-4 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-600 to-pink-500"></div>
+          
           <div className="flex justify-between items-center">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div className="flex items-center">
-                    <Ticket className="h-5 w-5 text-tazkara-green mr-1" />
-                    <span className="text-xs font-medium text-gray-500">#{id.substring(0, 6)}</span>
+                    <Ticket className="h-5 w-5 text-purple-400 mr-1" />
+                    <span className="text-xs font-medium text-purple-300">#{id.substring(0, 6)}</span>
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -65,51 +67,51 @@ const ModernTicketCard: React.FC<TicketProps> = ({
             </TooltipProvider>
             
             {isPriceFluctuating && (
-              <Badge variant="destructive" className="text-xs animate-pulse">
+              <Badge variant="destructive" className="text-xs animate-pulse bg-gradient-to-r from-orange-400 to-red-500 border-none">
                 سعر متغير
               </Badge>
             )}
           </div>
           
-          <div className="flex justify-between items-center mt-2 rtl">
-            <div className="text-lg font-bold">{homeTeam}</div>
+          <div className="flex justify-between items-center mt-3 rtl">
+            <div className="text-lg font-bold text-white">{homeTeam}</div>
             <div className="flex flex-col items-center mx-2">
-              <span className="text-xs font-bold text-gray-400">ضد</span>
-              <span className="text-sm font-bold text-tazkara-green">VS</span>
+              <span className="text-xs font-bold text-purple-300">ضد</span>
+              <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">VS</span>
             </div>
-            <div className="text-lg font-bold">{awayTeam}</div>
+            <div className="text-lg font-bold text-white">{awayTeam}</div>
           </div>
         </CardHeader>
         
         <CardContent className="space-y-4 pt-4">
           <div className="space-y-3">
-            <div className="flex items-center gap-2 text-gray-700 rtl">
+            <div className="flex items-center gap-2 text-purple-200 rtl">
               <MapPin size={16} className={cn(
                 "transition-colors",
-                isHovered ? "text-tazkara-gold" : "text-tazkara-green"
+                isHovered ? "text-pink-400" : "text-purple-400"
               )} />
               <HoverCard>
                 <HoverCardTrigger asChild>
                   <span className="cursor-help">{stadium}</span>
                 </HoverCardTrigger>
-                <HoverCardContent className="rtl">
+                <HoverCardContent className="rtl bg-[#1A0B2E] border border-purple-500/20 text-purple-100">
                   <p>المدينة: {city}</p>
                 </HoverCardContent>
               </HoverCard>
             </div>
             
-            <div className="flex items-center gap-2 text-gray-700 rtl">
+            <div className="flex items-center gap-2 text-purple-200 rtl">
               <Calendar size={16} className={cn(
                 "transition-colors",
-                isHovered ? "text-tazkara-gold" : "text-tazkara-green"
+                isHovered ? "text-pink-400" : "text-purple-400"
               )} />
               <span>{date}</span>
             </div>
             
-            <div className="flex items-center gap-2 text-gray-700 rtl">
+            <div className="flex items-center gap-2 text-purple-200 rtl">
               <Clock size={16} className={cn(
                 "transition-colors",
-                isHovered ? "text-tazkara-gold" : "text-tazkara-green"
+                isHovered ? "text-pink-400" : "text-purple-400"
               )} />
               <span>{time}</span>
             </div>
@@ -118,16 +120,16 @@ const ModernTicketCard: React.FC<TicketProps> = ({
               <div className="flex items-center gap-2">
                 <Tag size={16} className={cn(
                   "transition-colors",
-                  isHovered ? "text-tazkara-gold" : "text-tazkara-green"
+                  isHovered ? "text-pink-400" : "text-purple-400"
                 )} />
-                <span className="font-bold text-lg text-tazkara-dark">
+                <span className="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300">
                   {price} ر.س
                 </span>
               </div>
               
               <div className="flex items-center gap-1">
-                <Users size={14} className="text-gray-400" />
-                <span className="text-xs text-gray-500">محدود</span>
+                <Users size={14} className="text-purple-400" />
+                <span className="text-xs text-purple-300">محدود</span>
               </div>
             </div>
           </div>
@@ -138,8 +140,8 @@ const ModernTicketCard: React.FC<TicketProps> = ({
             className={cn(
               "w-full font-bold rtl transition-colors",
               isHovered 
-              ? "bg-tazkara-gold hover:bg-tazkara-gold/90" 
-              : "bg-tazkara-green hover:bg-tazkara-green/90"
+              ? "bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600" 
+              : "bg-purple-600 hover:bg-purple-700"
             )}
           >
             شراء التذكرة

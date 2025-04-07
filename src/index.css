@@ -87,4 +87,23 @@
   .btn-secondary {
     @apply bg-tazkara-gold text-white hover:bg-tazkara-gold/90 transition-colors;
   }
+
+  /* Gradient Text */
+  .gradient-text {
+    @apply text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300;
+  }
+}
+
+/* Animation for pulsing elements */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
 }
