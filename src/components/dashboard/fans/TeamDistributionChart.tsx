@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
-import { PieChart, Pie, ResponsiveContainer, Cell, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import { Loader2 } from 'lucide-react';
 import { TeamDistribution } from './types';
 
@@ -35,8 +35,8 @@ const TeamDistributionChart: React.FC<TeamDistributionChartProps> = ({ isLoading
                 }
               }}
             >
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
+              <div style={{ width: '100%', height: '100%' }}>
+                <PieChart width={400} height={300} style={{ margin: 'auto' }}>
                   <Pie
                     data={teamDistribution}
                     cx="50%"
@@ -54,7 +54,7 @@ const TeamDistributionChart: React.FC<TeamDistributionChartProps> = ({ isLoading
                   <Tooltip content={<ChartTooltipContent />} />
                   <Legend />
                 </PieChart>
-              </ResponsiveContainer>
+              </div>
             </ChartContainer>
           </div>
         )}

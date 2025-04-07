@@ -36,10 +36,11 @@ export const useFanData = (teamProfile: any) => {
         setTickets(ticketsData as FanTicket[] || []);
 
         // Get fan preferences for the pie chart
+        // Fix the query by using ilike instead of contains
         const { data: preferencesData, error: preferencesError } = await supabase
           .from('fan_preferences')
           .select('*')
-          .contains('favorite_team', teamName.replace('فريق ', ''));
+          .ilike('favorite_team', `%${teamName.replace('فريق ', '')}%`);
 
         if (preferencesError) throw preferencesError;
 
