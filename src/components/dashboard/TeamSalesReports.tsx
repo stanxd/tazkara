@@ -15,7 +15,7 @@ const TeamSalesReports: React.FC<TeamSalesReportsProps> = ({ teamProfile }) => {
   // Placeholder data - in a real application this would come from the database
   const matchSales = [
     { id: 1, match: 'ضد الهلال', date: '2025-04-15', soldTickets: 950, totalTickets: 1000, revenue: 95000 },
-    { id: 2, match: 'ضد النصر', date: '2025-05-01', soldTickets: 1200, totalTickets: 1500, revenue: 144000 },
+    { id: 2, match: 'ضد الاتحاد', date: '2025-05-01', soldTickets: 1200, totalTickets: 1500, revenue: 144000 },
     { id: 3, match: 'ضد الأهلي', date: '2025-03-15', soldTickets: 1100, totalTickets: 1200, revenue: 88000 },
   ];
 

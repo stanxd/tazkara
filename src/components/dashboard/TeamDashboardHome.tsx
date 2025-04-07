@@ -15,7 +15,7 @@ const TeamDashboardHome: React.FC<TeamDashboardHomeProps> = ({ teamProfile }) =>
     soldTickets: 1250,
     lastMatchAttendance: 85,
     alerts: [
-      { id: 1, title: 'تنبيه المباراة', message: 'تبقى 3 أيام على المباراة القادمة مع النصر' },
+      { id: 1, title: 'تنبيه المباراة', message: 'تبقى 3 أيام على المباراة القادمة' },
       { id: 2, title: 'مبيعات التذاكر', message: 'مبيعات التذاكر للمباراة القادمة أقل من المتوقع' }
     ]
   };
