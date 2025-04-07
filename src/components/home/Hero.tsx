@@ -58,7 +58,7 @@ const Hero = () => {
       <div className="absolute inset-0 bg-[url('/stadium-bg.jpg')] bg-center bg-cover opacity-5 mix-blend-overlay"></div>
       
       <div className="container mx-auto px-4 relative z-10 flex flex-col items-center justify-center">
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-16 px-0 my-[29px]">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">احجز تذكرتك الآن</span>
           </h1>
