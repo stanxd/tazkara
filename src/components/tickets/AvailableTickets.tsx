@@ -21,10 +21,11 @@ const AvailableTickets: React.FC = () => {
         setIsLoading(true);
         // Get available matches from service
         const matches = getAvailableMatches();
+        console.log('Available matches loaded:', matches.length);
         
         if (matches && matches.length > 0) {
           // Convert matches to ticket format
-          const ticketData = matches.map(match => {
+          const ticketData: TicketProps[] = matches.map(match => {
             const ticket = matchToTicket(match) as TicketProps;
             
             // Check if the current user has a gift ticket for this match
@@ -38,12 +39,15 @@ const AvailableTickets: React.FC = () => {
             return ticket;
           });
           
+          console.log('Converted to tickets:', ticketData.length);
           setTickets(ticketData);
         } else {
           console.log("No available matches found");
+          setTickets([]);
         }
       } catch (error) {
         console.error("Error loading tickets:", error);
+        setTickets([]);
       } finally {
         setIsLoading(false);
       }
@@ -53,6 +57,7 @@ const AvailableTickets: React.FC = () => {
     
     // Listen for storage events to refresh tickets when matches are updated
     const handleStorageChange = () => {
+      console.log('Storage changed, reloading tickets');
       loadTickets();
     };
     
@@ -113,7 +118,7 @@ const AvailableTickets: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredTickets.map((ticket) => (
               <ModernTicketCard 
-                key={ticket.id} 
+                key={`${ticket.id}-${ticket.homeTeam}-${ticket.awayTeam}`} 
                 {...ticket} 
                 extraIcon={ticket.isGift ? <Gift className="h-5 w-5 text-amber-400" /> : undefined}
               />

@@ -36,7 +36,9 @@ export const mockMatches = [
     time: '20:00', 
     availableTickets: 1000, 
     ticketPrice: 100,
-    isFuture: true
+    isFuture: true,
+    homeTeam: 'فريق النصر',
+    homeTeamId: 'default'
   },
   { 
     id: 2, 
@@ -47,7 +49,9 @@ export const mockMatches = [
     time: '21:00', 
     availableTickets: 1500, 
     ticketPrice: 120,
-    isFuture: true
+    isFuture: true,
+    homeTeam: 'فريق النصر',
+    homeTeamId: 'default'
   },
   { 
     id: 3, 
@@ -58,7 +62,9 @@ export const mockMatches = [
     time: '20:30', 
     availableTickets: 1200, 
     ticketPrice: 80,
-    isFuture: false
+    isFuture: false,
+    homeTeam: 'فريق النصر',
+    homeTeamId: 'default'
   },
 ];
 
@@ -71,8 +77,11 @@ export const getStoredMatches = (teamId: string): Match[] => {
     const key = `${MATCHES_STORAGE_KEY}_${teamId}`;
     const storedMatches = localStorage.getItem(key);
     if (storedMatches) {
-      return JSON.parse(storedMatches);
+      const parsedMatches = JSON.parse(storedMatches);
+      console.log(`Retrieved ${parsedMatches.length} matches for team ID: ${teamId}`);
+      return parsedMatches;
     }
+    console.log(`No stored matches found for team ID: ${teamId}, using mock data`);
     return mockMatches;
   } catch (error) {
     console.error("Error loading matches from localStorage:", error);
@@ -85,6 +94,7 @@ export const saveMatchesToStorage = (matches: Match[], teamId: string): void => 
   try {
     const key = `${MATCHES_STORAGE_KEY}_${teamId}`;
     localStorage.setItem(key, JSON.stringify(matches));
+    console.log(`Saved ${matches.length} matches for team ID: ${teamId} with key: ${key}`);
   } catch (error) {
     console.error("Error saving matches to localStorage:", error);
   }

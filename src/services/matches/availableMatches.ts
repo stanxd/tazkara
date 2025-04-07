@@ -1,3 +1,4 @@
+
 import { Match } from '@/components/dashboard/matches/types';
 import { getStoredMatches } from '@/components/dashboard/matches/matchUtils';
 
@@ -23,6 +24,11 @@ export const getAvailableMatches = (): Match[] => {
       match.availableTickets > 0
     );
     
+    console.log('Available matches found:', availableMatches.length);
+    if (availableMatches.length === 0) {
+      console.log('No available matches found, team IDs checked:', allTeamIds);
+    }
+    
     return availableMatches;
   } catch (error) {
     console.error("Error getting available matches:", error);
@@ -39,12 +45,13 @@ const getAllTeamIds = (): string[] => {
     // Get all keys from localStorage
     const allKeys = Object.keys(localStorage);
     
-    // Filter keys that start with 'matches-'
+    // Filter keys that start with 'tazkara_team_matches_'
     const teamIds = allKeys
-      .filter(key => key.startsWith('matches-'))
-      .map(key => key.replace('matches-', ''));
+      .filter(key => key.startsWith('tazkara_team_matches_'))
+      .map(key => key.replace('tazkara_team_matches_', ''));
     
-    return teamIds;
+    console.log('Found team IDs:', teamIds);
+    return teamIds.length > 0 ? teamIds : ['default'];
   } catch (error) {
     console.error("Error getting team IDs:", error);
     return ['default']; // Fallback to default

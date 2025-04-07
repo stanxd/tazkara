@@ -44,13 +44,15 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
   // Load matches from localStorage on component mount
   useEffect(() => {
     const storedMatches = getStoredMatches(teamId);
+    console.log(`TeamMatchesManager - Loaded ${storedMatches.length} matches for team: ${currentTeam} (ID: ${teamId})`);
     setMatches(storedMatches);
-  }, [teamId]);
+  }, [teamId, currentTeam]);
 
   // Save matches to localStorage when they change
   useEffect(() => {
     if (matches.length > 0) {
       saveMatchesToStorage(matches, teamId);
+      console.log(`TeamMatchesManager - Saved ${matches.length} matches for team ID: ${teamId}`);
       
       // Dispatch storage event to notify other components about the change
       window.dispatchEvent(new Event('storage'));
@@ -86,6 +88,8 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
       homeTeamId: teamId,
       giftTickets: data.giftTickets || 0
     };
+    
+    console.log('Adding new match:', newMatch);
     
     // Add new match to state
     setMatches(prevMatches => [...prevMatches, newMatch]);
@@ -139,6 +143,7 @@ const TeamMatchesManager: React.FC<TeamMatchesManagerProps> = ({ teamProfile }) 
           <MatchesList 
             matches={matches} 
             onDeleteMatch={handleDeleteMatch}
+            showGiftColumn={true}
           />
         </CardContent>
       </Card>
