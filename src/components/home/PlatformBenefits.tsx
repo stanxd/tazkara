@@ -83,8 +83,7 @@ const PlatformBenefits: React.FC = () => {
   ];
 
   return <section className="bg-[#13002A] py-16 relative overflow-hidden">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1624880357913-a8539238245b')] bg-cover bg-center opacity-[0.03]"></div>
+      {/* Removed the background image */}
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
