@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/context/AuthContext';
@@ -10,16 +11,16 @@ import FanWaitlistTickets from './fans/FanWaitlistTickets';
 import AttendanceHistory from './fans/AttendanceHistory';
 import Subscriptions from './fans/Subscriptions';
 import { supabase } from '@/integrations/supabase/client';
-import { Info } from 'lucide-react';
+import { Info, Heart } from 'lucide-react';
+
 interface FanDashboardProps {
   fanProfile: any;
 }
+
 const FanDashboard: React.FC<FanDashboardProps> = ({
   fanProfile: initialProfile
 }) => {
-  const {
-    user
-  } = useAuth();
+  const { user } = useAuth();
   const [fanProfile, setFanProfile] = useState(initialProfile);
 
   // Update Mohammed Abdullah's favorite team to Al-Hilal
@@ -27,11 +28,10 @@ const FanDashboard: React.FC<FanDashboardProps> = ({
     if (fanProfile?.name === 'محمد عبدالله' && fanProfile?.favorite_team !== 'الهلال') {
       const updateFavoriteTeam = async () => {
         try {
-          const {
-            error
-          } = await supabase.from('fans').update({
+          const { error } = await supabase.from('fans').update({
             favorite_team: 'الهلال'
           }).eq('id', user?.id);
+          
           if (!error) {
             // Update the local state with the new favorite team
             setFanProfile({
@@ -49,6 +49,7 @@ const FanDashboard: React.FC<FanDashboardProps> = ({
       updateFavoriteTeam();
     }
   }, [user, fanProfile]);
+
   useEffect(() => {
     // إضافة سجل للتحقق من بيانات المستخدم
     console.log("Fan Dashboard - User data:", user);
@@ -56,7 +57,9 @@ const FanDashboard: React.FC<FanDashboardProps> = ({
     console.log("Fan Dashboard - Favorite team:", user?.user_metadata?.favorite_team);
     console.log("Fan Dashboard - Fan profile:", fanProfile);
   }, [user, fanProfile]);
-  return <div className="space-y-6">
+
+  return (
+    <div className="space-y-6">
       <Card className="w-full max-w-4xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl font-bold rtl">لوحة التحكم</CardTitle>
@@ -70,11 +73,11 @@ const FanDashboard: React.FC<FanDashboardProps> = ({
             </div>
             <div className="md:w-1/3 space-y-2">
               <h3 className="text-lg font-medium rtl">رقم الهوية:</h3>
-              <p className="rtl">1109878576</p>
+              <p className="rtl">{fanProfile?.id_number || '1109878576'}</p>
             </div>
             <div className="md:w-1/3 space-y-2">
               <h3 className="text-lg font-medium rtl">البريد الإلكتروني:</h3>
-              <p className="rtl">mod@t.sa</p>
+              <p className="rtl">{user?.email || 'mod@t.sa'}</p>
             </div>
           </div>
           
@@ -87,11 +90,13 @@ const FanDashboard: React.FC<FanDashboardProps> = ({
               <div className="flex items-center gap-2">
                 <h3 className="text-lg font-medium rtl">الفريق المفضل:</h3>
                 <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
-                  <Info className="h-3 w-3 ml-1" />
-                  <span className="rtl"></span>
+                  <Heart className="h-3 w-3 ml-1" />
+                  <span className="rtl">الفريق المفضل</span>
                 </div>
               </div>
-              <p className="rtl">{fanProfile?.favorite_team || user?.user_metadata?.favorite_team || "غير محدد"}</p>
+              <p className="rtl font-semibold text-tazkara-green">
+                {fanProfile?.favorite_team || user?.user_metadata?.favorite_team || "غير محدد"}
+              </p>
             </div>
           </div>
         </CardContent>
@@ -134,6 +139,8 @@ const FanDashboard: React.FC<FanDashboardProps> = ({
           <AccountSettings fanProfile={fanProfile} />
         </TabsContent>
       </Tabs>
-    </div>;
+    </div>
+  );
 };
+
 export default FanDashboard;

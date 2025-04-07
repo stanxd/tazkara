@@ -35,29 +35,36 @@ export const useFanData = (teamProfile: any) => {
         // Set tickets data
         setTickets(ticketsData as FanTicket[] || []);
 
-        // Get fan preferences for the pie chart
-        // Fix the query by using ilike instead of contains
-        const { data: preferencesData, error: preferencesError } = await supabase
-          .from('fan_preferences')
-          .select('*')
-          .ilike('favorite_team', `%${teamName.replace('فريق ', '')}%`);
+        // Fetch data for all fans to analyze their favorite team preferences
+        const { data: fansData, error: fansError } = await supabase
+          .from('fans')
+          .select('id, name, favorite_team')
+          .order('created_at', { ascending: false });
 
-        if (preferencesError) throw preferencesError;
+        if (fansError) throw fansError;
 
-        // Process preferences into chart data
+        // Process fan preferences into chart data
         const teamCounts: Record<string, number> = {};
 
-        (preferencesData || []).forEach((pref: FanPreference) => {
-          const team = pref.favorite_team;
-          teamCounts[team] = (teamCounts[team] || 0) + 1;
+        (fansData || []).forEach((fan) => {
+          if (fan.favorite_team) {
+            // Normalize team name - strip "فريق " prefix if present
+            const normalizedTeamName = fan.favorite_team.replace(/^فريق\s+/i, '').trim();
+            if (normalizedTeamName) {
+              teamCounts[normalizedTeamName] = (teamCounts[normalizedTeamName] || 0) + 1;
+            }
+          }
         });
 
-        // Convert team counts to chart format
-        const chartData: TeamDistribution[] = Object.keys(teamCounts).map(team => ({
-          name: team,
-          value: teamCounts[team]
-        }));
+        // Convert team counts to chart format and sort by count (descending)
+        const chartData: TeamDistribution[] = Object.keys(teamCounts)
+          .map(team => ({
+            name: team,
+            value: teamCounts[team]
+          }))
+          .sort((a, b) => b.value - a.value);
 
+        // If data exists, use it; otherwise use default placeholder data
         setTeamDistribution(chartData.length > 0 ? chartData : [
           { name: 'الهلال', value: 0 },
           { name: 'النصر', value: 0 },
@@ -81,6 +88,19 @@ export const useFanData = (teamProfile: any) => {
     fetchData();
 
     // Set up real-time listeners
+    const fansChannel = supabase
+      .channel('fans_changes')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'fans'
+      }, (payload) => {
+        console.log('Fans real-time update:', payload);
+        // Refresh data upon changes
+        fetchData();
+      })
+      .subscribe();
+
     const ticketsChannel = supabase
       .channel('fan_tickets_changes')
       .on('postgres_changes', {
@@ -94,23 +114,10 @@ export const useFanData = (teamProfile: any) => {
       })
       .subscribe();
 
-    const preferencesChannel = supabase
-      .channel('fan_preferences_changes')
-      .on('postgres_changes', {
-        event: '*',
-        schema: 'public',
-        table: 'fan_preferences'
-      }, (payload) => {
-        console.log('Preferences real-time update:', payload);
-        // Refresh data upon changes
-        fetchData();
-      })
-      .subscribe();
-
     // Cleanup
     return () => {
       supabase.removeChannel(ticketsChannel);
-      supabase.removeChannel(preferencesChannel);
+      supabase.removeChannel(fansChannel);
     };
   }, [teamProfile, toast]);
 
