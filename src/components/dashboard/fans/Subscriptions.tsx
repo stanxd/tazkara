@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -29,9 +30,9 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({
             </div>
             <CardHeader className="pb-4">
               <CardTitle className="text-xl rtl">للمشجعين الحماسيين</CardTitle>
-              <div className="mt-2">
+              <div className="mt-2 rtl">
+                <span className="text-gray-500 ml-1">ريال</span>
                 <span className="text-3xl font-bold">99</span>
-                <span className="text-gray-500 rtl mr-1">ريال</span>
               </div>
             </CardHeader>
             <CardContent className="rtl flex-grow">
@@ -67,9 +68,9 @@ const Subscriptions: React.FC<SubscriptionsProps> = ({
             </div>
             <CardHeader className="pb-4">
               <CardTitle className="text-xl rtl">للمشجعين المتميزين</CardTitle>
-              <div className="mt-2">
+              <div className="mt-2 rtl">
+                <span className="text-gray-500 ml-1">ريال</span>
                 <span className="text-3xl font-bold">499</span>
-                <span className="text-gray-500 rtl mr-1">ريال</span>
               </div>
             </CardHeader>
             <CardContent className="rtl flex-grow">
