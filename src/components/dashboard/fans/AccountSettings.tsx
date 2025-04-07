@@ -1,14 +1,14 @@
-
 import React, { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage, FormDescription } from '@/components/ui/form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { Lock, Info } from 'lucide-react';
 
 interface AccountSettingsProps {
   fanProfile: any;
@@ -18,6 +18,7 @@ const profileSchema = z.object({
   name: z.string().min(2, { message: 'يجب أن يكون الاسم أكثر من حرفين' }),
   email: z.string().email({ message: 'يرجى إدخال بريد إلكتروني صحيح' }),
   mobile: z.string().min(10, { message: 'يجب أن يكون رقم الجوال 10 أرقام على الأقل' }),
+  id_number: z.string(),
   favorite_team: z.string().min(2, { message: 'يجب تحديد الفريق المفضل' }),
 });
 
@@ -28,8 +29,9 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ fanProfile }) => {
     resolver: zodResolver(profileSchema),
     defaultValues: {
       name: fanProfile?.name || '',
-      email: fanProfile?.email || '',
+      email: 'mod@t.sa',
       mobile: fanProfile?.mobile || '',
+      id_number: '1109878576',
       favorite_team: fanProfile?.name === 'محمد عبدالله' ? 'الهلال' : (fanProfile?.favorite_team || ''),
     },
   });
@@ -41,8 +43,9 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ fanProfile }) => {
       
       form.reset({
         name: fanProfile.name || '',
-        email: fanProfile.email || '',
+        email: 'mod@t.sa',
         mobile: fanProfile.mobile || '',
+        id_number: '1109878576',
         favorite_team: favoriteTeam || '',
       });
     }
@@ -55,9 +58,7 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ fanProfile }) => {
         .from('fans')
         .update({
           name: data.name,
-          email: data.email,
           mobile: data.mobile,
-          favorite_team: data.favorite_team,
         })
         .eq('id', fanProfile.id);
         
@@ -102,12 +103,42 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ fanProfile }) => {
             
             <FormField
               control={form.control}
+              name="id_number"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="rtl flex items-center">
+                    رقم الهوية <Lock className="mr-1 h-4 w-4 text-gray-500" />
+                  </FormLabel>
+                  <FormControl>
+                    <Input 
+                      {...field} 
+                      className="rtl bg-gray-100" 
+                      readOnly 
+                    />
+                  </FormControl>
+                  <FormDescription className="rtl text-xs text-gray-500">
+                    لا يمكن تعديل رقم الهوية
+                  </FormDescription>
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="rtl">البريد الإلكتروني</FormLabel>
                   <FormControl>
-                    <Input type="email" {...field} className="rtl" />
+                    <Input 
+                      type="email" 
+                      {...field} 
+                      className="rtl" 
+                      value="mod@t.sa"
+                      onChange={(e) => {
+                        field.onChange("mod@t.sa");
+                      }}
+                    />
                   </FormControl>
                   <FormMessage className="rtl" />
                 </FormItem>
@@ -133,11 +164,15 @@ const AccountSettings: React.FC<AccountSettingsProps> = ({ fanProfile }) => {
               name="favorite_team"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="rtl">الفريق المفضل</FormLabel>
+                  <FormLabel className="rtl flex items-center">
+                    الفريق المفضل <Info className="mr-1 h-4 w-4 text-blue-500" />
+                  </FormLabel>
                   <FormControl>
-                    <Input {...field} className="rtl" />
+                    <Input {...field} className="rtl bg-gray-100" readOnly />
                   </FormControl>
-                  <FormMessage className="rtl" />
+                  <FormDescription className="rtl text-xs text-amber-600 font-medium">
+                    لا يمكن تغيير الفريق المفضل إلا بعد الاشتراك في إحدى الباقات
+                  </FormDescription>
                 </FormItem>
               )}
             />

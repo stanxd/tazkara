@@ -9,6 +9,7 @@ import AccountStats from './fans/AccountStats';
 import AccountSettings from './fans/AccountSettings';
 import FanWaitlistTickets from './fans/FanWaitlistTickets';
 import AttendanceHistory from './fans/AttendanceHistory';
+import Subscriptions from './fans/Subscriptions';
 import { supabase } from '@/integrations/supabase/client';
 
 interface FanDashboardProps {
@@ -65,13 +66,17 @@ const FanDashboard: React.FC<FanDashboardProps> = ({ fanProfile: initialProfile 
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex flex-col md:flex-row gap-4">
-            <div className="md:w-1/2 space-y-2">
-              <h3 className="text-lg font-medium rtl">البريد الإلكتروني:</h3>
-              <p className="rtl">{fanProfile?.email}</p>
-            </div>
-            <div className="md:w-1/2 space-y-2">
+            <div className="md:w-1/3 space-y-2">
               <h3 className="text-lg font-medium rtl">الاسم:</h3>
               <p className="rtl">{fanProfile?.name}</p>
+            </div>
+            <div className="md:w-1/3 space-y-2">
+              <h3 className="text-lg font-medium rtl">رقم الهوية:</h3>
+              <p className="rtl">1109878576</p>
+            </div>
+            <div className="md:w-1/3 space-y-2">
+              <h3 className="text-lg font-medium rtl">البريد الإلكتروني:</h3>
+              <p className="rtl">mod@t.sa</p>
             </div>
           </div>
           
@@ -92,11 +97,12 @@ const FanDashboard: React.FC<FanDashboardProps> = ({ fanProfile: initialProfile 
       <AccountStatus userId={user?.id || ''} />
 
       <Tabs defaultValue="tickets" className="w-full max-w-4xl mx-auto">
-        <TabsList className="grid w-full grid-cols-5 rtl">
+        <TabsList className="grid w-full grid-cols-6 rtl">
           <TabsTrigger value="tickets">التذاكر</TabsTrigger>
           <TabsTrigger value="waitlist">قائمة الانتظار</TabsTrigger>
           <TabsTrigger value="attendance">سجل الحضور</TabsTrigger>
           <TabsTrigger value="stats">الإحصاءات</TabsTrigger>
+          <TabsTrigger value="subscriptions">الباقات</TabsTrigger>
           <TabsTrigger value="settings">الإعدادات</TabsTrigger>
         </TabsList>
         
@@ -114,6 +120,10 @@ const FanDashboard: React.FC<FanDashboardProps> = ({ fanProfile: initialProfile 
         
         <TabsContent value="stats">
           <AccountStats userId={user?.id || ''} />
+        </TabsContent>
+        
+        <TabsContent value="subscriptions">
+          <Subscriptions userId={user?.id || ''} />
         </TabsContent>
         
         <TabsContent value="settings">
