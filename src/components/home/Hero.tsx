@@ -1,12 +1,13 @@
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Ticket } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import MatchCountdown from './MatchCountdown';
+
 const Hero: React.FC = () => {
   return <section className="relative bg-[#190038] overflow-hidden min-h-[90vh] flex items-center">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1624880357913-a8539238245b')] bg-cover bg-center opacity-[0.03]"></div>
+      {/* Remove the background image div that was here */}
       
       <div className="container mx-auto px-4 py-20 md:py-32 relative z-10">
         <div className="max-w-3xl mx-auto text-center mb-8">
