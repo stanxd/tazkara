@@ -42,14 +42,14 @@ const ModernTicketCard: React.FC<TicketProps> = ({
     >
       <Card 
         className={cn(
-          "overflow-hidden h-full transition-all duration-300 bg-[#230B3F]/70 backdrop-blur-sm border border-purple-500/20 shadow-lg",
+          "overflow-hidden h-full transition-all duration-300 bg-[#13002A]/90 backdrop-blur-sm border border-purple-500/20 shadow-lg",
           isHovered ? "shadow-purple-500/30" : "shadow-purple-500/10"
         )}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <CardHeader className="pb-2 pt-4 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-purple-600 to-pink-500"></div>
+          <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-pink-500 to-purple-500"></div>
           
           <div className="flex justify-between items-center">
             <TooltipProvider>
@@ -67,7 +67,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
             </TooltipProvider>
             
             {isPriceFluctuating && (
-              <Badge variant="destructive" className="text-xs animate-pulse bg-gradient-to-r from-orange-400 to-red-500 border-none">
+              <Badge variant="destructive" className="text-xs animate-pulse bg-gradient-to-r from-pink-500 to-purple-500 border-none">
                 سعر متغير
               </Badge>
             )}
@@ -77,7 +77,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
             <div className="text-lg font-bold text-white">{homeTeam}</div>
             <div className="flex flex-col items-center mx-2">
               <span className="text-xs font-bold text-purple-300">ضد</span>
-              <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">VS</span>
+              <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">VS</span>
             </div>
             <div className="text-lg font-bold text-white">{awayTeam}</div>
           </div>
@@ -94,7 +94,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
                 <HoverCardTrigger asChild>
                   <span className="cursor-help">{stadium}</span>
                 </HoverCardTrigger>
-                <HoverCardContent className="rtl bg-[#1A0B2E] border border-purple-500/20 text-purple-100">
+                <HoverCardContent className="rtl bg-[#13002A] border border-purple-500/20 text-purple-100">
                   <p>المدينة: {city}</p>
                 </HoverCardContent>
               </HoverCard>
@@ -122,7 +122,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
                   "transition-colors",
                   isHovered ? "text-pink-400" : "text-purple-400"
                 )} />
-                <span className="font-bold text-lg text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300">
+                <span className="font-bold text-lg text-white">
                   {price} ر.س
                 </span>
               </div>
@@ -140,7 +140,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
             className={cn(
               "w-full font-bold rtl transition-colors",
               isHovered 
-              ? "bg-gradient-to-r from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600" 
+              ? "bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 border-none" 
               : "bg-purple-600 hover:bg-purple-700"
             )}
           >

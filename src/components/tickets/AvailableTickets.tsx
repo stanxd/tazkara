@@ -46,19 +46,19 @@ const AvailableTickets: React.FC = () => {
   );
 
   return (
-    <section className="py-16 bg-gradient-to-b from-[#1A0B2E] to-[#231044]" id="tickets">
+    <section className="py-16 bg-gradient-to-b from-[#520082] to-[#13002A]" id="tickets">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-300 to-pink-300 mb-3 rtl">
+          <h2 className="text-4xl font-bold text-white mb-3 rtl">
             المباريات القادمة
           </h2>
           <p className="text-purple-200 mt-2 mb-8 rtl">احجز تذكرتك الآن للمباريات القادمة</p>
           
-          <div className="inline-flex bg-[#230B3F]/50 backdrop-blur-sm p-1.5 rounded-lg border border-purple-500/20 mb-10">
+          <div className="inline-flex bg-[#13002A]/80 backdrop-blur-sm p-1.5 rounded-lg border border-purple-500/20 mb-10">
             <Button 
               variant="ghost"
               onClick={() => setActiveCity("all")} 
-              className={`mx-1 text-sm font-medium rtl ${activeCity === "all" ? "bg-purple-600 text-white" : "text-purple-200 hover:text-white"}`}
+              className={`mx-1 text-sm font-medium rtl ${activeCity === "all" ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white" : "text-purple-200 hover:text-white"}`}
             >
               جميع المباريات
             </Button>
@@ -67,7 +67,7 @@ const AvailableTickets: React.FC = () => {
                 key={city}
                 variant="ghost" 
                 onClick={() => setActiveCity(city)}
-                className={`mx-1 text-sm font-medium rtl ${activeCity === city ? "bg-purple-600 text-white" : "text-purple-200 hover:text-white"}`}
+                className={`mx-1 text-sm font-medium rtl ${activeCity === city ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white" : "text-purple-200 hover:text-white"}`}
               >
                 {city}
               </Button>
@@ -79,7 +79,7 @@ const AvailableTickets: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(3)].map((_, index) => (
               <div key={index} className="rounded-lg overflow-hidden">
-                <Skeleton className="h-[320px] w-full bg-[#230B3F]/50" />
+                <Skeleton className="h-[320px] w-full bg-[#13002A]/50" />
               </div>
             ))}
           </div>
@@ -93,7 +93,7 @@ const AvailableTickets: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 bg-[#230B3F]/60 backdrop-blur-sm rounded-lg border border-purple-500/20">
+          <div className="text-center py-16 bg-[#13002A]/60 backdrop-blur-sm rounded-lg border border-purple-500/20">
             <Map className="w-16 h-16 text-purple-400/50 mx-auto mb-4" />
             <p className="text-xl text-purple-200 rtl">لا توجد تذاكر متوفرة حالياً</p>
             <p className="text-purple-300/60 mt-2 rtl">سيتم إضافة تذاكر جديدة قريباً</p>

@@ -33,31 +33,31 @@ const MatchCountdown: React.FC = () => {
   return (
     <div className="flex justify-center space-x-4 rtl:space-x-reverse">
       <div className="flex flex-col items-center">
-        <div className="bg-[#1A0B2E] w-14 h-14 rounded-lg flex items-center justify-center border border-purple-500/30 shadow-inner shadow-purple-500/10">
-          <span className="text-xl font-bold text-white">{timeLeft.days}</span>
+        <div className="bg-[#13002A] w-16 h-16 rounded-lg flex items-center justify-center border border-purple-500/30">
+          <span className="text-2xl font-bold text-white">{timeLeft.days}</span>
         </div>
-        <span className="text-xs mt-1 text-purple-200 rtl">يوم</span>
+        <span className="text-xs mt-2 text-gray-300 font-medium uppercase">أيام</span>
       </div>
       
       <div className="flex flex-col items-center">
-        <div className="bg-[#1A0B2E] w-14 h-14 rounded-lg flex items-center justify-center border border-purple-500/30 shadow-inner shadow-purple-500/10">
-          <span className="text-xl font-bold text-white">{timeLeft.hours}</span>
+        <div className="bg-[#13002A] w-16 h-16 rounded-lg flex items-center justify-center border border-purple-500/30">
+          <span className="text-2xl font-bold text-white">{timeLeft.hours}</span>
         </div>
-        <span className="text-xs mt-1 text-purple-200 rtl">ساعة</span>
+        <span className="text-xs mt-2 text-gray-300 font-medium uppercase">ساعات</span>
       </div>
       
       <div className="flex flex-col items-center">
-        <div className="bg-[#1A0B2E] w-14 h-14 rounded-lg flex items-center justify-center border border-purple-500/30 shadow-inner shadow-purple-500/10">
-          <span className="text-xl font-bold text-white">{timeLeft.minutes}</span>
+        <div className="bg-[#13002A] w-16 h-16 rounded-lg flex items-center justify-center border border-purple-500/30">
+          <span className="text-2xl font-bold text-white">{timeLeft.minutes}</span>
         </div>
-        <span className="text-xs mt-1 text-purple-200 rtl">دقيقة</span>
+        <span className="text-xs mt-2 text-gray-300 font-medium uppercase">دقائق</span>
       </div>
       
       <div className="flex flex-col items-center">
-        <div className="bg-[#1A0B2E] w-14 h-14 rounded-lg flex items-center justify-center border border-purple-500/30 shadow-inner shadow-purple-500/10">
-          <span className="text-xl font-bold text-white">{timeLeft.seconds}</span>
+        <div className="bg-[#13002A] w-16 h-16 rounded-lg flex items-center justify-center border border-purple-500/30">
+          <span className="text-2xl font-bold text-white">{timeLeft.seconds}</span>
         </div>
-        <span className="text-xs mt-1 text-purple-200 rtl">ثانية</span>
+        <span className="text-xs mt-2 text-gray-300 font-medium uppercase">ثواني</span>
       </div>
     </div>
   );
