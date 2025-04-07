@@ -8,8 +8,20 @@ import { predictDemandLevel } from './demandCalculator';
  * Calculate the recommended ticket price
  */
 export const calculateRecommendedPrice = (input: PricingModelInput): PricingModelOutput => {
-  // Determine base price (use provided base price or default to 85)
-  const basePrice = input.basePrice || 85;
+  // Determine base price based on team categories
+  const bigTeams = ['الهلال', 'النصر', 'الأهلي', 'الاتحاد'];
+  const mediumTeams = ['الشباب', 'الاتفاق', 'الفيصلي'];
+  
+  // Set base price range based on teams
+  let basePrice = 45; // Default base price for regular teams (35-55)
+  
+  if (bigTeams.includes(input.homeTeam) || bigTeams.includes(input.awayTeam)) {
+    // For big teams, higher base price (100-150)
+    basePrice = 100;
+  } else if (mediumTeams.includes(input.homeTeam) || mediumTeams.includes(input.awayTeam)) {
+    // For medium tier teams
+    basePrice = 60;
+  }
   
   // Determine match characteristics
   const matchType = getMatchType(input.homeTeam, input.awayTeam);
