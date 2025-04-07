@@ -87,11 +87,12 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-1 container mx-auto px-4 py-8">
+      {/* Added padding-top to push the content below the fixed navbar */}
+      <main className="flex-1 container mx-auto px-4 py-8 pt-24">
         {userType === 'team' ? (
           <div className="w-full">
             <div className="mb-6 rtl text-center">
-              <h1 className="text-3xl font-bold">فريق {userProfile?.team_name}</h1>
+              <h1 className="text-3xl font-bold">لوحة تحكم {userProfile?.team_name}</h1>
               <p className="text-muted-foreground mt-2">مرحباً بك في لوحة تحكم الفريق</p>
             </div>
 
