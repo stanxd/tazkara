@@ -16,8 +16,12 @@ import {
   CardHeader
 } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
 import { TicketProps } from './TicketCard';
+import { useAuth } from '@/context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 const ModernTicketCard: React.FC<TicketProps> = ({
   homeTeam,
@@ -31,6 +35,41 @@ const ModernTicketCard: React.FC<TicketProps> = ({
   isPriceFluctuating = false
 }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  const handleBookTicket = () => {
+    if (!user) {
+      // User is not logged in
+      setShowLoginDialog(true);
+    } else {
+      // Check if user is a fan or team
+      const userType = user.user_metadata?.user_type;
+      
+      if (userType === 'fan') {
+        // User is a fan, proceed with booking
+        toast({
+          title: "جاري معالجة الطلب",
+          description: `تم حجز تذكرة لمباراة ${homeTeam} ضد ${awayTeam}`,
+        });
+        // Add actual booking logic here
+      } else {
+        // User is logged in but not as a fan
+        toast({
+          title: "لا يمكن إكمال الحجز",
+          description: "يجب تسجيل الدخول بحساب مشجع لحجز التذاكر",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+  
+  const handleLoginRedirect = () => {
+    setShowLoginDialog(false);
+    navigate('/login');
+  };
   
   return (
     <motion.div
@@ -143,11 +182,43 @@ const ModernTicketCard: React.FC<TicketProps> = ({
               ? "bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 border-none" 
               : "bg-purple-600 hover:bg-purple-700"
             )}
+            onClick={handleBookTicket}
           >
             شراء التذكرة
           </Button>
         </CardFooter>
       </Card>
+
+      {/* Login Dialog */}
+      <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
+        <DialogContent className="sm:max-w-md bg-[#13002A] text-white border border-purple-500/20">
+          <DialogHeader>
+            <DialogTitle className="text-center text-xl rtl">تسجيل الدخول مطلوب</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4 text-center rtl">
+            <p className="text-purple-200">
+              يجب تسجيل الدخول بحساب مشجع لتتمكن من حجز هذه التذكرة
+            </p>
+          </div>
+          <DialogFooter className="sm:justify-center gap-2 rtl">
+            <Button
+              type="button"
+              variant="ghost"
+              className="border border-purple-500/20 text-purple-200"
+              onClick={() => setShowLoginDialog(false)}
+            >
+              إلغاء
+            </Button>
+            <Button 
+              type="button" 
+              className="bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 border-none"
+              onClick={handleLoginRedirect}
+            >
+              تسجيل الدخول
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </motion.div>
   );
 };
