@@ -11,6 +11,7 @@ import FanWaitlistTickets from './fans/FanWaitlistTickets';
 import AttendanceHistory from './fans/AttendanceHistory';
 import Subscriptions from './fans/Subscriptions';
 import { supabase } from '@/integrations/supabase/client';
+import { Info } from 'lucide-react';
 
 interface FanDashboardProps {
   fanProfile: any;
@@ -86,7 +87,13 @@ const FanDashboard: React.FC<FanDashboardProps> = ({ fanProfile: initialProfile 
               <p className="rtl">{fanProfile?.mobile}</p>
             </div>
             <div className="md:w-1/2 space-y-2">
-              <h3 className="text-lg font-medium rtl">الفريق المفضل:</h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-lg font-medium rtl">الفريق المفضل:</h3>
+                <div className="flex items-center text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded-md">
+                  <Info className="h-3 w-3 ml-1" />
+                  <span className="rtl">يتطلب اشتراك لتغييره</span>
+                </div>
+              </div>
               <p className="rtl">{fanProfile?.favorite_team || user?.user_metadata?.favorite_team || "غير محدد"}</p>
             </div>
           </div>

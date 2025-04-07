@@ -14,7 +14,7 @@ import TeamSalesReports from '@/components/dashboard/TeamSalesReports';
 import TeamFansData from '@/components/dashboard/TeamFansData';
 import TeamSettings from '@/components/dashboard/TeamSettings';
 import FanDashboard from '@/components/dashboard/FanDashboard';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Info } from 'lucide-react';
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
