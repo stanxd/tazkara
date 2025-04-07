@@ -71,7 +71,7 @@ const Hero = () => {
             <Button 
               size="lg" 
               className="bg-gradient-to-r from-pink-500 to-purple-500 hover:opacity-90 border-none rtl text-lg px-8 py-6" 
-              onClick={() => handleBookTicket()}
+              onClick={handleBookTicket}
             >
               <Ticket className="ml-2" />
               احجز تذكرتك الآن
