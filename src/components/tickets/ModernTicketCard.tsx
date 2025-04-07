@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Calendar, Clock, MapPin, Tag, Users, Shield, Ticket } from 'lucide-react';
+import { Calendar, Clock, MapPin, Tag, Users, Shield, Ticket, Flame } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { 
   HoverCard,
@@ -22,6 +22,10 @@ import { TicketProps } from './TicketCard';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import TeamSelectionDialog from './TeamSelectionDialog';
+import PaymentDialog from './PaymentDialog';
+import WaitlistDialog from './WaitlistDialog';
+import { isPopularTeam } from '@/services/teams/teamPopularity';
 
 const ModernTicketCard: React.FC<TicketProps> = ({
   homeTeam,
@@ -36,9 +40,17 @@ const ModernTicketCard: React.FC<TicketProps> = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
+  const [showTeamSelectionDialog, setShowTeamSelectionDialog] = useState(false);
+  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+  const [showWaitlistDialog, setShowWaitlistDialog] = useState(false);
+  const [selectedTeam, setSelectedTeam] = useState<string>('');
+  
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+  
+  // Find user's favorite team from metadata
+  const userFavoriteTeam = user?.user_metadata?.favorite_team;
   
   const handleBookTicket = () => {
     if (!user) {
@@ -49,12 +61,8 @@ const ModernTicketCard: React.FC<TicketProps> = ({
       const userType = user.user_metadata?.user_type;
       
       if (userType === 'fan') {
-        // User is a fan, proceed with booking
-        toast({
-          title: "جاري معالجة الطلب",
-          description: `تم حجز تذكرة لمباراة ${homeTeam} ضد ${awayTeam}`,
-        });
-        // Add actual booking logic here
+        // User is a fan, proceed with team selection
+        setShowTeamSelectionDialog(true);
       } else {
         // User is logged in but not as a fan
         toast({
@@ -69,6 +77,43 @@ const ModernTicketCard: React.FC<TicketProps> = ({
   const handleLoginRedirect = () => {
     setShowLoginDialog(false);
     navigate('/login');
+  };
+  
+  const handleTeamSelection = (team: string) => {
+    setSelectedTeam(team);
+    setShowTeamSelectionDialog(false);
+    
+    // Check if selected team is the user's favorite team
+    const isUserFavoriteTeam = team === userFavoriteTeam;
+    
+    // Check if the selected team is popular
+    const isPopular = isPopularTeam(team);
+    
+    if (!isUserFavoriteTeam && isPopular) {
+      // Case 1: Not favorite and popular team - show waitlist
+      setShowWaitlistDialog(true);
+    } else {
+      // Case 2: Either favorite or non-popular team - show payment dialog
+      setShowPaymentDialog(true);
+    }
+  };
+  
+  const handleJoinWaitlist = () => {
+    setShowWaitlistDialog(false);
+    toast({
+      title: "تم الانضمام لقائمة الانتظار",
+      description: `سيتم إشعارك عند توفر تذاكر لفريق ${selectedTeam}`,
+    });
+  };
+  
+  const handleProcessPayment = (method: 'card' | 'applepay') => {
+    setShowPaymentDialog(false);
+    toast({
+      title: "تم إكمال عملية الدفع بنجاح",
+      description: `تم حجز تذكرة لمباراة ${homeTeam} ضد ${awayTeam}`,
+    });
+    
+    // Actual payment processing would happen here
   };
   
   return (
@@ -113,12 +158,22 @@ const ModernTicketCard: React.FC<TicketProps> = ({
           </div>
           
           <div className="flex justify-between items-center mt-3 rtl">
-            <div className="text-lg font-bold text-white">{homeTeam}</div>
+            <div className="text-lg font-bold text-white flex items-center">
+              {homeTeam}
+              {isPopularTeam(homeTeam) && (
+                <Flame className="h-4 w-4 text-orange-500 mr-1" />
+              )}
+            </div>
             <div className="flex flex-col items-center mx-2">
               <span className="text-xs font-bold text-purple-300">ضد</span>
               <span className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">VS</span>
             </div>
-            <div className="text-lg font-bold text-white">{awayTeam}</div>
+            <div className="text-lg font-bold text-white flex items-center">
+              {awayTeam}
+              {isPopularTeam(awayTeam) && (
+                <Flame className="h-4 w-4 text-orange-500 mr-1" />
+              )}
+            </div>
           </div>
         </CardHeader>
         
@@ -155,17 +210,7 @@ const ModernTicketCard: React.FC<TicketProps> = ({
               <span>{time}</span>
             </div>
             
-            <div className="flex items-center justify-between rtl">
-              <div className="flex items-center gap-2">
-                <Tag size={16} className={cn(
-                  "transition-colors",
-                  isHovered ? "text-pink-400" : "text-purple-400"
-                )} />
-                <span className="font-bold text-lg text-white">
-                  {price} ر.س
-                </span>
-              </div>
-              
+            <div className="flex items-center justify-end rtl">
               <div className="flex items-center gap-1">
                 <Users size={14} className="text-purple-400" />
                 <span className="text-xs text-purple-300">محدود</span>
@@ -219,6 +264,41 @@ const ModernTicketCard: React.FC<TicketProps> = ({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      {/* Team Selection Dialog */}
+      <TeamSelectionDialog
+        open={showTeamSelectionDialog}
+        onOpenChange={setShowTeamSelectionDialog}
+        homeTeam={homeTeam}
+        awayTeam={awayTeam}
+        onTeamSelect={handleTeamSelection}
+        price={price}
+      />
+      
+      {/* Payment Dialog */}
+      <PaymentDialog
+        open={showPaymentDialog}
+        onOpenChange={setShowPaymentDialog}
+        teamName={selectedTeam}
+        matchDetails={{
+          homeTeam,
+          awayTeam,
+          date,
+          time,
+          stadium,
+          city
+        }}
+        price={price}
+        onProcessPayment={handleProcessPayment}
+      />
+      
+      {/* Waitlist Dialog */}
+      <WaitlistDialog
+        open={showWaitlistDialog}
+        onOpenChange={setShowWaitlistDialog}
+        teamName={selectedTeam}
+        onJoinWaitlist={handleJoinWaitlist}
+      />
     </motion.div>
   );
 };
