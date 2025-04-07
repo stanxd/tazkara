@@ -9,6 +9,7 @@ import PaymentDialog from '../tickets/PaymentDialog';
 import WaitlistDialog from '../tickets/WaitlistDialog';
 import PenaltyDialog from '../tickets/PenaltyDialog';
 import MatchCountdown from './MatchCountdown';
+
 const Hero = () => {
   const navigate = useNavigate();
 
@@ -38,7 +39,7 @@ const Hero = () => {
   const featuredMatch = {
     homeTeam: "الهلال",
     awayTeam: "النصر",
-    stadium: "ملعب مدينة أرينا",
+    stadium: "ملعب مملكة آرينا",
     location: "الرياض",
     date: "2025-04-15",
     time: "20:00",
@@ -54,6 +55,7 @@ const Hero = () => {
       });
     }
   };
+
   return <div className="py-20 relative bg-[#13002A] overflow-hidden min-h-[85vh] flex items-center" id="hero">
       <div className="absolute inset-0 bg-[url('/stadium-bg.jpg')] bg-center bg-cover opacity-5 mix-blend-overlay"></div>
       
@@ -127,4 +129,5 @@ const Hero = () => {
       <PenaltyDialog open={showPenaltyDialog} onOpenChange={setShowPenaltyDialog} matchesRemaining={penaltyMatches} onClose={handlePenaltyAcknowledged} />
     </div>;
 };
+
 export default Hero;
