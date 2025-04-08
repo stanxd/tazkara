@@ -34,8 +34,8 @@ const PricingFactors: React.FC<PricingFactorsProps> = ({ matchData }) => {
             {matchData.stadium === 'استاد الملك فهد الدولي' ? '67,000' : 
              matchData.stadium === 'استاد الملك عبدالله' ? '62,000' : 
              matchData.stadium === 'الجوهرة' ? '45,000' : 
-             matchData.stadium === 'مملكة آرينا' ? '25,000' : 
-             matchData.stadium === 'مرسول بارك' ? '22,000' : 'غير محدد'}
+             matchData.stadium === 'المملكة أرينا' ? '25,000' : 
+             matchData.stadium === 'الأول بارك' ? '22,000' : 'غير محدد'}
           </span>
         </div>
         <div className="flex justify-between">

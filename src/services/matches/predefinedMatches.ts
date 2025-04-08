@@ -1,3 +1,4 @@
+
 /**
  * Service providing predefined match data
  */
@@ -22,7 +23,7 @@ export const getPredefinedMatches = (): Match[] => {
       homeTeam: "فريق الهلال",
       opponent: "فريق النصر",
       city: "الرياض",
-      stadium: "مرسول بارك",
+      stadium: "الأول بارك",
       date: getNextDate(7),
       time: "20:00",
       availableTickets: 1000,
@@ -50,7 +51,7 @@ export const getPredefinedMatches = (): Match[] => {
       homeTeam: "فريق الشباب",
       opponent: "فريق الهلال",
       city: "الرياض",
-      stadium: "مدينة الملك فهد الرياضية",
+      stadium: "استاد الملك فهد الدولي",
       date: getNextDate(14),
       time: "19:30",
       availableTickets: 1200,
@@ -64,7 +65,7 @@ export const getPredefinedMatches = (): Match[] => {
       homeTeam: "فريق الاهلي",
       opponent: "فريق الهلال",
       city: "جدة",
-      stadium: "مدينة الملك عبدالله الرياضية",
+      stadium: "استاد الملك عبدالله",
       date: getNextDate(21),
       time: "20:30",
       availableTickets: 900,
@@ -78,7 +79,7 @@ export const getPredefinedMatches = (): Match[] => {
       homeTeam: "فريق النصر",
       opponent: "فريق الاتحاد",
       city: "الرياض",
-      stadium: "مرسول بارك",
+      stadium: "الأول بارك",
       date: getNextDate(25),
       time: "19:00",
       availableTickets: 1500,
@@ -106,7 +107,7 @@ export const getPredefinedMatches = (): Match[] => {
       homeTeam: "فريق الهلال",
       opponent: "فريق الفتح",
       city: "الرياض",
-      stadium: "مرسول بارك",
+      stadium: "الأول بارك",
       date: getNextDate(7),
       time: "20:00",
       availableTickets: 1000,

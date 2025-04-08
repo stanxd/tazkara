@@ -1,22 +1,17 @@
-
 import { StadiumCapacity, TeamFanBase, MatchTypeDefinition, RealMatchData } from './types';
 
 /**
  * Data constants for the pricing model
  */
 
-// Stadium capacity data (updated with accurate capacities)
+// Stadium capacity data (updated with accurate capacities and consistent names)
 export const stadiumCapacities: StadiumCapacity = {
-  'مملكة آرينا': 25000,
   'المملكة أرينا': 25000,
-  'المملكة ارينا': 25000,
   'استاد الملك فهد الدولي': 67000,
-  'مرسول بارك': 22000,
-  'الأول بارك': 30000,
+  'الأول بارك': 22000,
   'ملعب الشباب': 15000,
   'الجوهرة': 45000,
   'استاد الملك عبدالله': 62000,
-  'مدينة الملك عبد الله الرياضية': 62000,
   'ملعب أبها': 12000,
   'استاد الأمير سلطان': 25000
 };
@@ -122,7 +117,7 @@ export const realMatchData: RealMatchData[] = [
     homeTeam: 'الاتحاد',
     awayTeam: 'التعاون',
     city: 'جدة',
-    stadium: 'مدينة الملك عبد الله الرياضية',
+    stadium: 'استاد الملك عبدالله',
     attendance: 30000,
     ticketPrice: 30,
     opponentRanking: 'متوسط',
@@ -133,7 +128,7 @@ export const realMatchData: RealMatchData[] = [
     homeTeam: 'الاتحاد',
     awayTeam: 'الأهلي',
     city: 'جدة',
-    stadium: 'مدينة الملك عبد الله الرياضية',
+    stadium: 'استاد الملك عبدالله',
     attendance: 35000,
     ticketPrice: 100,
     opponentRanking: 'منافس',
@@ -144,7 +139,7 @@ export const realMatchData: RealMatchData[] = [
     homeTeam: 'الاتحاد',
     awayTeam: 'الوحدة',
     city: 'جدة',
-    stadium: 'مدينة الملك عبد الله الرياضية',
+    stadium: 'استاد الملك عبدالله',
     attendance: 20000,
     ticketPrice: 50,
     opponentRanking: 'ضعيف',
@@ -155,7 +150,7 @@ export const realMatchData: RealMatchData[] = [
     homeTeam: 'الاتحاد',
     awayTeam: 'الفتح',
     city: 'جدة',
-    stadium: 'مدينة الملك عبد الله الرياضية',
+    stadium: 'استاد الملك عبدالله',
     attendance: 28000,
     ticketPrice: 30,
     opponentRanking: 'متوسط',
@@ -212,7 +207,7 @@ export const realMatchData: RealMatchData[] = [
     homeTeam: 'الهلال',
     awayTeam: 'النصر',
     city: 'الرياض',
-    stadium: 'المملكة ارينا',
+    stadium: 'المملكة أرينا',
     attendance: 30000,
     ticketPrice: 400,
     opponentRanking: 'منافس',

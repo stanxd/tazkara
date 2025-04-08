@@ -98,9 +98,8 @@ export const extractFeaturesFromRealData = (matchData: RealMatchData): number =>
 const getStadiumCapacity = (stadiumName: string): number => {
   const capacities: Record<string, number> = {
     'الأول بارك': 30000,
-    'مدينة الملك عبد الله الرياضية': 62000,
+    'استاد الملك عبدالله': 62000,
     'المملكة أرينا': 25000,
-    'المملكة ارينا': 25000,
   };
   
   return capacities[stadiumName] || 25000;

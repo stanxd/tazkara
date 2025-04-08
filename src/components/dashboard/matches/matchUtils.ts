@@ -1,4 +1,3 @@
-
 /**
  * Utility functions for team matches management
  */
@@ -8,7 +7,7 @@ import { Match } from './types';
 export const cities = ['الرياض', 'جدة', 'أبها'];
 
 export const stadiums = {
-  'الرياض': ['مملكة آرينا', 'استاد الملك فهد الدولي', 'مرسول بارك', 'ملعب الشباب'],
+  'الرياض': ['المملكة أرينا', 'استاد الملك فهد الدولي', 'الأول بارك', 'ملعب الشباب'],
   'جدة': ['الجوهرة', 'استاد الملك عبدالله'],
   'أبها': ['ملعب أبها', 'استاد الأمير سلطان'],
 };
@@ -31,7 +30,7 @@ export const mockMatches = [
     id: 1, 
     opponent: 'الهلال', 
     city: 'الرياض', 
-    stadium: 'مملكة آرينا', 
+    stadium: 'المملكة أرينا', 
     date: '2025-04-15', 
     time: '20:00', 
     availableTickets: 1000, 
@@ -57,7 +56,7 @@ export const mockMatches = [
     id: 3, 
     opponent: 'الشباب', 
     city: 'الرياض', 
-    stadium: 'مملكة آرينا', 
+    stadium: 'المملكة أرينا', 
     date: '2025-03-15', 
     time: '20:30', 
     availableTickets: 1200, 
