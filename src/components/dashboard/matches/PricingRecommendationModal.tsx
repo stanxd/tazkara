@@ -1,3 +1,4 @@
+
 import React from 'react';
 import {
   Dialog,
@@ -40,6 +41,8 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
     setModelError(null);
     setLoading(true);
     
+    console.log(`Getting price recommendation for match:`, matchData);
+    
     setTimeout(() => {
       try {
         const input: PricingModelInput = {
@@ -51,6 +54,8 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
           day: matchData.day || 'الجمعة',
         };
         
+        console.log(`Prepared pricing model input:`, input);
+        
         const result = calculateRecommendedPrice(input);
         
         if (result.recommendedPrice <= 0) {
@@ -59,11 +64,15 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
           result.notes += "\n\nملاحظة: تم تعديل السعر للحد الأدنى بسبب عوامل غير متوقعة.";
         }
         
+        // Get match type and importance for logging
+        const matchType = getMatchType(input.homeTeam, input.awayTeam);
+        const importanceLevel = calculateImportanceLevel(input.homeTeam, input.awayTeam, matchType);
+        
         console.log("Calculated recommendation:", {
           input, 
           result,
-          importance: input.homeTeam && input.awayTeam ? 
-            calculateImportanceLevel(input.homeTeam, input.awayTeam, getMatchType(input.homeTeam, input.awayTeam)) : 'unknown'
+          matchType,
+          importanceLevel
         });
         
         setRecommendation(result);

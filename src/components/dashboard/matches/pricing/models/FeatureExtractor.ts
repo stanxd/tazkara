@@ -7,15 +7,25 @@ import { PricingModelInput, RealMatchData } from '../types';
 export const extractFeatures = (
   matchData: PricingModelInput
 ): number[] => {
-  // Calculate basic feature value
+  // Normalize team names by removing "فريق " prefix if it exists
+  const normalizeTeamName = (name: string): string => {
+    return name.startsWith('فريق ') ? name.substring(5) : name;
+  };
+
+  const homeTeam = normalizeTeamName(matchData.homeTeam);
+  const awayTeam = normalizeTeamName(matchData.awayTeam);
+
+  console.log(`Extracting features for match: ${homeTeam} vs ${awayTeam}`);
+  
+  // Define team tiers with normalized names
   const bigTeams = ['الهلال', 'النصر', 'الأهلي', 'الاتحاد'];
   const mediumTeams = ['الشباب', 'الاتفاق', 'الفيصلي'];
   
   // Team importance feature (0-2)
   let teamFeature = 0;
-  if (bigTeams.includes(matchData.homeTeam) || bigTeams.includes(matchData.awayTeam)) {
+  if (bigTeams.includes(homeTeam) || bigTeams.includes(awayTeam)) {
     teamFeature = 2;
-  } else if (mediumTeams.includes(matchData.homeTeam) || mediumTeams.includes(matchData.awayTeam)) {
+  } else if (mediumTeams.includes(homeTeam) || mediumTeams.includes(awayTeam)) {
     teamFeature = 1;
   }
   
@@ -32,10 +42,10 @@ export const extractFeatures = (
   
   // Derby feature (0-1)
   const isDerby = (
-    (matchData.homeTeam === 'الهلال' && matchData.awayTeam === 'النصر') ||
-    (matchData.homeTeam === 'النصر' && matchData.awayTeam === 'الهلال') ||
-    (matchData.homeTeam === 'الأهلي' && matchData.awayTeam === 'الاتحاد') ||
-    (matchData.homeTeam === 'الاتحاد' && matchData.awayTeam === 'الأهلي')
+    (homeTeam === 'الهلال' && awayTeam === 'النصر') ||
+    (homeTeam === 'النصر' && awayTeam === 'الهلال') ||
+    (homeTeam === 'الأهلي' && awayTeam === 'الاتحاد') ||
+    (homeTeam === 'الاتحاد' && awayTeam === 'الأهلي')
   ) ? 1 : 0;
   
   // Combined feature value (weighted sum)
@@ -46,6 +56,9 @@ export const extractFeatures = (
     0.7 * dayFeature + 
     3.0 * isDerby;
   
+  console.log(`Feature calculation: teamFeature=${teamFeature}, cityFeature=${cityFeature}, timeFeature=${timeFeature}, dayFeature=${dayFeature}, isDerby=${isDerby}`);
+  console.log(`Combined feature value: ${combinedFeature}`);
+  
   return [combinedFeature];
 };
 
@@ -53,14 +66,22 @@ export const extractFeatures = (
  * Extract features from real match data
  */
 export const extractFeaturesFromRealData = (matchData: RealMatchData): number => {
+  // Normalize team names by removing "فريق " prefix if it exists
+  const normalizeTeamName = (name: string): string => {
+    return name.startsWith('فريق ') ? name.substring(5) : name;
+  };
+
+  const homeTeam = normalizeTeamName(matchData.homeTeam);
+  const awayTeam = normalizeTeamName(matchData.awayTeam);
+  
   const bigTeams = ['الهلال', 'النصر', 'الأهلي', 'الاتحاد'];
   const mediumTeams = ['الشباب', 'الاتفاق', 'الفيصلي', 'التعاون'];
   
   // Team importance feature (0-2)
   let teamFeature = 0;
-  if (bigTeams.includes(matchData.homeTeam) || bigTeams.includes(matchData.awayTeam)) {
+  if (bigTeams.includes(homeTeam) || bigTeams.includes(awayTeam)) {
     teamFeature = 2;
-  } else if (mediumTeams.includes(matchData.homeTeam) || mediumTeams.includes(matchData.awayTeam)) {
+  } else if (mediumTeams.includes(homeTeam) || mediumTeams.includes(awayTeam)) {
     teamFeature = 1;
   }
   

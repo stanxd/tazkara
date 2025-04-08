@@ -10,6 +10,8 @@ const initializeRegressionModel = (): LinearRegression => {
   const model = new LinearRegression();
   const { features, prices } = generateTrainingData();
   
+  console.log('Training regression model with data:', { features, prices });
+  
   // Ensure features are formatted correctly as number[][]
   const formattedFeatures = features.map(feature => {
     // If feature is already an array, return it
@@ -26,17 +28,29 @@ const initializeRegressionModel = (): LinearRegression => {
 const regressionModel = initializeRegressionModel();
 console.log('Regression model initialized:', regressionModel.getModelDetails());
 
-// Constants for price limits
-const MIN_TICKET_PRICE = 20; // Minimum ticket price in SAR
+// Constants for price limits - using a lower minimum to allow more variation
+const MIN_TICKET_PRICE = 15; // Reduced minimum ticket price in SAR
 
 /**
  * Calculate the recommended ticket price
  */
 export const calculateRecommendedPrice = (input: PricingModelInput): PricingModelOutput => {
+  // Normalize team names by removing "فريق " prefix if it exists
+  const normalizeTeamName = (name: string): string => {
+    return name.startsWith('فريق ') ? name.substring(5) : name;
+  };
+
+  const homeTeam = normalizeTeamName(input.homeTeam);
+  const awayTeam = normalizeTeamName(input.awayTeam);
+  
+  console.log(`Calculating price for match: ${homeTeam} vs ${awayTeam} at ${input.stadium}, ${input.city}`);
+  
   // Determine match characteristics
-  const matchType = getMatchType(input.homeTeam, input.awayTeam);
-  const importanceLevel = calculateImportanceLevel(input.homeTeam, input.awayTeam, matchType);
-  const expectedDemandLevel = predictDemandLevel(input.homeTeam, input.awayTeam, input.stadium, matchType);
+  const matchType = getMatchType(homeTeam, awayTeam);
+  const importanceLevel = calculateImportanceLevel(homeTeam, awayTeam, matchType);
+  const expectedDemandLevel = predictDemandLevel(homeTeam, awayTeam, input.stadium, matchType);
+  
+  console.log(`Match characteristics: type=${matchType}, importance=${importanceLevel}, demand=${expectedDemandLevel}`);
   
   // Extract features for regression model
   const features = extractFeatures(input);
@@ -46,25 +60,24 @@ export const calculateRecommendedPrice = (input: PricingModelInput): PricingMode
   const featureForPrediction = Array.isArray(features[0]) ? features[0][0] : features[0];
   let recommendedPrice = regressionModel.predict([featureForPrediction]);
   
-  // Ensure the base price is positive
-  recommendedPrice = Math.max(recommendedPrice, 0);
+  console.log(`Base price from regression model: ${recommendedPrice}`);
   
   // Apply traditional factors as adjustment coefficients
   
   // Calculate importance multiplier
-  const importanceMultiplier = (importanceLevel === 'عالية' || matchType === 'ديربي') ? 1.15 : 
-                               (importanceLevel === 'متوسطة' ? 1.08 : 1.0);
+  const importanceMultiplier = (importanceLevel === 'عالية' || matchType === 'ديربي') ? 1.25 : 
+                               (importanceLevel === 'متوسطة' ? 1.1 : 0.9);
   
-  // Calculate demand multiplier based on expected demand
-  const demandMultiplier = expectedDemandLevel === 'مرتفع' ? 1.15 : 
-                          (expectedDemandLevel === 'متوسط' ? 1.05 : 0.95);
+  // Calculate demand multiplier based on expected demand - made more impactful
+  const demandMultiplier = expectedDemandLevel === 'مرتفع' ? 1.25 : 
+                          (expectedDemandLevel === 'متوسط' ? 1.05 : 0.85);
   
   // Stadium capacity adjustment (smaller stadiums can command higher prices due to scarcity)
   const stadiumCapacity = stadiumCapacities[input.stadium] || 25000;
-  const capacityMultiplier = 1 + (0.10 * (1 - (stadiumCapacity / 60000)));
+  const capacityMultiplier = 1 + (0.15 * (1 - (stadiumCapacity / 60000)));
   
   // Calculate historical attendance adjustment
-  let attendanceRate = historicalAttendanceRates[input.homeTeam] || 0.8;
+  let attendanceRate = historicalAttendanceRates[homeTeam] || 0.8;
   let attendanceAdjustment = 1.0;
   
   if (input.previousMatches && input.previousMatches.length > 0) {
@@ -72,24 +85,45 @@ export const calculateRecommendedPrice = (input: PricingModelInput): PricingMode
     const totalCapacity = stadiumCapacities[input.stadium] || 25000;
     const avgAttendance = input.previousMatches.reduce((sum, match) => sum + match.attendance, 0) / input.previousMatches.length;
     attendanceRate = avgAttendance / totalCapacity;
-    attendanceAdjustment = attendanceRate < 0.7 ? 0.95 : (attendanceRate > 0.9 ? 1.10 : 1.0);
+    attendanceAdjustment = attendanceRate < 0.7 ? 0.9 : (attendanceRate > 0.9 ? 1.15 : 1.0);
   }
+  
+  // Log multipliers before applying
+  console.log(`Price adjustment multipliers: importance=${importanceMultiplier}, demand=${demandMultiplier}, capacity=${capacityMultiplier}, attendance=${attendanceAdjustment}`);
   
   // Apply adjustment multipliers to the regression model prediction
   recommendedPrice *= importanceMultiplier * demandMultiplier * capacityMultiplier * attendanceAdjustment;
   
+  console.log(`Price after applying multipliers: ${recommendedPrice}`);
+  
+  // If regression model returns too low a price, apply base pricing model
+  if (recommendedPrice < 30) {
+    // Base prices by team tier and match importance
+    const basePriceByImportance = {
+      'عالية': 150,
+      'متوسطة': 80,
+      'منخفضة': 40
+    };
+    
+    // Get base price from importance level
+    const basePrice = basePriceByImportance[importanceLevel as keyof typeof basePriceByImportance];
+    
+    // Apply same multipliers to base price
+    const adjustedBasePrice = basePrice * demandMultiplier * capacityMultiplier * attendanceAdjustment;
+    
+    console.log(`Using base pricing model: importance=${importanceLevel}, basePrice=${basePrice}, adjusted=${adjustedBasePrice}`);
+    
+    // Blend regression result with base price model with higher weight to base price
+    recommendedPrice = (adjustedBasePrice * 0.7) + (recommendedPrice * 0.3);
+    console.log(`Blended price: ${recommendedPrice}`);
+  }
+  
   // Ensure the price is at least the minimum ticket price
   recommendedPrice = Math.max(recommendedPrice, MIN_TICKET_PRICE);
   
-  // Apply a base price if the model prediction is still too low or negative
-  if (recommendedPrice < MIN_TICKET_PRICE) {
-    // Use a base price that's adjusted by the match characteristics
-    const basePrice = 30 * importanceMultiplier * demandMultiplier;
-    recommendedPrice = Math.max(basePrice, MIN_TICKET_PRICE);
-  }
-  
   // Round to nearest 5
   recommendedPrice = Math.round(recommendedPrice / 5) * 5;
+  console.log(`Final recommended price: ${recommendedPrice}`);
   
   // Calculate sellout probability
   const selloutProbability = calculateSelloutProbability(importanceMultiplier, demandMultiplier);
@@ -129,8 +163,16 @@ const calculateConfidenceScore = (
   // Base confidence starts at 0.6
   let confidenceScore = 0.6;
   
+  // Normalize team names
+  const normalizeTeamName = (name: string): string => {
+    return name.startsWith('فريق ') ? name.substring(5) : name;
+  };
+
+  const homeTeam = normalizeTeamName(input.homeTeam);
+  const awayTeam = normalizeTeamName(input.awayTeam);
+  
   // Major teams have more predictable pricing
-  if (['الهلال', 'النصر', 'الأهلي', 'الاتحاد'].includes(input.homeTeam)) {
+  if (['الهلال', 'النصر', 'الأهلي', 'الاتحاد'].includes(homeTeam)) {
     confidenceScore += 0.08;
   }
   
