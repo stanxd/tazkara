@@ -72,7 +72,8 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
   return (
     <div className="mb-3">
       <h3 className="text-sm font-medium mb-2">تحليل العلاقة بين السعر والطلب</h3>
-      <div className="h-[200px] w-full overflow-x-auto pb-1"> {/* تقليص ارتفاع المخطط */}
+      {/* تقليص ارتفاع المخطط */}
+      <div className="h-[200px] w-full overflow-x-auto pb-1">
         <ChartContainer config={{
           price: {
             label: "السعر",
@@ -93,40 +94,47 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart 
               data={chartData} 
-              margin={{ top: 5, right: 20, left: 0, bottom: 20 }} {/* تقليل الهوامش */}
+              // تقليل الهوامش
+              margin={{ top: 5, right: 20, left: 0, bottom: 20 }}
             >
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis 
                 dataKey="price" 
-                tick={{ fontSize: 9 }} {/* خفض حجم الخط */}
+                // خفض حجم الخط
+                tick={{ fontSize: 9 }}
                 label={{ 
                   value: 'السعر (ر.س)', 
                   position: 'insideBottom', 
-                  fontSize: 9, {/* خفض حجم الخط */}
+                  // خفض حجم الخط
+                  fontSize: 9,
                   offset: -10
                 }}
               />
               <YAxis 
                 yAxisId="left"
-                tick={{ fontSize: 9 }} {/* خفض حجم الخط */}
+                // خفض حجم الخط
+                tick={{ fontSize: 9 }}
                 orientation="left"
                 label={{ 
                   value: 'الطلب', 
                   angle: -90, 
                   position: 'insideLeft',
-                  fontSize: 9, {/* خفض حجم الخط */}
+                  // خفض حجم الخط
+                  fontSize: 9,
                   offset: -5
                 }}
               />
               <YAxis 
                 yAxisId="right"
-                tick={{ fontSize: 9 }} {/* خفض حجم الخط */}
+                // خفض حجم الخط
+                tick={{ fontSize: 9 }}
                 orientation="right"
                 label={{ 
                   value: 'الإيرادات', 
                   angle: 90, 
                   position: 'insideRight', 
-                  fontSize: 9, {/* خفض حجم الخط */}
+                  // خفض حجم الخط
+                  fontSize: 9,
                   offset: 0
                 }}
               />
@@ -137,8 +145,10 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
                 type="monotone" 
                 dataKey="demand" 
                 stroke="var(--color-demand, #3b82f6)" 
-                strokeWidth={1.5} {/* خفض سمك الخط */}
-                dot={{ r: 0 }} {/* إزالة النقاط */}
+                // خفض سمك الخط
+                strokeWidth={1.5}
+                // إزالة النقاط
+                dot={{ r: 0 }}
                 activeDot={{ r: 4 }}
                 name="الطلب المتوقع"
               />
@@ -147,8 +157,10 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
                 type="monotone" 
                 dataKey="revenue" 
                 stroke="var(--color-revenue, #f59e0b)" 
-                strokeWidth={1.5} {/* خفض سمك الخط */}
-                dot={{ r: 0 }} {/* إزالة النقاط */}
+                // خفض سمك الخط
+                strokeWidth={1.5}
+                // إزالة النقاط
+                dot={{ r: 0 }}
                 activeDot={{ r: 4 }}
                 name="الإيرادات"
               />
@@ -161,7 +173,8 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
                   value: 'السعر الموصى به', 
                   position: 'top',
                   fill: '#16a34a',
-                  fontSize: 9 {/* خفض حجم الخط */}
+                  // خفض حجم الخط
+                  fontSize: 9
                 }} 
               />
             </LineChart>
