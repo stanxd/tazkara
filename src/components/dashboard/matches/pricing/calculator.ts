@@ -1,11 +1,11 @@
 
 import { PricingModelInput, PricingModelOutput } from './types';
-import { stadiumCapacities, teamFanBases, teamHomeCities, historicalAttendanceRates } from './data';
+import { stadiumCapacities, teamFanBases, teamHomeCities, historicalAttendanceRates, realMatchData } from './data';
 import { getMatchType, calculateImportanceLevel, calculateSelloutProbability, generatePricingNotes } from './utils';
 import { predictDemandLevel } from './demandCalculator';
 import { LinearRegression, extractFeatures, generateTrainingData } from './linearRegression';
 
-// Initialize and train the linear regression model with synthetic data
+// Initialize and train the linear regression model with real data
 const initializeRegressionModel = (): LinearRegression => {
   const model = new LinearRegression();
   const { features, prices } = generateTrainingData();
@@ -72,7 +72,12 @@ export const calculateRecommendedPrice = (input: PricingModelInput): PricingMode
   
   // Add model information to notes
   const modelDetails = regressionModel.getModelDetails();
+  
+  // Add data source information to notes
   notes += `\n\nالتوصية تستند إلى نموذج الانحدار الخطي (دقة النموذج: ${Math.round(modelDetails.rSquared * 100)}%).`;
+  if (realMatchData && realMatchData.length > 0) {
+    notes += `\nتم تدريب النموذج على بيانات ${realMatchData.length} مباراة حقيقية.`;
+  }
   
   // Calculate confidence score based on data quality and match characteristics
   const confidenceScore = calculateConfidenceScore(input, matchType, attendanceRate, modelDetails.rSquared);
@@ -119,6 +124,11 @@ const calculateConfidenceScore = (
   
   // Factor in regression model accuracy
   confidenceScore += (modelAccuracy * 0.15);
+  
+  // Add bonus for using real data
+  if (realMatchData && realMatchData.length > 0) {
+    confidenceScore += 0.05;
+  }
   
   // Cap at 0.95
   return Math.min(confidenceScore, 0.95);

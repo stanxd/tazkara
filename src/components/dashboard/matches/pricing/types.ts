@@ -59,3 +59,18 @@ export interface TrainingDataPoint {
     attendance: number;
   };
 }
+
+/**
+ * Real match data structure from historical data
+ */
+export interface RealMatchData {
+  date: string;
+  homeTeam: string;
+  awayTeam: string;
+  city: string;
+  stadium: string;
+  attendance: number;
+  ticketPrice: number;
+  opponentRanking: 'منافس' | 'متوسط' | 'ضعيف';
+  importance: 'ديربي' | 'عادية';
+}

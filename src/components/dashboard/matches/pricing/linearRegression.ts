@@ -2,6 +2,8 @@
 /**
  * Linear Regression Model for Match Ticket Pricing
  */
+import { RealMatchData } from './types';
+import { realMatchData } from './data';
 
 // Simple linear regression implementation
 export class LinearRegression {
@@ -140,10 +142,95 @@ export const extractFeatures = (
 }
 
 /**
- * Generate synthetic training data based on known patterns
- * This will be replaced with real historical data when available
+ * Generate training data based on real historical match data
  */
 export const generateTrainingData = (): { features: number[]; prices: number[] } => {
+  // Check if we have real match data available
+  if (realMatchData && realMatchData.length > 0) {
+    console.log(`Using ${realMatchData.length} real match data records for training`);
+    
+    const features: number[] = [];
+    const prices: number[] = [];
+    
+    // Process each real match data entry
+    realMatchData.forEach(match => {
+      // Extract features from real match data
+      const feature = extractFeaturesFromRealData(match);
+      features.push(feature);
+      
+      // Add price to prices array
+      prices.push(match.ticketPrice);
+    });
+    
+    return { features, prices };
+  } else {
+    console.log('No real match data available. Using synthetic data.');
+    return generateSyntheticTrainingData();
+  }
+};
+
+/**
+ * Extract features from real match data
+ */
+const extractFeaturesFromRealData = (matchData: RealMatchData): number => {
+  const bigTeams = ['الهلال', 'النصر', 'الأهلي', 'الاتحاد'];
+  const mediumTeams = ['الشباب', 'الاتفاق', 'الفيصلي', 'التعاون'];
+  
+  // Team importance feature (0-2)
+  let teamFeature = 0;
+  if (bigTeams.includes(matchData.homeTeam) || bigTeams.includes(matchData.awayTeam)) {
+    teamFeature = 2;
+  } else if (mediumTeams.includes(matchData.homeTeam) || mediumTeams.includes(matchData.awayTeam)) {
+    teamFeature = 1;
+  }
+  
+  // City importance feature (0-1)
+  const cityFeature = (matchData.city === 'الرياض' || matchData.city === 'جدة') ? 1 : 0;
+  
+  // Opponent ranking feature (0-2)
+  const opponentRankingFeature = 
+    matchData.opponentRanking === 'منافس' ? 2 : 
+    matchData.opponentRanking === 'متوسط' ? 1 : 0;
+  
+  // Match importance feature (0-1)
+  const importanceFeature = matchData.importance === 'ديربي' ? 1 : 0;
+  
+  // Attendance rate feature (0-1)
+  // Get stadium capacity from the stadium name
+  const stadiumCapacity = getStadiumCapacity(matchData.stadium);
+  const attendanceRateFeature = stadiumCapacity > 0 ? 
+    Math.min(matchData.attendance / stadiumCapacity, 1) : 0.5;
+  
+  // Combined feature value (weighted sum)
+  const combinedFeature = 
+    2.5 * teamFeature + 
+    1.2 * cityFeature + 
+    2.0 * opponentRankingFeature + 
+    3.0 * importanceFeature +
+    1.5 * attendanceRateFeature;
+  
+  return combinedFeature;
+};
+
+/**
+ * Get stadium capacity from stadium name
+ */
+const getStadiumCapacity = (stadiumName: string): number => {
+  const capacities: Record<string, number> = {
+    'الأول بارك': 30000,
+    'مدينة الملك عبد الله الرياضية': 62000,
+    'المملكة أرينا': 25000,
+    'المملكة ارينا': 25000,
+  };
+  
+  return capacities[stadiumName] || 25000;
+};
+
+/**
+ * Generate synthetic training data based on known patterns
+ * This is used as a fallback when no real data is available
+ */
+const generateSyntheticTrainingData = (): { features: number[]; prices: number[] } => {
   const features: number[] = [];
   const prices: number[] = [];
   
