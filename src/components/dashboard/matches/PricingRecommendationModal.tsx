@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Dialog,
@@ -14,6 +13,7 @@ import { PricingModelInput, PricingModelOutput, calculateRecommendedPrice } from
 import LoadingState from './pricing/recommendations/LoadingState';
 import ErrorState from './pricing/recommendations/ErrorState';
 import PricingRecommendationContent from './pricing/recommendations/PricingRecommendationContent';
+import { calculateImportanceLevel, getMatchType } from './pricing/utils';
 
 interface PricingRecommendationModalProps {
   matchData: Partial<PricingModelInput>;
@@ -32,7 +32,6 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
   const [modelError, setModelError] = React.useState<string | null>(null);
   
   const getPricingRecommendation = () => {
-    // Make sure we have the required data
     if (!matchData.homeTeam || !matchData.awayTeam || !matchData.stadium) {
       setModelError("بيانات المباراة غير مكتملة");
       return;
@@ -41,7 +40,6 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
     setModelError(null);
     setLoading(true);
     
-    // Simulate a bit of processing time for a better UX
     setTimeout(() => {
       try {
         const input: PricingModelInput = {
@@ -50,15 +48,14 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
           city: matchData.city || '',
           stadium: matchData.stadium,
           time: matchData.time || '20:00',
-          day: matchData.day || 'الجمعة', // Default to Friday if not provided
+          day: matchData.day || 'الجمعة',
         };
         
         const result = calculateRecommendedPrice(input);
         
-        // Safety check to ensure price is positive
         if (result.recommendedPrice <= 0) {
           console.error("Model returned negative or zero price, adjusting to minimum", result);
-          result.recommendedPrice = 20; // Minimum price as fallback
+          result.recommendedPrice = 20;
           result.notes += "\n\nملاحظة: تم تعديل السعر للحد الأدنى بسبب عوامل غير متوقعة.";
         }
         
