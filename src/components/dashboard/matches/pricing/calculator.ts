@@ -3,7 +3,7 @@ import { PricingModelInput, PricingModelOutput } from './types';
 import { stadiumCapacities, teamFanBases, teamHomeCities, historicalAttendanceRates, realMatchData } from './data';
 import { getMatchType, calculateImportanceLevel, calculateSelloutProbability, generatePricingNotes } from './utils';
 import { predictDemandLevel } from './demandCalculator';
-import { LinearRegression, extractFeatures, generateTrainingData } from './linearRegression';
+import { LinearRegression, extractFeatures, generateTrainingData } from './models';
 
 // Initialize and train the linear regression model with real data
 const initializeRegressionModel = (): LinearRegression => {
