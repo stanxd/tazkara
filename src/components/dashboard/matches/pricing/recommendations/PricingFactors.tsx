@@ -1,12 +1,32 @@
 
 import React from 'react';
 import { PricingModelInput } from '../../pricing';
+import { calculateImportanceLevel, getMatchType } from '../utils';
 
 interface PricingFactorsProps {
   matchData: Partial<PricingModelInput>;
 }
 
 const PricingFactors: React.FC<PricingFactorsProps> = ({ matchData }) => {
+  // Calculate importance level using the same logic as in the pricing calculator
+  const getImportanceDisplay = () => {
+    if (!matchData.homeTeam || !matchData.awayTeam) return 'غير محددة';
+    
+    const matchType = getMatchType(matchData.homeTeam, matchData.awayTeam);
+    return calculateImportanceLevel(matchData.homeTeam, matchData.awayTeam, matchType);
+  };
+  
+  // Calculate expected demand
+  const getDemandDisplay = () => {
+    if (!matchData.awayTeam) return 'غير محدد';
+    
+    if (matchData.awayTeam.includes('الهلال') || matchData.awayTeam.includes('النصر')) {
+      return 'مرتفع';
+    } else {
+      return 'متوسط';
+    }
+  };
+  
   return (
     <div className="border rounded-lg p-2">
       <h3 className="font-medium text-sm mb-2 border-b pb-1">عوامل التحليل</h3>
@@ -14,18 +34,14 @@ const PricingFactors: React.FC<PricingFactorsProps> = ({ matchData }) => {
         <div className="flex justify-between">
           <span>أهمية المباراة:</span>
           <span className="font-medium">
-            {matchData.homeTeam && matchData.awayTeam && matchData.stadium ? 
-              (matchData.awayTeam.includes('الهلال') || matchData.awayTeam.includes('النصر') || 
-               matchData.awayTeam.includes('الأهلي') || matchData.awayTeam.includes('الاتحاد') ? 'عالية' : 'متوسطة') 
-              : 'غير محددة'}
+            {matchData.homeTeam && matchData.awayTeam ? 
+              getImportanceDisplay() : 'غير محددة'}
           </span>
         </div>
         <div className="flex justify-between">
           <span>الطلب المتوقع:</span>
           <span className="font-medium">
-            {matchData.awayTeam && 
-             (matchData.awayTeam.includes('الهلال') || matchData.awayTeam.includes('النصر')) ? 
-             'مرتفع' : 'متوسط'}
+            {getDemandDisplay()}
           </span>
         </div>
         <div className="flex justify-between">

@@ -80,13 +80,13 @@ export const calculateSelloutProbability = (importanceMultiplier: number, demand
 export const generatePricingNotes = (importanceLevel: string, expectedDemandLevel: string): string => {
   let notes = '';
   
-  // Importance level notes
+  // Importance level notes - Fixed to match the displayed importance level correctly
   if (importanceLevel === 'عالية') {
     notes = 'مباراة ذات أهمية عالية تحظى باهتمام كبير من المشجعين. ';
   } else if (importanceLevel === 'متوسطة') {
     notes = 'مباراة ذات أهمية متوسطة مع جمهور متوقع جيد. ';
   } else {
-    notes = 'مباراة ذات أهمية عادية. ';
+    notes = 'مباراة ذات أهمية منخفضة. ';
   }
   
   // Demand level notes
