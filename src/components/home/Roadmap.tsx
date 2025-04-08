@@ -1,14 +1,11 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MessageSquare, Star, TrendingUp, User } from 'lucide-react';
-
 const Roadmap = () => {
-  return (
-    <section id="roadmap" className="py-16 dark-purple-bg">
+  return <section id="roadmap" className="py-16 dark-purple-bg">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold gradient-text mb-4">خارطة الطريق لمنصة تذكرة+</h2>
+          <h2 className="text-3xl font-bold gradient-text mb-4">خارطة التطوير لمنصة تذكرة+ مستمرة</h2>
           <p className="text-purple-200 max-w-3xl mx-auto">
             نعمل باستمرار على تطوير منصتنا لتقديم أفضل تجربة للأندية والجماهير، إليكم المزايا القادمة
           </p>
@@ -86,8 +83,6 @@ const Roadmap = () => {
           </Card>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default Roadmap;
