@@ -6,4 +6,4 @@ export * from './utils';
 export * from './demandCalculator';
 export * from './calculator';
 export * from './models';
-
+export * from './recommendations';

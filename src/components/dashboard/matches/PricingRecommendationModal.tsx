@@ -11,7 +11,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { Brain } from 'lucide-react';
 import { PricingModelInput, PricingModelOutput, calculateRecommendedPrice } from './pricing';
-import PriceOptimizationChart from './pricing/charts/PriceOptimizationChart';
+import LoadingState from './pricing/recommendations/LoadingState';
+import ErrorState from './pricing/recommendations/ErrorState';
+import PricingRecommendationContent from './pricing/recommendations/PricingRecommendationContent';
 
 interface PricingRecommendationModalProps {
   matchData: Partial<PricingModelInput>;
@@ -78,26 +80,6 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
       setModelError("لا يمكن تطبيق سعر سالب أو صفر");
     }
   };
-
-  const getSelloutProbabilityText = (probability: string) => {
-    switch(probability) {
-      case 'Very High': return 'عالية جداً';
-      case 'High': return 'عالية';
-      case 'Medium': return 'متوسطة';
-      case 'Low': return 'منخفضة';
-      default: return 'متوسطة';
-    }
-  };
-  
-  const getSelloutProbabilityColor = (probability: string) => {
-    switch(probability) {
-      case 'Very High': return 'text-green-600';
-      case 'High': return 'text-green-500';
-      case 'Medium': return 'text-blue-500';
-      case 'Low': return 'text-amber-500';
-      default: return 'text-blue-500';
-    }
-  };
   
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -124,106 +106,16 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
           </DialogDescription>
         </DialogHeader>
         
-        {loading && (
-          <div className="flex flex-col items-center justify-center py-10">
-            <div className="w-10 h-10 border-4 border-gray-300 border-t-tazkara-green rounded-full animate-spin"></div>
-            <p className="mt-4 text-gray-600">جاري تحليل البيانات...</p>
-          </div>
-        )}
-
-        {modelError && !loading && (
-          <div className="flex flex-col items-center justify-center py-10">
-            <p className="text-red-500">{modelError}</p>
-          </div>
-        )}
+        {loading && <LoadingState />}
+        {modelError && !loading && <ErrorState error={modelError} />}
         
         {recommendation && !loading && !modelError && (
-          <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="border rounded-lg p-4 text-center">
-                <h3 className="text-lg font-medium">السعر الموصى به</h3>
-                <div className="text-3xl font-bold text-tazkara-green">
-                  {recommendation.recommendedPrice} ر.س
-                </div>
-                <div className="mt-2 text-sm text-gray-500">
-                  درجة الثقة: {Math.round(recommendation.confidenceScore * 100)}%
-                </div>
-              </div>
-              
-              <div className="border rounded-lg p-4 text-center">
-                <h3 className="text-lg font-medium">احتمالية نفاد التذاكر</h3>
-                <div className={`text-3xl font-bold ${getSelloutProbabilityColor(recommendation.selloutProbability)}`}>
-                  {getSelloutProbabilityText(recommendation.selloutProbability)}
-                </div>
-              </div>
-            </div>
-            
-            {/* إضافة المخطط البياني للعلاقة بين السعر والطلب */}
-            <div className="border rounded-lg p-4">
-              <PriceOptimizationChart 
-                recommendedPrice={recommendation.recommendedPrice} 
-                matchData={matchData} 
-              />
-            </div>
-            
-            <div className="border rounded-lg p-4">
-              <h3 className="font-medium mb-3 border-b pb-2">عوامل التحليل</h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>أهمية المباراة:</span>
-                  <span className="font-medium">
-                    {matchData.homeTeam && matchData.awayTeam && matchData.stadium ? 
-                      (matchData.awayTeam.includes('الهلال') || matchData.awayTeam.includes('النصر') || 
-                       matchData.awayTeam.includes('الأهلي') || matchData.awayTeam.includes('الاتحاد') ? 'عالية' : 'متوسطة') 
-                      : 'غير محددة'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span>الطلب المتوقع:</span>
-                  <span className="font-medium">
-                    {matchData.awayTeam && 
-                     (matchData.awayTeam.includes('الهلال') || matchData.awayTeam.includes('النصر')) ? 
-                     'مرتفع' : 'متوسط'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span>سعة الملعب:</span>
-                  <span className="font-medium">
-                    {matchData.stadium === 'استاد الملك فهد الدولي' ? '67,000 متفرج' : 
-                     matchData.stadium === 'استاد الملك عبدالله' ? '62,000 متفرج' : 
-                     matchData.stadium === 'الجوهرة' ? '45,000 متفرج' : 
-                     matchData.stadium === 'مملكة آرينا' ? '25,000 متفرج' : 
-                     matchData.stadium === 'مرسول بارك' ? '22,000 متفرج' : 'غير محدد'}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span>المدينة:</span>
-                  <span className="font-medium">{matchData.city || 'غير محددة'}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>توقيت المباراة:</span>
-                  <span className="font-medium">{matchData.time || '20:00'}</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="border rounded-lg p-4">
-              <h3 className="font-medium mb-2">ملاحظات</h3>
-              <p className="text-sm whitespace-pre-line">{recommendation.notes}</p>
-            </div>
-            
-            <div className="flex justify-between">
-              <Button variant="outline" onClick={() => setIsOpen(false)}>
-                إلغاء
-              </Button>
-              <Button 
-                onClick={handleApplyPrice}
-                className="bg-tazkara-green hover:bg-tazkara-green/90"
-              >
-                تطبيق السعر الموصى به
-              </Button>
-            </div>
-          </div>
+          <PricingRecommendationContent 
+            matchData={matchData}
+            recommendation={recommendation}
+            onApplyPrice={handleApplyPrice}
+            onClose={() => setIsOpen(false)}
+          />
         )}
       </DialogContent>
     </Dialog>

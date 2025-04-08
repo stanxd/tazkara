@@ -9,7 +9,7 @@ interface LinearRegressionModelDetails {
   intercept: number;
   rSquared: number;
   mse: number;
-  meanAbsoluteError?: number; // إضافة هذا الحقل إلى الواجهة
+  meanAbsoluteError: number;
 }
 
 export class LinearRegression {
@@ -98,7 +98,7 @@ export class LinearRegression {
       prediction += X[i] * this.coefficients[i];
     }
     
-    // الإضافة الجديدة: تحقق من عدم وجود أسعار سالبة
+    // تحقق من عدم وجود أسعار سالبة
     if (prediction < 0) {
       console.warn('Model predicted negative price, adjusting to 0');
       prediction = 0;

@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, Tooltip, Legend, ReferenceLine } from 'recharts';
 import { PricingModelInput } from '../types';
 
@@ -22,7 +22,7 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
 }) => {
   const [chartData, setChartData] = useState<PricePoint[]>([]);
   
-  // جيل بيانات للرسم البياني بناء على التوصية والبيانات الأخرى
+  // توليد بيانات للرسم البياني بناء على التوصية والبيانات الأخرى
   useEffect(() => {
     // إنشاء منحنى يحاكي العلاقة بين السعر والطلب
     const generateChartData = () => {
@@ -84,7 +84,6 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
           },
           revenue: {
             label: "الإيرادات المتوقعة",
-            color: "#f59e0b",
             theme: {
               light: "#f59e0b",
               dark: "#f59e0b"
