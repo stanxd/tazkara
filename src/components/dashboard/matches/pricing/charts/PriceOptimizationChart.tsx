@@ -153,7 +153,8 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
               <ReferenceLine 
                 x={recommendedPrice} 
                 stroke="#16a34a" 
-                strokeDasharray="3 3" 
+                strokeDasharray="3 3"
+                yAxisId="left"
                 label={{ 
                   value: 'السعر الموصى به', 
                   position: 'top',
