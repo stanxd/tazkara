@@ -2,6 +2,7 @@
 import React from 'react';
 import { PricingModelInput } from '../../pricing';
 import { calculateImportanceLevel, getMatchType } from '../utils';
+import { predictDemandLevel } from '../demandCalculator';
 
 interface PricingFactorsProps {
   matchData: Partial<PricingModelInput>;
@@ -16,15 +17,19 @@ const PricingFactors: React.FC<PricingFactorsProps> = ({ matchData }) => {
     return calculateImportanceLevel(matchData.homeTeam, matchData.awayTeam, matchType);
   };
   
-  // Calculate expected demand
+  // Calculate expected demand using the same logic as in the pricing calculator
   const getDemandDisplay = () => {
-    if (!matchData.awayTeam) return 'غير محدد';
-    
-    if (matchData.awayTeam.includes('الهلال') || matchData.awayTeam.includes('النصر')) {
-      return 'مرتفع';
-    } else {
-      return 'متوسط';
+    if (!matchData.homeTeam || !matchData.awayTeam || !matchData.stadium) {
+      return 'غير محدد';
     }
+    
+    const matchType = getMatchType(matchData.homeTeam, matchData.awayTeam);
+    return predictDemandLevel(
+      matchData.homeTeam,
+      matchData.awayTeam,
+      matchData.stadium,
+      matchType
+    );
   };
   
   return (

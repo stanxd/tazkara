@@ -62,6 +62,13 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
           result.notes += "\n\nملاحظة: تم تعديل السعر للحد الأدنى بسبب عوامل غير متوقعة.";
         }
         
+        console.log("Calculated recommendation:", {
+          input, 
+          result,
+          importance: input.homeTeam && input.awayTeam ? 
+            calculateImportanceLevel(input.homeTeam, input.awayTeam, getMatchType(input.homeTeam, input.awayTeam)) : 'unknown'
+        });
+        
         setRecommendation(result);
         setLoading(false);
       } catch (error) {
