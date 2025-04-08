@@ -8,9 +8,9 @@ interface PricingFactorsProps {
 
 const PricingFactors: React.FC<PricingFactorsProps> = ({ matchData }) => {
   return (
-    <div className="border rounded-lg p-4">
-      <h3 className="font-medium mb-3 border-b pb-2">عوامل التحليل</h3>
-      <div className="space-y-2 text-sm">
+    <div className="border rounded-lg p-2">
+      <h3 className="font-medium text-sm mb-2 border-b pb-1">عوامل التحليل</h3>
+      <div className="space-y-1 text-xs">
         <div className="flex justify-between">
           <span>أهمية المباراة:</span>
           <span className="font-medium">
@@ -31,11 +31,11 @@ const PricingFactors: React.FC<PricingFactorsProps> = ({ matchData }) => {
         <div className="flex justify-between">
           <span>سعة الملعب:</span>
           <span className="font-medium">
-            {matchData.stadium === 'استاد الملك فهد الدولي' ? '67,000 متفرج' : 
-             matchData.stadium === 'استاد الملك عبدالله' ? '62,000 متفرج' : 
-             matchData.stadium === 'الجوهرة' ? '45,000 متفرج' : 
-             matchData.stadium === 'مملكة آرينا' ? '25,000 متفرج' : 
-             matchData.stadium === 'مرسول بارك' ? '22,000 متفرج' : 'غير محدد'}
+            {matchData.stadium === 'استاد الملك فهد الدولي' ? '67,000' : 
+             matchData.stadium === 'استاد الملك عبدالله' ? '62,000' : 
+             matchData.stadium === 'الجوهرة' ? '45,000' : 
+             matchData.stadium === 'مملكة آرينا' ? '25,000' : 
+             matchData.stadium === 'مرسول بارك' ? '22,000' : 'غير محدد'}
           </span>
         </div>
         <div className="flex justify-between">
@@ -43,7 +43,7 @@ const PricingFactors: React.FC<PricingFactorsProps> = ({ matchData }) => {
           <span className="font-medium">{matchData.city || 'غير محددة'}</span>
         </div>
         <div className="flex justify-between">
-          <span>توقيت المباراة:</span>
+          <span>توقيت:</span>
           <span className="font-medium">{matchData.time || '20:00'}</span>
         </div>
       </div>

@@ -21,27 +21,30 @@ const PricingRecommendationContent: React.FC<PricingRecommendationContentProps> 
   onClose
 }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4"> {/* تقليل المساحة بين المكونات */}
       <PricingSummary recommendation={recommendation} />
       
       {/* PriceOptimizationChart */}
-      <div className="border rounded-lg p-4">
+      <div className="border rounded-lg p-2"> {/* تقليل حجم الحاوية */}
         <PriceOptimizationChart 
           recommendedPrice={recommendation.recommendedPrice} 
           matchData={matchData} 
         />
       </div>
       
-      <PricingFactors matchData={matchData} />
-      <PricingNotes notes={recommendation.notes} />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3"> {/* ترتيب المكونات بجانب بعضها على الشاشات الكبيرة */}
+        <PricingFactors matchData={matchData} />
+        <PricingNotes notes={recommendation.notes} />
+      </div>
       
       <div className="flex justify-between">
-        <Button variant="outline" onClick={onClose}>
+        <Button variant="outline" onClick={onClose} size="sm">
           إلغاء
         </Button>
         <Button 
           onClick={onApplyPrice}
           className="bg-tazkara-green hover:bg-tazkara-green/90"
+          size="sm"
         >
           تطبيق السعر الموصى به
         </Button>

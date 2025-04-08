@@ -28,20 +28,20 @@ const PricingSummary: React.FC<PricingSummaryProps> = ({ recommendation }) => {
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="border rounded-lg p-4 text-center">
-        <h3 className="text-lg font-medium">السعر الموصى به</h3>
-        <div className="text-3xl font-bold text-tazkara-green">
+    <div className="grid grid-cols-2 gap-3">
+      <div className="border rounded-lg p-2 text-center">
+        <h3 className="text-sm font-medium">السعر الموصى به</h3>
+        <div className="text-xl font-bold text-tazkara-green">
           {recommendation.recommendedPrice} ر.س
         </div>
-        <div className="mt-2 text-sm text-gray-500">
+        <div className="mt-1 text-xs text-gray-500">
           درجة الثقة: {Math.round(recommendation.confidenceScore * 100)}%
         </div>
       </div>
       
-      <div className="border rounded-lg p-4 text-center">
-        <h3 className="text-lg font-medium">احتمالية نفاد التذاكر</h3>
-        <div className={`text-3xl font-bold ${getSelloutProbabilityColor(recommendation.selloutProbability)}`}>
+      <div className="border rounded-lg p-2 text-center">
+        <h3 className="text-sm font-medium">احتمالية نفاد التذاكر</h3>
+        <div className={`text-xl font-bold ${getSelloutProbabilityColor(recommendation.selloutProbability)}`}>
           {getSelloutProbabilityText(recommendation.selloutProbability)}
         </div>
       </div>

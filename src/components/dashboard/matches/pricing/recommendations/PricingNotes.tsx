@@ -7,9 +7,9 @@ interface PricingNotesProps {
 
 const PricingNotes: React.FC<PricingNotesProps> = ({ notes }) => {
   return (
-    <div className="border rounded-lg p-4">
-      <h3 className="font-medium mb-2">ملاحظات</h3>
-      <p className="text-sm whitespace-pre-line">{notes}</p>
+    <div className="border rounded-lg p-2">
+      <h3 className="font-medium text-sm mb-1">ملاحظات</h3>
+      <p className="text-xs whitespace-pre-line">{notes}</p>
     </div>
   );
 };

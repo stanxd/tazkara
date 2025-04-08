@@ -41,14 +41,14 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
       // إنشاء نقاط بيانية من 40% الى 160% من السعر الموصى به
       const dataPoints: PricePoint[] = [];
       const priceRange = 0.6;
-      const steps = 20;
+      // تقليل عدد النقاط لتبسيط المخطط
+      const steps = 10; 
       
       for (let i = 0; i <= steps; i++) {
         const priceRatio = 0.4 + (i * priceRange) / steps;
         const price = Math.round(basePrice * priceRatio);
         
         // صيغة معدلة لحساب الطلب بناءً على السعر
-        // نستخدم دالة أسية سالبة تمثل العلاقة العكسية بين السعر والطلب
         const demandRatio = Math.pow(priceRatio, -elasticityFactor);
         const demand = Math.round(baseDemand * demandRatio);
         
@@ -58,7 +58,7 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
         dataPoints.push({
           price,
           demand,
-          revenue: Math.round(revenue / 100), // تقسيم القيمة للحصول على مقياس أفضل للرسم
+          revenue: Math.round(revenue / 100),
           isRecommended: price === Math.round(basePrice)
         });
       }
@@ -70,9 +70,9 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
   }, [recommendedPrice, matchData]);
   
   return (
-    <div className="mb-6">
-      <h3 className="text-lg font-medium mb-3">تحليل العلاقة بين السعر والطلب</h3>
-      <div className="h-[280px] w-full overflow-x-auto pb-2">
+    <div className="mb-3">
+      <h3 className="text-sm font-medium mb-2">تحليل العلاقة بين السعر والطلب</h3>
+      <div className="h-[200px] w-full overflow-x-auto pb-1"> {/* تقليص ارتفاع المخطط */}
         <ChartContainer config={{
           price: {
             label: "السعر",
@@ -93,51 +93,53 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
           <ResponsiveContainer width="100%" height="100%">
             <LineChart 
               data={chartData} 
-              margin={{ top: 10, right: 30, left: 0, bottom: 30 }}
+              margin={{ top: 5, right: 20, left: 0, bottom: 20 }} {/* تقليل الهوامش */}
             >
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis 
                 dataKey="price" 
-                tick={{ fontSize: 10 }} 
+                tick={{ fontSize: 9 }} {/* خفض حجم الخط */}
                 label={{ 
                   value: 'السعر (ر.س)', 
                   position: 'insideBottom', 
-                  fontSize: 12,
-                  offset: -15
+                  fontSize: 9, {/* خفض حجم الخط */}
+                  offset: -10
                 }}
               />
               <YAxis 
                 yAxisId="left"
-                tick={{ fontSize: 10 }} 
+                tick={{ fontSize: 9 }} {/* خفض حجم الخط */}
                 orientation="left"
                 label={{ 
-                  value: 'الطلب المتوقع', 
+                  value: 'الطلب', 
                   angle: -90, 
                   position: 'insideLeft',
-                  fontSize: 12
+                  fontSize: 9, {/* خفض حجم الخط */}
+                  offset: -5
                 }}
               />
               <YAxis 
                 yAxisId="right"
-                tick={{ fontSize: 10 }} 
+                tick={{ fontSize: 9 }} {/* خفض حجم الخط */}
                 orientation="right"
                 label={{ 
-                  value: 'الإيرادات (آلاف)', 
+                  value: 'الإيرادات', 
                   angle: 90, 
                   position: 'insideRight', 
-                  fontSize: 12
+                  fontSize: 9, {/* خفض حجم الخط */}
+                  offset: 0
                 }}
               />
               <Tooltip content={<ChartTooltipContent />} />
-              <Legend wrapperStyle={{ paddingTop: 5, fontSize: 12 }} />
+              <Legend wrapperStyle={{ paddingTop: 2, fontSize: 9 }} layout="horizontal" verticalAlign="bottom" height={20} />
               <Line 
                 yAxisId="left"
                 type="monotone" 
                 dataKey="demand" 
                 stroke="var(--color-demand, #3b82f6)" 
-                strokeWidth={2} 
-                dot={{ r: 1 }} 
-                activeDot={{ r: 5 }}
+                strokeWidth={1.5} {/* خفض سمك الخط */}
+                dot={{ r: 0 }} {/* إزالة النقاط */}
+                activeDot={{ r: 4 }}
                 name="الطلب المتوقع"
               />
               <Line 
@@ -145,10 +147,10 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
                 type="monotone" 
                 dataKey="revenue" 
                 stroke="var(--color-revenue, #f59e0b)" 
-                strokeWidth={2} 
-                dot={{ r: 1 }} 
-                activeDot={{ r: 5 }}
-                name="الإيرادات (آلاف)"
+                strokeWidth={1.5} {/* خفض سمك الخط */}
+                dot={{ r: 0 }} {/* إزالة النقاط */}
+                activeDot={{ r: 4 }}
+                name="الإيرادات"
               />
               <ReferenceLine 
                 x={recommendedPrice} 
@@ -159,15 +161,15 @@ const PriceOptimizationChart: React.FC<PriceOptimizationChartProps> = ({
                   value: 'السعر الموصى به', 
                   position: 'top',
                   fill: '#16a34a',
-                  fontSize: 10 
+                  fontSize: 9 {/* خفض حجم الخط */}
                 }} 
               />
             </LineChart>
           </ResponsiveContainer>
         </ChartContainer>
       </div>
-      <div className="text-xs text-gray-500 mt-1 text-center">
-        ملاحظة: هذا التحليل تقديري ويعتمد على نموذج اقتصادي مبسط للعلاقة بين السعر والطلب
+      <div className="text-xs text-gray-500 text-center">
+        ملاحظة: تحليل تقديري يعتمد على نموذج مبسط للعلاقة بين السعر والطلب
       </div>
     </div>
   );
