@@ -1,15 +1,24 @@
-
 import { PricingModelInput, PricingModelOutput } from './types';
 import { stadiumCapacities, teamFanBases, teamHomeCities, historicalAttendanceRates, realMatchData } from './data';
 import { getMatchType, calculateImportanceLevel, calculateSelloutProbability, generatePricingNotes } from './utils';
 import { predictDemandLevel } from './demandCalculator';
-import { LinearRegression, extractFeatures, generateTrainingData } from './models';
+import { LinearRegression } from './models';
+import { extractFeatures, generateTrainingData } from './models';
 
 // Initialize and train the linear regression model with real data
 const initializeRegressionModel = (): LinearRegression => {
   const model = new LinearRegression();
   const { features, prices } = generateTrainingData();
-  model.fit(features, prices);
+  
+  // Ensure features are formatted correctly as number[][]
+  const formattedFeatures = features.map(feature => {
+    // If feature is already an array, return it
+    if (Array.isArray(feature)) return feature;
+    // Otherwise, wrap it in an array to match the expected format
+    return [feature];
+  });
+  
+  model.fit(formattedFeatures, prices);
   return model;
 };
 
@@ -33,7 +42,9 @@ export const calculateRecommendedPrice = (input: PricingModelInput): PricingMode
   const features = extractFeatures(input);
   
   // Get price prediction from regression model
-  let recommendedPrice = regressionModel.predict(features[0]);
+  // If features[0] is a number, wrap it in an array
+  const featureForPrediction = Array.isArray(features[0]) ? features[0][0] : features[0];
+  let recommendedPrice = regressionModel.predict([featureForPrediction]);
   
   // Ensure the base price is positive
   recommendedPrice = Math.max(recommendedPrice, 0);

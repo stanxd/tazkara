@@ -40,9 +40,14 @@ export class LinearRegression {
     // Gradient descent optimization
     for (let iter = 0; iter < iterations; iter++) {
       // Calculate predictions
-      const predictions = X.map((xi) => 
-        this.intercept + xi.reduce((sum, xij, j) => sum + xij * this.coefficients[j], 0)
-      );
+      const predictions = X.map((xi) => {
+        // Ensure xi is an array before using reduce
+        if (!Array.isArray(xi)) {
+          console.error('Feature vector is not an array:', xi);
+          return this.intercept; // Return just the intercept as fallback
+        }
+        return this.intercept + xi.reduce((sum, xij, j) => sum + xij * this.coefficients[j], 0);
+      });
       
       // Calculate errors
       const errors = predictions.map((pred, i) => pred - y[i]);
@@ -52,7 +57,14 @@ export class LinearRegression {
       const coeffGradients = new Array(numFeatures).fill(0);
       
       for (let j = 0; j < numFeatures; j++) {
-        coeffGradients[j] = errors.reduce((sum, error, i) => sum + error * X[i][j], 0) / n;
+        coeffGradients[j] = errors.reduce((sum, error, i) => {
+          // Ensure X[i] is an array and has a value at index j
+          if (Array.isArray(X[i]) && j < X[i].length) {
+            return sum + error * X[i][j];
+          }
+          console.error(`Invalid feature vector at index ${i}`);
+          return sum;
+        }, 0) / n;
       }
       
       // Update parameters
@@ -63,9 +75,13 @@ export class LinearRegression {
     }
     
     // Calculate performance metrics
-    const predictions = X.map((xi) => 
-      this.intercept + xi.reduce((sum, xij, j) => sum + xij * this.coefficients[j], 0)
-    );
+    const predictions = X.map((xi) => {
+      if (!Array.isArray(xi)) {
+        console.error('Feature vector is not an array:', xi);
+        return this.intercept; // Return just the intercept as fallback
+      }
+      return this.intercept + xi.reduce((sum, xij, j) => sum + xij * this.coefficients[j], 0);
+    });
     
     // Mean Squared Error
     this.mse = predictions.reduce((sum, pred, i) => sum + Math.pow(pred - y[i], 2), 0) / n;
