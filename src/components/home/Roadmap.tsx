@@ -21,9 +21,7 @@ const Roadmap = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
-              <p className="text-purple-100 mb-4">
-                منصة تفاعلية تتيح للمشجعين إبداء آرائهم واقتراحاتهم حول الفريق أو المدرب أو الجهاز الإداري بشكل منظم ومؤثر.
-              </p>
+              <p className="text-purple-100 mb-4">ميزة تفاعلية تتيح للمشجعين إبداء آرائهم واقتراحاتهم حول الفريق أو المدرب أو الجهاز الإداري بشكل منظم ومؤثر.</p>
               
               <h4 className="text-lg font-semibold text-purple-300 mb-2">الأهداف المرجوة:</h4>
               <ul className="text-purple-200 space-y-2 mr-6 rtl">
@@ -52,9 +50,7 @@ const Roadmap = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-6">
-              <p className="text-purple-100 mb-4">
-                منصة مبتكرة تتيح لكل موهوب في كرة القدم مشاركة مواهبه مباشرة، مع تقييم بواسطة الذكاء الاصطناعي واقتراح المواهب للأندية.
-              </p>
+              <p className="text-purple-100 mb-4">ميزة مبتكرة تتيح لكل موهوب في كرة القدم مشاركة مواهبه مباشرة، مع تقييم بواسطة الذكاء الاصطناعي واقتراح المواهب للأندية.</p>
 
               <h4 className="text-lg font-semibold text-purple-300 mb-2">معايير التقييم:</h4>
               <ul className="text-purple-200 space-y-2 mr-6 rtl mb-4">
