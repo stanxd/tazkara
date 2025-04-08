@@ -41,3 +41,21 @@ export interface PricingModelOutput {
   selloutProbability: 'Low' | 'Medium' | 'High' | 'Very High';
   notes: string;
 }
+
+// Linear regression model data types
+export interface LinearRegressionModelDetails {
+  slope: number;
+  intercept: number;
+  rSquared: number;
+}
+
+export interface TrainingDataPoint {
+  features: number[];
+  price: number;
+  matchDetails?: {
+    homeTeam: string;
+    awayTeam: string;
+    stadium: string;
+    attendance: number;
+  };
+}
