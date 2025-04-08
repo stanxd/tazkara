@@ -11,6 +11,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Brain } from 'lucide-react';
 import { PricingModelInput, PricingModelOutput, calculateRecommendedPrice } from './pricing';
+import PriceOptimizationChart from './pricing/charts/PriceOptimizationChart';
 
 interface PricingRecommendationModalProps {
   matchData: Partial<PricingModelInput>;
@@ -115,7 +116,7 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
           تحليل سعر مقترح
         </Button>
       </DialogTrigger>
-      <DialogContent className="rtl max-w-xl">
+      <DialogContent className="rtl max-w-3xl">
         <DialogHeader>
           <DialogTitle className="text-xl">توصية التسعير الذكي</DialogTitle>
           <DialogDescription>
@@ -138,7 +139,7 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
         
         {recommendation && !loading && !modelError && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="border rounded-lg p-4 text-center">
                 <h3 className="text-lg font-medium">السعر الموصى به</h3>
                 <div className="text-3xl font-bold text-tazkara-green">
@@ -155,6 +156,14 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
                   {getSelloutProbabilityText(recommendation.selloutProbability)}
                 </div>
               </div>
+            </div>
+            
+            {/* إضافة المخطط البياني للعلاقة بين السعر والطلب */}
+            <div className="border rounded-lg p-4">
+              <PriceOptimizationChart 
+                recommendedPrice={recommendation.recommendedPrice} 
+                matchData={matchData} 
+              />
             </div>
             
             <div className="border rounded-lg p-4">
