@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MessageSquare, Star, TrendingUp, User, BarChart } from 'lucide-react';
@@ -7,9 +6,7 @@ const Roadmap = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold gradient-text mb-4">خارطة التطوير لمنصة تذكرة+ مستمرة</h2>
-          <p className="text-purple-200 max-w-3xl mx-auto">
-            نعمل باستمرار على تطوير منصتنا لتقديم أفضل تجربة للأندية والجماهير، إليكم المزايا القادمة
-          </p>
+          <p className="text-purple-200 max-w-3xl mx-auto">نعمل باستمرار على تطوير منصتنا لتقديم أفضل تجربة للأندية والجماهير، إليكم المزايا الحالية والقادمة</p>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
