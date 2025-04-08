@@ -17,6 +17,9 @@ const initializeRegressionModel = (): LinearRegression => {
 const regressionModel = initializeRegressionModel();
 console.log('Regression model initialized:', regressionModel.getModelDetails());
 
+// Constants for price limits
+const MIN_TICKET_PRICE = 20; // Minimum ticket price in SAR
+
 /**
  * Calculate the recommended ticket price
  */
@@ -31,6 +34,9 @@ export const calculateRecommendedPrice = (input: PricingModelInput): PricingMode
   
   // Get price prediction from regression model
   let recommendedPrice = regressionModel.predict(features[0]);
+  
+  // Ensure the base price is positive
+  recommendedPrice = Math.max(recommendedPrice, 0);
   
   // Apply traditional factors as adjustment coefficients
   
@@ -60,6 +66,16 @@ export const calculateRecommendedPrice = (input: PricingModelInput): PricingMode
   
   // Apply adjustment multipliers to the regression model prediction
   recommendedPrice *= importanceMultiplier * demandMultiplier * capacityMultiplier * attendanceAdjustment;
+  
+  // Ensure the price is at least the minimum ticket price
+  recommendedPrice = Math.max(recommendedPrice, MIN_TICKET_PRICE);
+  
+  // Apply a base price if the model prediction is still too low or negative
+  if (recommendedPrice < MIN_TICKET_PRICE) {
+    // Use a base price that's adjusted by the match characteristics
+    const basePrice = 30 * importanceMultiplier * demandMultiplier;
+    recommendedPrice = Math.max(basePrice, MIN_TICKET_PRICE);
+  }
   
   // Round to nearest 5
   recommendedPrice = Math.round(recommendedPrice / 5) * 5;

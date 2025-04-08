@@ -26,36 +26,55 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
   const [isOpen, setIsOpen] = React.useState(false);
   const [recommendation, setRecommendation] = React.useState<PricingModelOutput | null>(null);
   const [loading, setLoading] = React.useState(false);
+  const [modelError, setModelError] = React.useState<string | null>(null);
   
   const getPricingRecommendation = () => {
     // Make sure we have the required data
     if (!matchData.homeTeam || !matchData.awayTeam || !matchData.stadium) {
+      setModelError("بيانات المباراة غير مكتملة");
       return;
     }
     
+    setModelError(null);
     setLoading(true);
     
     // Simulate a bit of processing time for a better UX
     setTimeout(() => {
-      const input: PricingModelInput = {
-        homeTeam: matchData.homeTeam,
-        awayTeam: matchData.awayTeam,
-        city: matchData.city || '',
-        stadium: matchData.stadium,
-        time: matchData.time || '20:00',
-        day: matchData.day || 'الجمعة', // Default to Friday if not provided
-      };
-      
-      const result = calculateRecommendedPrice(input);
-      setRecommendation(result);
-      setLoading(false);
+      try {
+        const input: PricingModelInput = {
+          homeTeam: matchData.homeTeam,
+          awayTeam: matchData.awayTeam,
+          city: matchData.city || '',
+          stadium: matchData.stadium,
+          time: matchData.time || '20:00',
+          day: matchData.day || 'الجمعة', // Default to Friday if not provided
+        };
+        
+        const result = calculateRecommendedPrice(input);
+        
+        // Safety check to ensure price is positive
+        if (result.recommendedPrice <= 0) {
+          console.error("Model returned negative or zero price, adjusting to minimum", result);
+          result.recommendedPrice = 20; // Minimum price as fallback
+          result.notes += "\n\nملاحظة: تم تعديل السعر للحد الأدنى بسبب عوامل غير متوقعة.";
+        }
+        
+        setRecommendation(result);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error calculating price recommendation:", error);
+        setModelError("حدث خطأ أثناء حساب السعر الموصى به");
+        setLoading(false);
+      }
     }, 800);
   };
   
   const handleApplyPrice = () => {
-    if (recommendation) {
+    if (recommendation && recommendation.recommendedPrice > 0) {
       onSelectPrice(recommendation.recommendedPrice);
       setIsOpen(false);
+    } else {
+      setModelError("لا يمكن تطبيق سعر سالب أو صفر");
     }
   };
 
@@ -86,6 +105,7 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
           variant="outline" 
           onClick={() => {
             setRecommendation(null);
+            setModelError(null);
             getPricingRecommendation();
           }}
           disabled={disabled}
@@ -109,8 +129,14 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
             <p className="mt-4 text-gray-600">جاري تحليل البيانات...</p>
           </div>
         )}
+
+        {modelError && !loading && (
+          <div className="flex flex-col items-center justify-center py-10">
+            <p className="text-red-500">{modelError}</p>
+          </div>
+        )}
         
-        {recommendation && !loading && (
+        {recommendation && !loading && !modelError && (
           <div className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="border rounded-lg p-4 text-center">
@@ -174,7 +200,7 @@ const PricingRecommendationModal: React.FC<PricingRecommendationModalProps> = ({
             
             <div className="border rounded-lg p-4">
               <h3 className="font-medium mb-2">ملاحظات</h3>
-              <p className="text-sm">{recommendation.notes}</p>
+              <p className="text-sm whitespace-pre-line">{recommendation.notes}</p>
             </div>
             
             <div className="flex justify-between">

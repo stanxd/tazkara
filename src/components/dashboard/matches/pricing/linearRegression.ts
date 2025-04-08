@@ -1,4 +1,3 @@
-
 /**
  * Linear Regression Model for Match Ticket Pricing
  */
@@ -12,6 +11,7 @@ export class LinearRegression {
   private slope = 0;
   private intercept = 0;
   private rSquared = 0;
+  private meanAbsoluteError = 0;
 
   /**
    * Fit the linear regression model to the provided data points
@@ -38,8 +38,25 @@ export class LinearRegression {
     // Calculate the y-intercept (β0)
     this.intercept = this.yMean - this.slope * this.xMean;
 
+    // Guard against negative intercept if it would cause too many negative predictions
+    if (this.intercept < 0 && this.slope < Math.abs(this.intercept) / this.xMean) {
+      // Adjust the intercept to be slightly positive to avoid negative predictions
+      this.intercept = 5;
+      // Recalculate slope with new intercept
+      numerator = 0;
+      for (let i = 0; i < x.length; i++) {
+        numerator += (x[i] - this.xMean) * (y[i] - (this.intercept + this.slope * x[i]));
+      }
+      this.slope = denominator !== 0 ? numerator / denominator : 0;
+    }
+
     // Calculate R-squared (coefficient of determination)
     this.calculateRSquared(x, y);
+
+    // Calculate Mean Absolute Error
+    this.calculateMAE(x, y);
+
+    console.log(`Linear regression model trained. Intercept: ${this.intercept}, Slope: ${this.slope}, R²: ${this.rSquared}, MAE: ${this.meanAbsoluteError}`);
   }
 
   /**
@@ -61,10 +78,26 @@ export class LinearRegression {
   }
 
   /**
+   * Calculate Mean Absolute Error
+   */
+  private calculateMAE(x: number[], y: number[]): void {
+    let totalError = 0;
+    for (let i = 0; i < x.length; i++) {
+      const prediction = this.predict(x[i]);
+      totalError += Math.abs(y[i] - prediction);
+    }
+    this.meanAbsoluteError = totalError / x.length;
+  }
+
+  /**
    * Predict y value for a given x input
    */
   predict(x: number): number {
-    return this.intercept + this.slope * x;
+    // Basic prediction using the linear formula
+    const prediction = this.intercept + this.slope * x;
+    
+    // Ensure prediction is positive
+    return Math.max(0, prediction);
   }
 
   /**
@@ -74,7 +107,8 @@ export class LinearRegression {
     return {
       slope: this.slope,
       intercept: this.intercept,
-      rSquared: this.rSquared
+      rSquared: this.rSquared,
+      meanAbsoluteError: this.meanAbsoluteError
     };
   }
 }
@@ -126,7 +160,7 @@ export const extractFeatures = (
   const isDerby = (
     (matchData.homeTeam === 'الهلال' && matchData.awayTeam === 'النصر') ||
     (matchData.homeTeam === 'النصر' && matchData.awayTeam === 'الهلال') ||
-    (matchData.homeTeam === 'الأهلي' && matchData.awayTeam === 'الاتحاد') ||
+    (matchData.homeTeam === 'الأهلي' && matchData.awayTeam === 'ال��تحاد') ||
     (matchData.homeTeam === 'الاتحاد' && matchData.awayTeam === 'الأهلي')
   ) ? 1 : 0;
   
@@ -154,12 +188,18 @@ export const generateTrainingData = (): { features: number[]; prices: number[] }
     
     // Process each real match data entry
     realMatchData.forEach(match => {
-      // Extract features from real match data
-      const feature = extractFeaturesFromRealData(match);
-      features.push(feature);
-      
-      // Add price to prices array
-      prices.push(match.ticketPrice);
+      try {
+        // Extract features from real match data
+        const feature = extractFeaturesFromRealData(match);
+        features.push(feature);
+        
+        // Add price to prices array
+        prices.push(match.ticketPrice);
+        
+        console.log(`Processed match: ${match.homeTeam} vs ${match.awayTeam}, Price: ${match.ticketPrice}, Feature value: ${feature}`);
+      } catch (error) {
+        console.error(`Error processing match data: ${match.homeTeam} vs ${match.awayTeam}`, error);
+      }
     });
     
     return { features, prices };
