@@ -1,73 +1,65 @@
-# Welcome to your Lovable project
+تذكرة+ (TAZKARA+)
+تذكرة+ هي منصة لبيع تذاكر مباريات كرة القدم في المملكة العربية السعودية، تتيح للفرق الرياضية إدارة مبارياتها وتذاكرها، وللمشجعين شراء التذاكر بسهولة والاستفادة من المزايا المختلفة.
 
-## Project info
+التقنيات المستخدمة
+الواجهة الأمامية (Frontend)
+لغة البرمجة: TypeScript
+إطار العمل: React (باستخدام Vite كأداة بناء)
+تصميم واجهة المستخدم:
+Tailwind CSS للتنسيق
+shadcn-ui لمكونات واجهة المستخدم
+Framer Motion للرسوم المتحركة
+إدارة النماذج: React Hook Form مع Zod للتحقق من الصحة
+إدارة الحالة والطلبات: TanStack Query (React Query)
+رسوم بيانية: Recharts
+التوجيه: React Router DOM
+الواجهة الخلفية (Backend)
+Supabase: منصة متكاملة تعمل كواجهة خلفية للمشروع وتوفر:
+قاعدة بيانات PostgreSQL
+نظام المصادقة والتفويض
+التخزين
+واجهات برمجة التطبيقات (APIs)
+قواعد البيانات
+يستخدم المشروع قاعدة بيانات PostgreSQL مُدارة بواسطة Supabase، وتتضمن الجداول التالية:
 
-**URL**: https://lovable.dev/projects/cc197b2c-4df6-436d-869f-e31d64203e26
+fans: لتخزين بيانات المشجعين
+teams: لتخزين بيانات الفرق
+fan_tickets: لتخزين بيانات التذاكر المشتراة
+fan_preferences: لتخزين تفضيلات المشجعين
+خوارزميات الذكاء الاصطناعي
+نموذج الانحدار الخطي (Linear Regression) للتوصية بأسعار التذاكر بناءً على:
+أهمية المباراة
+الطلب المتوقع
+سعة الملعب
+معدلات الحضور التاريخية
+المميزات الرئيسية
+للفرق الرياضية:
+إدارة المباريات وتحديد جداولها
+تسعير ذكي للتذاكر باستخدام نماذج تعلم الآلة
+إدارة الهدايا والعروض الخاصة للمشجعين
+تحليلات مفصلة عن المبيعات والحضور
+للمشجعين:
+شراء التذاكر بسهولة
+معلومات عن المباريات القادمة
+إدارة الاشتراكات والتفضيلات
+سجل الحضور والإحصائيات
+كيفية تشغيل المشروع محلياً
 
-## How can I edit this code?
+# تثبيت الاعتماديات
+npm install
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/cc197b2c-4df6-436d-869f-e31d64203e26) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# تشغيل خادم التطوير
 npm run dev
-```
 
-**Edit a file directly in GitHub**
+# بناء المشروع للإنتاج
+npm run build
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/cc197b2c-4df6-436d-869f-e31d64203e26) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes it is!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+# معاينة نسخة الإنتاج محلياً
+npm run preview
+متطلبات النظام
+Node.js (الإصدار 18 أو أحدث)
+npm (الإصدار 9 أو أحدث)
+اتصال بالإنترنت (للوصول إلى خدمات Supabase)
+البيئات المدعومة
+متوافق مع جميع المتصفحات الحديثة
+تصميم متجاوب يعمل على أجهزة الكمبيوتر والأجهزة اللوحية والهواتف الذكية
